@@ -7,15 +7,6 @@
 using namespace std;
 
 // EXTRUCTURA PARA LOS TIPOS DE ORCOS.
-struct Especie_orco{// LIBRERIAS.
-
-#include<iostream>    // para operaciones de entrada y salida de datos.
-#include<string>      // para manejar string
-#include<limits.h>    // par los punteros NEW.
-
-using namespace std;
-
-// EXTRUCTURA PARA LOS TIPOS DE ORCOS.
 struct Especie_orco{
     /* data */
     string nombre_especie;
