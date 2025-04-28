@@ -13,6 +13,7 @@ struct Especie_orco
     int danno;
     int salud;
     int rapidez;
+    int identificador;
     Especie_orco *siguiente;
 };
 
@@ -57,12 +58,16 @@ void Crear_tipo_orco(Lista_espesie_orcos &lista)
 
     cout << "rapidez: ";
     cin >> nuevo->rapidez;
+    cout<<endl;
 
     // inserta de primero en la lista.
     nuevo->siguiente = lista.primero_especie; // a nuevo lo pone a apuntar a lo que este apuntando la lista (nullptr o otro si ya hay elementos en la lista).
     lista.primero_especie = nuevo;            // y lista ahora apunta a nuevo ya que lista siempre es la cabeza de la lista en este caso.
-    lista.cantidad = lista.cantidad + 1;      // se le suma 1
-
+    lista.cantidad = lista.cantidad + 1;  
+    
+    //Sube el identificador uno mas uno
+    nuevo->identificador=lista.cantidad;
+    // se le suma 1
     cout << "especie ORCO agregada exitosamente. \n";
 }
 
@@ -74,26 +79,55 @@ void mostar_lista_orco(Lista_espesie_orcos &lista)
         return;
     }
 
-    cout << "la cantidad de tipos de orcos son: " << lista.cantidad << endl;
+    cout << "la cantidad de tipos de orcos son: [" << lista.cantidad <<"]"<< endl;
     Especie_orco *actual = lista.primero_especie; // se crea una variable auxiliar para igualarla al primer elemnto de la lista.
-    int num = 1;
     while (actual != nullptr)
     { // si es igual a nullptr significa que es el ultimo elemento de la lista.
-        cout << "numero de especie orco: " << num << endl;
+        cout << actual->identificador<<"-";
         cout << "nombre= " << actual->nombre_especie << endl;
         cout << "danno = " << actual->danno << endl;
         cout << "salud = " << actual->salud << endl;
-        cout << "rapidez = " << actual->rapidez << endl
-             << endl;
+        cout << "rapidez = " << actual->rapidez << endl;
         actual = actual->siguiente; // pasa a siguiente elemento de la lista.
 
-        num++;
+
     }
-    cout << "esos son todos los tipos de orcos disponibles.\n";
+    cout << "esos son todos los tipos de orcos disponibles.\n"<<endl;
 }
 
-void actualizar_tipo_orco()
-{
+void actualizar_tipo_orco(Lista_espesie_orcos& lista) {
+    int referencia;
+    cout<<"Ingresa que orco quieres actualizar= "; cin>>referencia;
+    Especie_orco* actual = lista.primero_especie;
+    bool encontrado = false;
+
+    while (actual != nullptr) {
+        if (actual->identificador == referencia) {
+            cout << "\nIngrese los datos a actualizar para el orco con identificador " << referencia << ":\n";
+            cin.ignore(); // Limpiar el buffer
+
+            cout << "Nombre de la especie: ";
+            getline(cin, actual->nombre_especie);
+
+            cout << "Daño: ";
+            cin >> actual->danno;
+
+            cout << "Salud: ";
+            cin >> actual->salud;
+
+            cout << "Rapidez: ";
+            cin >> actual->rapidez;
+
+            cout << "Datos del orco con ID " << referencia << " actualizados exitosamente.\n";
+            encontrado = true;
+            break; // Importante salir del bucle una vez encontrado
+        }
+        actual = actual->siguiente;
+    }
+
+    if (!encontrado) {
+        cout << "No se encontró ningún tipo de orco con el ID: " << referencia << ".\n";
+    }
 }
 
 int main()
@@ -109,6 +143,7 @@ int main()
         cout << "agregar una especie orco (1) \n ";
         cout << "mostrar los tipos de orcos disponibles (2) \n";
         cout << "salir del programa (3) \n";
+        cout << "Actualizar los datos de un orco (4) \n";
         cout << "coloque la opcion: ";
         cin >> opcion;
 
@@ -124,11 +159,15 @@ int main()
             cout << "\nsaliendo del programa \n";
             destruir_lista_especie_orco(tipoEspecieOrco);
             break;
+        case 4:
+            actualizar_tipo_orco(tipoEspecieOrco);
+            mostar_lista_orco(tipoEspecieOrco);
+            break;
         default:
             cout << "opcion no valida, la opcion " << opcion << " no esta disponible. \n";
             break;
         }
-    } while (opcion != 3);
+    } while (opcion != 4);
 
     return 0;
 }
