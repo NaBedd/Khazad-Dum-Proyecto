@@ -1,8 +1,10 @@
 ## Cosas pendientes por hacer:
 
 ### Para el funcionamiento del programa:
+  -Funcion search (hay que preguntale bien al profe)  
   -Crud de poderes  
   -Crud de Implementos/Armas  
+  
   
 
 ### Cosas importantes que todavia no podemos/sabemos hacer:
