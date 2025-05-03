@@ -4,7 +4,7 @@
 
 - [x] Para marcar algo como listo lo escriben asi (ver archivo)  
 
-- [ ] Arreglar Funciones para que queden genericas (sirvan para orcos, heroes, ...)
+- [ ] Hacer las funciones para Orcos, Heroes e Implementos
 - [ ] Estructura para los implementos
 - [ ] Acomodar funcion search mediante menu (revisar pdf de rubrica)  
   
