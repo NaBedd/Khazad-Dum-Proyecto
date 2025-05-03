@@ -3,6 +3,8 @@
 #include <iostream> // para operaciones de entrada y salida de datos.
 #include <string>   // para manejar string
 #include <limits.h> // para los punteros NEW.
+#include <stack>    // para usar pilas
+#include <typeinfo> // para typeid
 
 using namespace std;
 
@@ -12,7 +14,7 @@ using namespace std;
 // ESTRUCTURA PARA LOS TIPOS DE ORCOS.
 struct Especie_orco
 {
-    string nombre_especie;
+    string nombre;
     int danno;
     int salud;
     int rapidez;
@@ -30,7 +32,7 @@ struct Lista_especie_orcos
 // ESTRUCTURA PARA LOS TIPO HEROE.
 struct Especie_heroe
 {
-    string nombre_especie;
+    string nombre;
     int fortaleza;
     int salud;
     int rapidez;
@@ -54,11 +56,29 @@ struct Implementos
 // FUNCIONES GENERICAS
 // -----------------------------------------------------------------------
 
-// CREADOR DE PERSONAJES, para crear nuevos tipos de personajes (orcos y heroes)
-template <typename TipoDeLista, typename TipoDeDato>
-void crear_tipo_personaje(TipoDeLista &lista)
+// Destruye cualquier tipo de la lista automaticamente al finalizar.
+template <typename TipoDeLista, typename TipoDeDato> // Template hace que la funcion sea como las de python, que trabaje con cualquier parametro
+void destruir_lista(TipoDeLista &lista)              // Para usar la funcion:
+{                                                    // destruir_lista<Tipo de la lista, nombre del tipo de dato que almacena la lista>(nombre de la lista)
+    TipoDeDato *actual = lista.cabeza;
+    while (actual != nullptr)
+    {
+        TipoDeDato *eliminar = actual;
+        actual = actual->siguiente;
+        delete eliminar;
+    }
+    lista.cabeza = nullptr;
+    lista.cantidad = 0;
+}
+
+// FUNCIONES PARA ORCOS
+// -----------------------------------------------------------------------
+
+// Creador de Orcos.
+template <typename TipoDeLista, typename TipoDePersonaje>
+void crear_tipo_orco(TipoDeLista &lista)
 {
-    TipoDeDato *nuevo = new TipoDeDato();
+    TipoDePersonaje *nuevo = new TipoDePersonaje();
     cout << "\nIngrese los datos para el nuevo tipo.\n";
     cin.ignore();
 
@@ -83,57 +103,58 @@ void crear_tipo_personaje(TipoDeLista &lista)
     // Sube el identificador uno mas uno
     nuevo->identificador = lista.cantidad;
     // se le suma 1
-    cout << "Especie " << nuevo->nombre_especie << " con ID " << nuevo->identificador << "ha sido agregada exitosamente. \n";
+    cout << "Especie " << nuevo->nombre << " con ID " << nuevo->identificador << " ha sido agregada exitosamente. \n";
 }
 
-// DESTRUCTOR, destruye cualquier tipo de la lista automaticamente al finalizar.
-template <typename TipoDeLista, typename TipoDeDato> // Template hace que la funcion sea como las de python, que trabaje con cualquier parametro
-void destruir_lista(TipoDeLista &lista)              // Para usar la funcion:
-{                                                    // destruir_lista<Tipo de la lista, nombre del tipo de dato que almacena la lista>(nombre que de la lista)
-    TipoDeDato *actual = lista.cabeza;
-    while (actual != nullptr)
-    {
-        TipoDeDato *eliminar = actual;
-        actual = actual->siguiente;
-        delete eliminar;
-    }
-    lista.cabeza = nullptr;
-    lista.cantidad = 0;
-}
-
-// EDITADO DE AQUI PARA ARRIBA
-// -----------------------------------
-
-void mostrar_lista_orco(Lista_especie_orcos &lista)
-{ // toma la direccion de memoria.
+// Mostrar Lista de Orcos
+template <typename TipoDeLista, typename TipoDePersonaje>
+void mostrar_lista(TipoDeLista &lista)
+{
     if (lista.cantidad == 0)
-    { // si no hay elementos no hace nada.
-        cout << "No hay tipos de orcos en este momento. \n\n";
+    {
+        cout << "La lista esta vacia. \n";
         return;
     }
 
-    cout << "\nHay [" << lista.cantidad << "] tipos de orcos disponibles" << endl;
-    Especie_orco *actual = lista.primero_especie; // se crea una variable auxiliar para igualarla al primer elemnto de la lista.
-    while (actual != nullptr)
-    { // si es igual a nullptr significa que es el ultimo elemento de la lista.
-        cout << actual->identificador << "-";
-        cout << "Nombre= " << actual->nombre_especie << endl;
-        cout << "Danno = " << actual->danno << endl;
-        cout << "Salud = " << actual->salud << endl;
-        cout << "Rapidez = " << actual->rapidez << "\n"
-             << endl;
-        actual = actual->siguiente; // pasa a siguiente elemento de la lista.
+    else if (lista.cantidad > 0)
+    {
+        cout << "Hay " << lista.cantidad << " tipos de orcos en este momento. \n\n";
+
+        stack<TipoDePersonaje *> pila;
+        TipoDePersonaje *actual = lista.cabeza;
+
+        while (actual != nullptr)
+        {
+            pila.push(actual);
+            actual = actual->siguiente;
+        };
+
+        // Mientras la pila NO este vacia:
+        while (!pila.empty())
+        {
+            // Ultimo sera el que este encima de la pila (el ultimo ingresado)
+            TipoDePersonaje *ultimo = pila.top();
+            cout << "ID: " << ultimo->identificador << "\n";
+            cout << "Nombre: " << ultimo->nombre << "\n";
+
+            cout << "Danno: " << ultimo->danno << "\n";
+
+            cout << "Salud: " << ultimo->salud << "\n";
+            cout << "Rapidez: " << ultimo->rapidez << "\n";
+            cout << "------------------------------------------------\n";
+
+            // Se elimina el item ya mostrado
+            pila.pop();
+        }
     }
-    cout << "No hay mas tipos de orcos disponibles.\n"
-         << endl;
-}
+};
 
 void actualizar_tipo_orco(Lista_especie_orcos &lista)
 {
     int referencia;
     cout << "Ingresa que orco quieres actualizar: ";
     cin >> referencia;
-    Especie_orco *actual = lista.primero_especie;
+    Especie_orco *actual = lista.cabeza;
     bool encontrado = false;
 
     while (actual != nullptr)
@@ -144,7 +165,7 @@ void actualizar_tipo_orco(Lista_especie_orcos &lista)
             cin.ignore(); // Limpiar el buffer
 
             cout << "Nombre de la especie: ";
-            getline(cin, actual->nombre_especie);
+            getline(cin, actual->nombre);
 
             cout << "Daño: ";
             cin >> actual->danno;
@@ -190,28 +211,28 @@ int main()
         switch (opcion)
         {
         case 1:
-            Crear_tipo_orco(tipoEspecieOrco);
+            crear_tipo_orco<Lista_especie_orcos, Especie_orco>(tipoEspecieOrco);
             break;
         case 2:
             actualizar_tipo_orco(tipoEspecieOrco);
-            mostrar_lista_orco(tipoEspecieOrco);
+            mostrar_lista<Lista_especie_orcos, Especie_orco>(tipoEspecieOrco);
             break;
         case 3:
-            mostrar_lista_orco(tipoEspecieOrco);
+            mostrar_lista<Lista_especie_orcos, Especie_orco>(tipoEspecieOrco);
             break;
         case 4:
             cout << "\nSaliendo del menu... \n";
             break; // Sale del programa, la opcion como tal no destruye las listas porque se destruyen automaticamente al salir del programa.
 
         default:
-            cout << "opcion no valida, la opcion " << opcion << " no esta disponible. \n";
+            cout << "Ppcion no valida. La opcion " << opcion << " no esta disponible. \n";
             break;
         }
     } while (opcion != 4);
 
     // Dejar esto al final del programa para que se destruyan las listas enlazadas.
     // Hay que añadir todos los tipos de listas que se vayan creando.
-    destruir_lista_especie_orco(tipoEspecieOrco); // se destruye la lista al final del programa.
+    destruir_lista<Lista_especie_orcos, Especie_orco>(tipoEspecieOrco); // se destruye la lista al final del programa.
     cout << "Gracias por usar el programa. \n";
     return 0;
 }
