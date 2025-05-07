@@ -35,39 +35,60 @@ struct Lista_especie
 
 //-----------------------------------------------------------------------------------------------------
 //------------------------------ PARA LOS PERSONAJES --------------------------------------------------
-int regulador_personaje_orco=0;
-int cantidad_personaje_orco=0;
+int regulador_personaje_orco = 0;
+int cantidad_personaje_orco = 0;
 
-int regulador_personaje_heroe=0;
-int cantidad_personaje_heroe=0;
+int regulador_personaje_heroe = 0;
+int cantidad_personaje_heroe = 0;
 
-struct personaje{
+struct personaje
+{
     string nombre;
     Especie *tipo;
     int identificador;
-    personaje *siguiente=nullptr;
+    personaje *siguiente = nullptr;
 };
-// 
+//
 
 //-----------------------------------------------------------------------------------------------------
 //-------------------------------------- FUNCIONES ----------------------------------------------------
 
 // Funciones para verificar formato de respuesta
-// Verificar entero para el menu de Opciones:
-int obtener_opcion()
+// Verificar entero:
+bool validar_entero(string entrada, int max_length)
+{
+
+    // Si la longitud de la entrada es mayor a 1, retorna false (opcion es 1 solo digito)
+    // Si dicho caracter no es un digito, retorna false.
+    if (entrada.size() > max_length || (!(isdigit(entrada[0]))))
+    {
+        return false;
+    }
+    return true;
+}
+
+// Funcion especifica para el menu de opciones
+int obtener_opcion(int max_length)
 {
     string entrada;
     int opcion;
 
+    // Pide la opcion
     cout << "Ingrese una opcion: ";
     getline(cin, entrada);
 
-    while (entrada.size() > 1 || (!(isdigit(entrada[0]))))
+    // Verifica si la entrada es un entero
+    bool es_entero = validar_entero(entrada, max_length); // Verifica que la entrada sea un entero.
+
+    // Si no es entero:
+    while (!(es_entero)) // Mientras no sea un entero, vuelve a pedir la entrada.
     {
         cout << "Error. Ingrese una opcion valida: ";
         getline(cin, entrada);
+        es_entero = validar_entero(entrada, 1); // Verifica que la entrada sea un entero.
     }
 
+    // Retorna la opcion convertida a entero con stoi (string to int)
     opcion = stoi(entrada);
     return (opcion);
 }
@@ -114,7 +135,7 @@ void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
     { // si es heroe
         cout << "\nIngrese los datos para la nueva especie se heroe\n";
     }
-    cin.ignore(); // Limpiar el buffer
+    cin.ignore(50); // Limpiar el buffer
 
     cout << "Nombre de la especie: ";
     getline(cin, nuevo->nombre_especie);
@@ -122,19 +143,23 @@ void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
     if (tipo == 1)
     {
         cout << "Danno: ";
-        cin >> nuevo->danno_fortaleza;
+        nuevo->danno_fortaleza = obtener_opcion(10);
+        // cin >> nuevo->danno_fortaleza;
     }
     else
     {
         cout << "fortaleza: ";
-        cin >> nuevo->danno_fortaleza;
+        nuevo->danno_fortaleza = obtener_opcion(10);
+        // cin >> nuevo->danno_fortaleza;
     }
 
     cout << "Salud: ";
-    cin >> nuevo->salud;
+    nuevo->salud = obtener_opcion(10);
+    // cin >> nuevo->salud;
 
     cout << "Rapidez: ";
-    cin >> nuevo->rapidez;
+    nuevo->rapidez = obtener_opcion(10);
+    // cin >> nuevo->rapidez;
     cout << endl;
 
     // inserta de primero en la lista.
@@ -157,11 +182,12 @@ void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
     }
 }
 
+// Para mostrar listas de especies
 void mostrar_lista(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
 {                                                  // toma la direccion de memoria.
     if (lista.cantidad == 0)
     { // si no hay elementos no hace nada.
-        cout << "la lista esta vacia. \n\n";
+        cout << "No hay tipos de Orcos disponibles. \n\n";
         return;
     }
 
@@ -195,6 +221,7 @@ void mostrar_lista(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
          << endl;
 }
 
+// Para actalizar tipos de especies.
 void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
 {
     if (lista.cantidad == 0)
@@ -205,14 +232,14 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
 
     int referencia;
     cout << "\nlos tipos de especie disponible son: ";
-    mostrar_lista(lista,tipo);
+    mostrar_lista(lista, tipo);
     if (tipo == 1)
     {
-        cout << "Ingrese el numero del tipo de orco que decea modificar: ";
+        cout << "Ingrese el numero del tipo de orco que desea modificar: ";
     }
     else
     {
-        cout << "Ingrese el numero del tipo de heroe que decea modificar: ";
+        cout << "Ingrese el numero del tipo de heroe que desea modificar: ";
     }
     cin >> referencia;
     Especie *actual = lista.primero_especie;
@@ -345,113 +372,133 @@ void eliminar_elemento_lista(Lista_especie &lista, int tipo)
 }
 // FUNCIONES REFERENTES A PERSONAJES.
 
-// funcion que retorna un puntero a una especie.
-Especie* encontra_especie(Lista_especie &lista, int identificador){
+// Funcion que retorna un puntero a una especie.
+Especie *encontrar_especie(Lista_especie &lista, int identificador)
+{
     Especie *actual = lista.primero_especie;
-    while ((actual->identificador != identificador) && (actual->siguiente != nullptr)){
+    while ((actual->identificador != identificador) && (actual->siguiente != nullptr))
+    {
         actual = actual->siguiente;
     }
-    if (actual->identificador == identificador){
+    if (actual->identificador == identificador)
+    {
         return actual;
-    }else{
-        cout << " la especie que coloco no existe."<<endl;
+    }
+    else
+    {
+        cout << " la especie que coloco no existe." << endl;
         actual = nullptr;
         return actual;
     }
 }
 
-// para crear personajes. 
-void crear_personaje(personaje &lista_personaje,Lista_especie &lista_tipos,int tipo){
-    if (lista_tipos.cantidad == 0){  // si nu hay tipos creados se sale.
-        cout << " en este momento no hay especies disponibles, deve crearlas antes de crear un personaje." << endl;
+// para crear personajes.
+void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int tipo)
+{
+    if (lista_tipos.cantidad == 0)
+    { // si no hay tipos creados se sale.
+        cout << "Todavia no hay especies disponibles. Debe crearlas antes de crear un personaje." << endl;
         return;
-    }else{
+    }
+    else
+    {
         personaje *nuevo = new personaje;
-        int num_tipo=0;                     // numero del tipo del personaje (identificador)
-        Especie *puntero_especie=nullptr;   // puntero al que se le asignara la especie.
-        
+        int num_tipo = 0;                   // numero del tipo del personaje (identificador)
+        Especie *puntero_especie = nullptr; // puntero al que se le asignara la especie.
 
-        if (tipo == 1){
-            cout << "      Coloque los datos de nuvo personaje orco." << endl;
+        if (tipo == 1)
+        {
+            cout << "      Coloque los datos de nuevo personaje orco." << endl;
             cout << "nombre: ";
-            cin >> nuevo->nombre; 
-    
+            cin >> nuevo->nombre;
+
             cout << "ahora coloque el tipo de especie al que pertenecera el personaje \n";
             cout << "\n    los tipos disponibles son: " << endl;
-            mostrar_lista(lista_tipos,tipo);
+            mostrar_lista(lista_tipos, tipo);
             cout << "coloque el numero del tipo del personaje: ";
-            cin >> num_tipo;     //(identificador)
-            puntero_especie =encontra_especie(lista_tipos,num_tipo);
-
-        } else{    // lo mismo pero pra heroes.
+            cin >> num_tipo; //(identificador)
+            puntero_especie = encontrar_especie(lista_tipos, num_tipo);
+        }
+        else
+        { // lo mismo pero pra heroes.
             cout << "      Coloque los datos de nuevo personaje heroe. " << endl;
             cout << "nombre: ";
-            cin >> nuevo->nombre; 
-    
+            cin >> nuevo->nombre;
+
             cout << "ahora coloque el tipo de especie al que pertenecera el personaje \n";
             cout << "\n    los tipos disponibles son: " << endl;
-            mostrar_lista(lista_tipos,tipo);
+            mostrar_lista(lista_tipos, tipo);
             cout << "coloque el numero del tipo del personaje: ";
-            cin >> num_tipo;     //(identificador)
-            puntero_especie =encontra_especie(lista_tipos,num_tipo);
+            cin >> num_tipo; //(identificador)
+            puntero_especie = encontrar_especie(lista_tipos, num_tipo);
             // para validar que si esta la especie en la lista.
-        }  
+        }
 
-        if (puntero_especie == nullptr){
+        if (puntero_especie == nullptr)
+        {
             cout << " la especie deve crearce primero." << endl;
             cout << " creacion del personaje: " << nuevo->nombre << " fue fallida " << endl;
-            delete nuevo;   // liveramos memoria dinamica
+            delete nuevo; // liveramos memoria dinamica
             return;
-        } else{
-            nuevo->tipo=puntero_especie;
+        }
+        else
+        {
+            nuevo->tipo = puntero_especie;
         }
         // lo mandamos a la lista enlazada.
         nuevo->siguiente = lista_personaje.siguiente;
         lista_personaje.siguiente = nuevo;
 
-        if (tipo==1){
-            cantidad_personaje_orco+=1;   // simamos a la cantidad de orcos.
+        if (tipo == 1)
+        {
+            cantidad_personaje_orco += 1; // simamos a la cantidad de orcos.
             nuevo->identificador = (cantidad_personaje_orco + regulador_personaje_orco);
-            cout << "el orco: "<< nuevo->nombre <<", se agrego correctamente." << endl;
-        } else{
-            cantidad_personaje_heroe+=1;  // sumamos a la cantidad de heroes.
+            cout << "el orco: " << nuevo->nombre << ", se agrego correctamente." << endl;
+        }
+        else
+        {
+            cantidad_personaje_heroe += 1; // sumamos a la cantidad de heroes.
             nuevo->identificador = (cantidad_personaje_heroe + regulador_personaje_heroe);
-            cout << "el heroe: "<< nuevo->nombre <<", se agrego correctamente." << endl;
-            
-        }      
+            cout << "el heroe: " << nuevo->nombre << ", se agrego correctamente." << endl;
+        }
     }
 }
 
 // funcion para destruir la lista de personajes.
 void destruir_lista_personajes(personaje &lista)
-{                                            // Toma la direccion de memoria de la lista que se le pase (del tipo).
+{                                        // Toma la direccion de memoria de la lista que se le pase (del tipo).
     personaje *actual = lista.siguiente; // declara un nodo actual para igualarlo al primer elemento de la lista.
     while (actual != nullptr)
-    {                               // si es nullptr es porque es el ultimo elemento.
+    {                                 // si es nullptr es porque es el ultimo elemento.
         personaje *eliminar = actual; // se crea una variable aux (eliminar) para darle la direccion de memoria de actual.
-        actual = actual->siguiente; // se manda al siguente nodo al actual.
-        delete eliminar;            // se elimina la variable aux (eliminar).
+        actual = actual->siguiente;   // se manda al siguente nodo al actual.
+        delete eliminar;              // se elimina la variable aux (eliminar).
     }
     // la declaramos en null a la lista.
 }
 
 // funcion para mostrar los personajes
 void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 heroe
-{                                                  // toma la direccion de memoria.
+{                                                   // toma la direccion de memoria.
     // para validar que si hay personajes para mostrar.
-    if (tipo == 1){       // para orcos.
-        if (cantidad_personaje_orco == 0){
-            cout <<"\nno hay personajes orcos para mostra actualmente \n";
+    if (tipo == 1)
+    { // para orcos.
+        if (cantidad_personaje_orco == 0)
+        {
+            cout << "\nno hay personajes orcos para mostra actualmente \n";
             cout << "primero deve crerlos\n";
             return;
         }
-    }else{                // para heroes
-        if (cantidad_personaje_heroe == 0){
-            cout <<"\nno hay personajes heroes para mostra actualmente \n";
-            cout << "primero deve crerlos\n";       
+    }
+    else
+    { // para heroes
+        if (cantidad_personaje_heroe == 0)
+        {
+            cout << "\nno hay personajes heroes para mostra actualmente \n";
+            cout << "primero deve crerlos\n";
         }
     }
-    
+
     if (tipo == 1)
     {
         cout << "\nHay [" << cantidad_personaje_orco << "] personajes orcos" << endl;
@@ -465,38 +512,44 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
     { // si es igual a nullptr significa que es el ultimo elemento de la lista.
         cout << actual->identificador << "-";
         cout << "Nombre= " << actual->nombre << endl;
-        cout << "Especie= " << actual->tipo->nombre_especie << endl << endl;
-        actual = actual->siguiente;     
+        cout << "Especie= " << actual->tipo->nombre_especie << endl;
+        actual = actual->siguiente;
     }
     cout << "No hay mas personajes.\n"
          << endl;
 }
 
 // funcion para modificar a los personajes.
-void actualizar_personaje(personaje &lista,Lista_especie lista_tipo ,int tipo) // tipo=1 orco / tipo=2 heroe
+void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) // tipo=1 orco / tipo=2 heroe
 {
-    if (tipo == 1){       // para orcos.
-        if (cantidad_personaje_orco == 0){
-            cout <<"\nno hay personajes orcos para mostra actualmente \n";
-            cout << "primero deve crerlos\n";
+    if (tipo == 1)
+    { // para orcos.
+        if (cantidad_personaje_orco == 0)
+        {
+            cout << "\nNo hay personajes orcos para mostrar actualmente \n";
+            cout << "Primero debe crearlos\n";
             return;
         }
-    }else{                // para heroes
-        if (cantidad_personaje_heroe == 0){
-            cout <<"\nno hay personajes heroes para mostra actualmente \n";
-            cout << "primero deve crerlos\n";       
+    }
+    else
+    { // para heroes
+        if (cantidad_personaje_heroe == 0)
+        {
+            cout << "\nNo hay personajes heroes para mostrar actualmente \n";
+            cout << "primero debe crearlos\n";
             return;
         }
     }
     // el procedimineto es similar al de crear personajes.
-    int identificador_tipo=0;
+    int identificador_tipo = 0;
     int referencia;
-    Especie *especie_nueva=nullptr;
-    
-    cout << "los personajes disponibles son: \n";
-    mostrar_personajes(lista,tipo);
-    cout << "ingrse el numero del personaje que desea modificar: ";    
-    cin >> referencia;
+    Especie *especie_nueva = nullptr;
+
+    cout << "Los personajes disponibles son: \n";
+    mostrar_personajes(lista, tipo);
+    cout << "Ingrese el numero del personaje que desea modificar: ";
+    referencia = obtener_opcion(10);
+    // verificar q siga funcionando
     personaje *actual = lista.siguiente;
     bool encontrado = false;
 
@@ -504,38 +557,42 @@ void actualizar_personaje(personaje &lista,Lista_especie lista_tipo ,int tipo) /
     {
         if (actual->identificador == referencia)
         {
-            encontrado=true;
-            cout <<"ingrese los datos para actuaizar al personaje " << actual->nombre<<endl;
+            encontrado = true;
+            cout << "ingrese los datos para actualizar al personaje " << actual->nombre << endl;
             cin.ignore(); // Limpiar el buffer
-            
+
             cout << "Nombre del personaje: ";
             getline(cin, actual->nombre);
-            
- 
-        
-            cout << "\n ahora coloque el nuevo tipode de especie al que pertenecera el personje \n";
-            cout << "\n    los tipos disponibles son: " << endl;
-            mostrar_lista(lista_tipo,tipo);
-            cout << "coloque el numero del tipo del personaje: ";
-            cin >> identificador_tipo;     //(identificador)
-            especie_nueva =encontra_especie(lista_tipo,identificador_tipo);
-               
-            if (especie_nueva == nullptr){
+
+            cout << "\n Coloque el nuevo tipo de de especie al que pertenecera el personje \n";
+            cout << "\n Los tipos disponibles son: " << endl;
+            mostrar_lista(lista_tipo, tipo);
+
+            cout << "Coloque el numero del tipo del personaje: ";
+            cout << "AAA\n";
+            identificador_tipo = obtener_opcion(10); //(identificador)
+
+            //  cin >> identificador_tipo; //(identificador)
+            especie_nueva = encontrar_especie(lista_tipo, identificador_tipo);
+
+            if (especie_nueva == nullptr)
+            {
                 cout << " la que coloco no se encuentra disponible." << endl;
                 cout << " la actualiacion del personaje: " << actual->nombre << " fue fallida " << endl;
                 return;
-            } else{
-                cout <<"el personaje ahora de nombre: " << actual->nombre << " se actualizo correctamente";
             }
-        
+            else
+            {
+                cout << "el personaje ahora de nombre: " << actual->nombre << " se actualizo correctamente";
+            }
         }
         actual = actual->siguiente;
-    
     }
-        if (!encontrado){
+    if (!encontrado)
+    {
         cout << "No se encontró ningún tipo de orco con el ID: " << referencia << ".\n";
         cout << "actualizacion fallida \n";
-        }
+    }
 }
 
 //-----------------------------------------------------------------------------------------------------
@@ -546,12 +603,13 @@ int main()
 
     Lista_especie tipoEspecieOrco;  // lista enlazada que contiene todos los tipos de orcos.
     Lista_especie tipoEspecieHeroe; // lista enlazada que contiene todos los tipos de heroes.
-    
-    personaje personajes_orco;      // lista enlazada de personajes orcos.
-    personaje personajes_hero;      // lista enlazada de personajes heroes.
+
+    personaje personajes_orco; // lista enlazada de personajes orcos.
+    personaje personajes_hero; // lista enlazada de personajes heroes.
 
     int opcion_principal = 0;
     int opcion_interna = 0;
+    // bool desea_salir_menu_interno = false; // variable para el menu de opciones.
     // bool es_opcion_valida;
     cout << "Bienvenido ¿Que desea hacer?: " << endl;
 
@@ -563,115 +621,121 @@ int main()
         cout << "1. Ingresar al Menu de Orcos" << "\n";
         cout << "2. Ingresar al Menu de Heroes" << "\n";
         cout << "3. Ingresar al Menu de Implementos" << "\n"; // Por agregar
-        cout << "4. No ingresar a ningun menu" << "\n";
-        opcion_principal = obtener_opcion();
+        cout << "4. Salir de Menu Principal" << "\n";
+        opcion_principal = obtener_opcion(1);
 
         // Switch para Menu Principal
         switch (opcion_principal)
         {
         // Menu Orcos
         case 1:
-            cout << "\n MENU ORCOS:\n";
-            cout << "---------------------\n";
-            cout << "1. Agregar una especie de Orco \n";
-            cout << "2. Actualizar los datos de un tipo de Orco \n";
-            cout << "3. Mostrar los tipos de Orcos disponibles \n";
-            cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
-            cout << "------------------------\n";
-            cout << "5. Crear personaje \n";
-            cout << "6. Mostrar personajes \n";
-            cout << "7. Modificar personaje \n";
-            cout << "------------------------\n";
-            cout << "8.Salir al menu principal.\n";
-
-            opcion_interna = obtener_opcion();
-
-            switch (opcion_interna)
+            do
             {
-            case 1:
-                Crear_tipo(tipoEspecieOrco, 1);
-                break;
-            case 2:
+                cout << "\n MENU ORCOS:\n";
+                cout << "---------------------\n";
+                cout << "1. Agregar una especie de Orco \n";
+                cout << "2. Actualizar los datos de un tipo de Orco \n";
+                cout << "3. Mostrar los tipos de Orcos disponibles \n";
+                cout << "4. Eliminar un tipo de especie \n";
+                cout << "------------------------\n";
+                cout << "5. Crear personaje \n";
+                cout << "6. Mostrar personajes \n";
+                cout << "7. Modificar personaje \n";
+                cout << "------------------------\n";
+                cout << "8.Salir al menu principal.\n";
+                opcion_interna = obtener_opcion(1);
 
-                actualizar_tipo(tipoEspecieOrco, 1);
-                break;
-            case 3:
-                mostrar_lista(tipoEspecieOrco, 1);
-                break;
-            case 4:
-                
-                eliminar_elemento_lista(tipoEspecieOrco, 1);
-                break;
-            case 5:
-                crear_personaje(personajes_orco, tipoEspecieOrco,1);
-                break;
-            
-            case 6:
-                mostrar_personajes(personajes_orco,1);
-                break;
-            case 7:
-                actualizar_personaje(personajes_orco,tipoEspecieOrco,1);
-                break;
-            case 8:
-                cout << "\nSaliendo al Menu Principal... \n";
-                break;
-            default:
-                cout << "Invalido. Ingrese una opcion valida \n";
-                break;
-            }
+                switch (opcion_interna)
+                {
+                case 1:
+                    Crear_tipo(tipoEspecieOrco, 1);
+                    break;
+                case 2:
+
+                    actualizar_tipo(tipoEspecieOrco, 1);
+                    break;
+                case 3:
+                    mostrar_lista(tipoEspecieOrco, 1);
+                    break;
+                case 4:
+
+                    eliminar_elemento_lista(tipoEspecieOrco, 1);
+                    break;
+                case 5:
+                    crear_personaje(personajes_orco, tipoEspecieOrco, 1);
+                    break;
+
+                case 6:
+                    mostrar_personajes(personajes_orco, 1);
+                    break;
+                case 7:
+                    actualizar_personaje(personajes_orco, tipoEspecieOrco, 1);
+                    break;
+                case 8:
+                    cout << "\nSaliendo al Menu Principal... \n";
+                    break;
+                default:
+                    cout << "Invalido. Ingrese una opcion valida \n";
+                    break;
+                }
+            } while (opcion_interna != 8); // Mientras no se salga del menu interno de orcos.
             break;
 
         // Menu Heroes
         case 2:
-            cout << "\n MENU DE HEROES:\n";
-            cout << "---------------------\n";
-            cout << "1. Agregar una especie de Heroe \n";
-            cout << "2. Actualizar los datos de un tipo de Heroe \n";
-            cout << "3. Mostrar los tipos de Heroes disponibles \n";
-            cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
-            cout << "---------------------\n";
-            cout << "5. Crear personaje.\n";
-            cout << "6. Mostrar personajes. \n";
-            cout << "7. Modificar personaje \n";
-            cout << "---------------------\n";
-            cout << "8. Salir al menu principal  \n";
-            opcion_interna = obtener_opcion();
-
-            switch (opcion_interna)
+            do
             {
-            case 1:
-                Crear_tipo(tipoEspecieHeroe, 2);
-                break;
-            case 2:
+                cout << "\n MENU DE HEROES:\n";
+                cout << "---------------------\n";
+                cout << "1. Agregar una especie de Heroe \n";
+                cout << "2. Actualizar los datos de un tipo de Heroe \n";
+                cout << "3. Mostrar los tipos de Heroes disponibles \n";
+                cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
+                cout << "---------------------\n";
+                cout << "5. Crear personaje.\n";
+                cout << "6. Mostrar personajes. \n";
+                cout << "7. Modificar personaje \n";
+                cout << "---------------------\n";
+                cout << "8. Salir al menu principal  \n";
+                opcion_interna = obtener_opcion(1);
 
-                actualizar_tipo(tipoEspecieHeroe, 2);
-                break;
-            case 3:
-                mostrar_lista(tipoEspecieHeroe, 2);
-                break;
-            case 4:
-                eliminar_elemento_lista(tipoEspecieHeroe, 2);
-                break;
-            case 5:
-                 crear_personaje(personajes_hero,tipoEspecieHeroe,2);
-                break; 
-            case 6:
-                mostrar_personajes(personajes_hero,2);
-                break;
-            case 7:
-                actualizar_personaje(personajes_hero,tipoEspecieHeroe,2);
-                break;
-            case 8:
-                cout << "\nSaliendo al Menu Principal... \n";
-                break;
-            default:
-                cout << "Invalido. Ingrese una opcion valida \n";
-                break;
-            }
+                switch (opcion_interna)
+                {
+                case 1:
+                    Crear_tipo(tipoEspecieHeroe, 2);
+                    break;
+                case 2:
+
+                    actualizar_tipo(tipoEspecieHeroe, 2);
+                    break;
+                case 3:
+                    mostrar_lista(tipoEspecieHeroe, 2);
+                    break;
+                case 4:
+                    eliminar_elemento_lista(tipoEspecieHeroe, 2);
+                    break;
+                case 5:
+                    crear_personaje(personajes_hero, tipoEspecieHeroe, 2);
+                    break;
+                case 6:
+                    mostrar_personajes(personajes_hero, 2);
+                    break;
+                case 7:
+                    actualizar_personaje(personajes_hero, tipoEspecieHeroe, 2);
+                    break;
+                case 8:
+                    cout << "\nSaliendo al Menu Principal... \n";
+                    break;
+                default:
+                    cout << "Invalido. Ingrese una opcion valida \n";
+                    break;
+                }
+            } while (opcion_interna != 8); // Mientras no se salga del menu interno de heroes.
             break;
 
         // Menu Implementos
         case 3:
+            // Cuando se agreguen las cosas, hay que hacer el do while
             cout << "\n MENU DE IMPLEMENTOS:\n";
             cout << "TODAVIA NO EXISTE OJO \n";
             cout << "DEVOLVIENDO AL MENU PRINCIPAL... \n";
@@ -696,7 +760,7 @@ int main()
     // Hay que añadir todos los tipos de listas que se vayan creando.
     destruir_lista_especie(tipoEspecieHeroe);
     destruir_lista_especie(tipoEspecieOrco); // se destruye la lista al final del programa.
-    
+
     destruir_lista_personajes(personajes_orco);
     destruir_lista_personajes(personajes_hero);
 
