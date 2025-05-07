@@ -19,9 +19,9 @@
   - [ ] Modificar
   - [ ] Destruir
 
-- [ ] Al actualizar una especie, debeeria de haber opcion para eliminarla  
+- [ ] Al actualizar una especie, deberia de haber opcion para eliminarla  
   -Podemos hacer una opcion de eliminar, o sino hacer que el usuario ingrese 0 en todas las caracteristicas
-- [ ] La funcion mostrar listas, las muestra de la ultima a la primera (3→2→1) en vez de (1→2→3)  
+- [x] La funcion mostrar listas, las muestra de la ultima a la primera (3→2→1) en vez de (1→2→3)  
 
   
 
