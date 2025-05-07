@@ -3,17 +3,19 @@
 
 #include <iostream> // para operaciones de entrada y salida de datos.
 #include <string>   // para manejar string
+#include <string.h> // para strlen
 #include <limits.h> // para los punteros NEW.
 
 using namespace std;
 
 //-----------------------------------------------------------------------------------------------------
 
-//------------------------------ PARA LOS TIPOS ------------------------------------------------------
-// regulador para cuando se eliminen tipos de orcos en la lista.
+//------------------------------ PARA LOS TIPOS DE ESPECIES -------------------------------------------
+// Regulador para cuando se eliminen tipos de orcos en la lista.
 int regulador_tipo_orco = 0;
 int regulador_tipo_heroe = 0;
-// ESTRUCTURA PARA LOS TIPOS DE especies. orcos y heroes
+
+// ESTRUCTURA para los tipos de especies. orcos y heroes
 struct Especie
 {
     string nombre_especie;
@@ -24,13 +26,47 @@ struct Especie
     Especie *siguiente;
 };
 
-// Estructura para crear las listas enlazadas de tipo orco.
+// Estructura para crear las listas enlazadas.
 struct Lista_especie
 {
     Especie *primero_especie = nullptr;
     int cantidad = 0;
 };
-//-----------------------------------------------------------------------------------------------------
+//-------------------------------------- FUNCIONES ----------------------------------------------------
+
+// Funciones para verificar formato de respuesta
+// Verificar entero para el menu de Opciones:
+int obtener_opcion()
+{
+    string entrada;
+    int opcion;
+
+    cout << "Ingrese una opcion: ";
+    getline(cin, entrada);
+
+    while (entrada.size() > 1 || (!(isdigit(entrada[0]))))
+    {
+        cout << "Error. Ingrese una opcion valida: ";
+        getline(cin, entrada);
+    }
+
+    opcion = stoi(entrada);
+    return (opcion);
+}
+
+// Verificar string:
+bool verificar_string(string respuesta)
+{
+    // Si la respuesta deberia ser una letra
+    for (char caracter : respuesta)
+    {
+        if (isdigit(caracter)) // Si caracter es un numero, retorna Falso
+        {
+            return false;
+        }
+    }
+    return true; // Si no hay numeros, retorna true
+}
 
 // funcion para liberar memoria dinamica.
 void destruir_lista_especie(Lista_especie &lista)
@@ -288,80 +324,125 @@ void eliminar_elemento_lista(Lista_especie &lista, int tipo)
     }
 }
 
+//-----------------------------------------------------------------------------------------------------
+//------------------------------ EJECUCION DEL PROGRAMA -----------------------------------------------
+
 int main()
 {
+
     Lista_especie tipoEspecieOrco;  // lista enlazada que contiene todos los tipos de orcos.
     Lista_especie tipoEspecieHeroe; // lista enlazada que contiene todos los tipos de heroes.
-    int opcion = 0;
-
+    int opcion_principal = 0;
+    int opcion_interna = 0;
+    bool es_opcion_valida;
     cout << "Bienvenido ¿Que desea hacer?: " << endl;
 
-    // menu mientras.
+    // Menu mientras.
+
     do
     {
-        cout << "\n      MENU \n";
-        cout << "\n ORCOS:\n";
-        cout << "---------------------\n";
-        cout << "1. Agregar una especie orco \n";
-        cout << "2. Actualizar los datos de un orco \n";
-        cout << "3. Mostrar los tipos de orcos disponibles \n";
-        cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
+        cout << "\n      MENU PRINCIPAL \n";
+        cout << "1. Ingresar al Menu de Orcos" << "\n";
+        cout << "2. Ingresar al Menu de Heroes" << "\n";
+        cout << "3. Ingresar al Menu de Implementos" << "\n"; // Por agregar
+        cout << "4. No ingresar a ningun menu" << "\n";
+        opcion_principal = obtener_opcion();
 
-        cout << "\n HEROES:\n";
-        cout << "\nMENU DE OPCIONES HEROES: \n";
-        cout << "---------------------\n";
-        cout << "5. Agregar una especie orco \n";
-        cout << "6. Actualizar los datos de un orco \n";
-        cout << "7. Mostrar los tipos de orcos disponibles \n";
-        cout << "8. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
-
-        cout << "9. Salir del menu \n ";
-
-        cout << "Ingrese una opcion: ";
-        cin >> opcion;
-
-        switch (opcion)
+        // Switch para Menu Principal
+        switch (opcion_principal)
         {
+        // Menu Orcos
         case 1:
-            Crear_tipo(tipoEspecieOrco, 1);
+            cout << "\n MENU ORCOS:\n";
+            cout << "---------------------\n";
+            cout << "1. Agregar una especie de Orco \n";
+            cout << "2. Actualizar los datos de un Orco \n";
+            cout << "3. Mostrar los tipos de Orcos disponibles \n";
+            cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
+            cout << "5. Volver al menu principal \n";
+            opcion_interna = obtener_opcion();
+
+            switch (opcion_interna)
+            {
+            case 1:
+                Crear_tipo(tipoEspecieOrco, 1);
+                break;
+            case 2:
+                actualizar_tipo(tipoEspecieOrco, 1);
+                break;
+            case 3:
+                mostrar_lista(tipoEspecieOrco, 1);
+                break;
+            case 4:
+                eliminar_elemento_lista(tipoEspecieOrco, 1);
+                break;
+            case 5:
+                cout << "\nSaliendo al Menu Principal... \n";
+                break;
+            default:
+                cout << "Invalido. Ingrese una opcion valida \n";
+                break;
+            }
             break;
+
+        // Menu Heroes
         case 2:
-            actualizar_tipo(tipoEspecieOrco, 1);
+            cout << "\n MENU DE HEROES:\n";
+            cout << "---------------------\n";
+            cout << "1. Agregar una especie de Heroe \n";
+            cout << "2. Actualizar los datos de un Heroe \n";
+            cout << "3. Mostrar los tipos de Heroes disponibles \n";
+            cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
+            cout << "5. Salir al menu principal  \n";
+            opcion_interna = obtener_opcion();
+
+            switch (opcion_interna)
+            {
+            case 1:
+                Crear_tipo(tipoEspecieHeroe, 2);
+                break;
+            case 2:
+                actualizar_tipo(tipoEspecieHeroe, 2);
+                break;
+            case 3:
+                mostrar_lista(tipoEspecieHeroe, 2);
+                break;
+            case 4:
+                eliminar_elemento_lista(tipoEspecieHeroe, 2);
+                break;
+            case 5:
+                cout << "\nSaliendo al Menu Principal... \n";
+                break; // Sale del programa, la opcion como tal no destruye las listas porque se destruyen automaticamente al salir del programa
+            default:
+                cout << "Invalido. Ingrese una opcion valida \n";
+                break;
+            }
             break;
+
+        // Menu Implementos
         case 3:
-            mostrar_lista(tipoEspecieOrco, 1);
+            cout << "\n MENU DE IMPLEMENTOS:\n";
+            cout << "TODAVIA NO EXISTE OJO \n";
+            cout << "DEVOLVIENDO AL MENU PRINCIPAL... \n";
+            // opcion_interna = obtener_opcion();
+
             break;
+
         case 4:
-            eliminar_elemento_lista(tipoEspecieOrco, 1);
+            cout << "\nSaliendo del Menu Principal... \n";
+            cout << "Entrando al Juego... \n";
             break;
 
-            // Opciones para heroes
-        case 5:
-            Crear_tipo(tipoEspecieHeroe, 2);
-            break;
-        case 6:
-            actualizar_tipo(tipoEspecieHeroe, 2);
-            break;
-        case 7:
-            mostrar_lista(tipoEspecieHeroe, 2);
-            break;
-        case 8:
-            eliminar_elemento_lista(tipoEspecieHeroe, 2);
-
-            break;
-        case 9:
-            cout << "\nSaliendo del menu... \n";
-            break; // Sale del programa, la opcion como tal no destruye las listas porque se destruyen automaticamente al salir del programa
-
+        // Default del Menu Principal:
         default:
-            cout << "opcion no valida, la opcion " << opcion << " no esta disponible. \n";
+            cout << "Invalido. Ingrese una opcion valida";
             break;
         }
-    } while (opcion != 9);
+
+    } while (opcion_principal != 4);
 
     // Dejar esto al final del programa para que se destruyan las listas enlazadas.
     // Hay que añadir todos los tipos de listas que se vayan creando.
-
     destruir_lista_especie(tipoEspecieHeroe);
     destruir_lista_especie(tipoEspecieOrco); // se destruye la lista al final del programa.
     cout << "Gracias por usar el programa. \n";
