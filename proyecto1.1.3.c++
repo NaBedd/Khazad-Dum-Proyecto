@@ -35,20 +35,23 @@ struct Lista_especie
 //-------------------------------------- FUNCIONES ----------------------------------------------------
 
 // Funciones para verificar formato de respuesta
-// Verificar entero:
-// ESTA MAL LOGICAMENTE, CAMBIAR LOGICA.
-bool verificar_entero(const char numero[]) // numero[] es un array de caracteres que contienen el numero como string.
+// Verificar entero para el menu de Opciones:
+int obtener_opcion()
 {
-    int i;
-    // Si la respuesta deberia de ser un Numero:
-    for (i = 0; i < strlen(numero); i++)
+    string entrada;
+    int opcion;
+
+    cout << "Ingrese una opcion: ";
+    getline(cin, entrada);
+
+    while (entrada.size() > 1 || (!(isdigit(entrada[0]))))
     {
-        if (!(isdigit(numero[i])))
-        {
-            return false; // Si caracter no es un numero, retorna Falso
-        }
+        cout << "Error. Ingrese una opcion valida: ";
+        getline(cin, entrada);
     }
-    return true;
+
+    opcion = stoi(entrada);
+    return (opcion);
 }
 
 // Verificar string:
@@ -334,7 +337,7 @@ int main()
     bool es_opcion_valida;
     cout << "Bienvenido ¿Que desea hacer?: " << endl;
 
-    // menu mientras.
+    // Menu mientras.
 
     do
     {
@@ -343,12 +346,7 @@ int main()
         cout << "2. Ingresar al Menu de Heroes" << "\n";
         cout << "3. Ingresar al Menu de Implementos" << "\n"; // Por agregar
         cout << "4. No ingresar a ningun menu" << "\n";
-        cout << "Ingrese una opcion: ";
-        cin >> opcion_principal;
-
-        // Esto no sirve de nada porque si fuera letra, explotaria con el cin antes de llegar a esta parte0
-        // REVISAR
-        es_opcion_valida = verificar_entero(to_string(opcion_principal).c_str());
+        opcion_principal = obtener_opcion();
 
         // Switch para Menu Principal
         switch (opcion_principal)
@@ -362,8 +360,7 @@ int main()
             cout << "3. Mostrar los tipos de Orcos disponibles \n";
             cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
             cout << "5. Volver al menu principal \n";
-            cout << "Ingrese una opcion: ";
-            cin >> opcion_interna;
+            opcion_interna = obtener_opcion();
 
             switch (opcion_interna)
             {
@@ -397,8 +394,7 @@ int main()
             cout << "3. Mostrar los tipos de Heroes disponibles \n";
             cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
             cout << "5. Salir al menu principal  \n";
-            cout << "Ingrese una opcion: ";
-            cin >> opcion_interna;
+            opcion_interna = obtener_opcion();
 
             switch (opcion_interna)
             {
@@ -428,6 +424,8 @@ int main()
             cout << "\n MENU DE IMPLEMENTOS:\n";
             cout << "TODAVIA NO EXISTE OJO \n";
             cout << "DEVOLVIENDO AL MENU PRINCIPAL... \n";
+            // opcion_interna = obtener_opcion();
+
             break;
 
         case 4:
