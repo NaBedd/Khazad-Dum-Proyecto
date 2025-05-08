@@ -1,4 +1,4 @@
-
+//
 // LIBRERIAS.
 
 #include <iostream> // para operaciones de entrada y salida de datos.
@@ -14,6 +14,29 @@ using namespace std;
 // Regulador para cuando se eliminen tipos de orcos en la lista.
 int regulador_tipo_orco = 0;
 int regulador_tipo_heroe = 0;
+
+//ESTRUCTURA DE LA MOCHILA
+struct Implemento{
+    string nombre_implemento;
+    string tipo_implemento;
+    string uso_implemento;
+    int fortalezanecesaria;
+    int valor;
+};
+
+//ESTRUCTURA DE LOS PODERES MAGICOS
+struct Poder_magico{
+    string nombre_poder;
+    string funcion;
+};
+
+struct Mapa {
+    string nombreEstacion; // Nombre de la sala
+    int distancia_salida;
+    int cantidadOrcos; // Cantidad de orcos en la sala
+    Mapa* der;
+    Mapa* izq;
+};
 
 // ESTRUCTURA para los tipos de especies. orcos y heroes
 struct Especie
