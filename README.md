@@ -23,7 +23,7 @@
   -Podemos hacer una opcion de eliminar, o sino hacer que el usuario ingrese 0 en todas las caracteristicas
 
 ### Errores Conocidos
-- [ ] Asegurarnos de que NADA explote
+- [x] Asegurarnos de que NADA explote
 - [ ] Al agregar especie orco tienes que darle a Enter por alguna razon
 - [ ] Al terminar de agregar especie orco, el obtener_opcion() te marca como si hubieras puesto una opcion invalida
 - [ ] La funcion mostrar listas, las muestra de la ultima a la primera (3→2→1) en vez de (1→2→3)
