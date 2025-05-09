@@ -3,6 +3,7 @@
 ### Para la primera entrega: 
 
 - [x] Para marcar algo como listo lo escriben asi (ver archivo)  
+- [ ] En funcion eliminar especie primero hay que eliminar todos los personajes   
 
 - [ ] Hacer las funciones para Orcos, Heroes e Implementos
 - [ ] Estructura para los implementos
