@@ -14,12 +14,11 @@
 - [x] Borrar todos los datos dinamicos siempre al final del programa (actualmente solo se hace si el usuario elige la opcion)  
 - [ ] Validaciones (No explotar al meter letras en Danno)  
   
-- [ ] Menu ajustes:  
-  - [ ] Crear  
-  - [ ] Modificar
-  - [ ] Destruir
-
-- [ ] Al actualizar una especie, debeeria de haber opcion para eliminarla  
+- [x] Menu ajustes personaje:  
+  - [x] Crear  
+  - [x] Modificar
+  - [x] Destruir
+  
   -Podemos hacer una opcion de eliminar, o sino hacer que el usuario ingrese 0 en todas las caracteristicas
 
 ### Errores Conocidos
