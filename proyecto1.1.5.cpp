@@ -23,6 +23,7 @@ struct Implemento
     string uso_implemento;
     int fortalezanecesaria;
     int valor;
+    Implemento *siguiente;
 };
 
 // ESTRUCTURA DE LOS PODERES MAGICOS
@@ -30,6 +31,7 @@ struct Poder_magico
 {
     string nombre_poder;
     string funcion;
+    Poder_magico *siguiente;
 };
 
 // Estructura para el Mapa
@@ -104,9 +106,9 @@ int obtener_entero(const string &mensaje)
         }
 
         // Revisa cada caracter
-        for (size_t i = 0; i < entrada.size(); ++i)
+        for (size_t i = 0; i < entrada.size(); ++i)   // entrada.size() devuelve la longitud de la cadena.
         {
-            if (es_valido && !isdigit(entrada[i]))
+            if (es_valido && !isdigit(entrada[i]))  //isdigit( es para comprovar si el caracter es un numero)
             {
                 es_valido = false;
                 break;
@@ -114,9 +116,9 @@ int obtener_entero(const string &mensaje)
         }
 
         // Convierte a entero mientras sea valido y no este vacio
-        if (es_valido && !entrada.empty())
+        if (es_valido && !entrada.empty())  // empty() es para verificar si no esta vai la cadena.
         {
-            valor = stoi(entrada);
+            valor = stoi(entrada);          // stoi convierte una cadena de caracter en entero
 
             return valor;
         }
@@ -145,7 +147,7 @@ bool verificar_string(string respuesta)
         return false; // Si esta vacia, retorna Falso
     }
 
-    for (char caracter : respuesta)
+    for (char caracter : respuesta)  // itera por cada elemento de la caden.
     {
         if (isdigit(caracter)) // Si caracter es un numero, retorna Falso
         {
@@ -173,6 +175,9 @@ string devolver_string_verificada(const string &mensaje)
 
     return (entrada);
 }
+
+
+
 
 // funcion para liberar memoria dinamica.
 void destruir_lista_especie(Lista_especie &lista)
@@ -365,96 +370,23 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
 
 // REVISARRRRRRRRRRRRR
 
-void eliminar_elemento_lista(Lista_especie &lista, int tipo)
-{
-    if (lista.cantidad == 0)
-    {
-        cout << "No hay elementos en la lista para borrar\n";
-        return;
-    }
 
-    mostrar_lista(lista, tipo);
-
-    int identificador = 0;
-
-    identificador = obtener_entero("Ingrese el numero del tipo que desea borrar: ");
-
-    if (identificador > 0 && identificador <= lista.cantidad)
-    {
-        Especie *actual = lista.primero_especie;
-        Especie *anterior = nullptr; // Inicializamos anterior como nullptr
-
-        // Caso especial: el elemento a eliminar es el primero de la lista
-        if (actual != nullptr && actual->identificador == identificador)
-        {
-            lista.primero_especie = actual->siguiente;
-            cout << "El tipo " << actual->nombre_especie << " se elimino correctamente" << endl;
-            delete actual;
-            lista.cantidad -= 1;
-            if (tipo == 1)
-            {
-                regulador_tipo_orco += 1;
-            }
-            else
-            {
-                regulador_tipo_heroe += 1;
-            }
-            return; // Salimos de la función después de eliminar el primer elemento
-        }
-
-        // Caso general: el elemento a eliminar no es el primero
-        while (actual != nullptr && actual->identificador != identificador)
-        {
-            anterior = actual;
-            actual = actual->siguiente;
-        }
-
-        if (actual != nullptr)
-        {
-            Especie *eliminar = actual;
-            anterior->siguiente = actual->siguiente;
-            cout << "El tipo " << eliminar->nombre_especie << " se elimino correctamente" << endl;
-            delete eliminar;
-            lista.cantidad -= 1;
-            if (tipo == 1)
-            {
-                regulador_tipo_orco += 1;
-            }
-            else
-            {
-                regulador_tipo_heroe += 1;
-            }
-        }
-        else
-        {
-            cout << "El numero de especie: " << identificador << " no se encuentra en la lista. \n";
-        }
-    }
-    else
-    {
-        cout << "El numero de especie ingresado no es valido. \n";
-    }
-}
 // FUNCIONES REFERENTES A PERSONAJES.
 
 // Funcion que retorna un puntero a una especie.
 Especie *encontrar_especie(Lista_especie &lista, int identificador)
 {
     Especie *actual = lista.primero_especie;
-    while ((actual->identificador != identificador) && (actual->siguiente != nullptr))
+    while (actual != nullptr)
     {
+        if (actual->identificador == identificador)
+        {
+            return actual;
+        }
         actual = actual->siguiente;
     }
-    if (actual->identificador == identificador)
-    {
-        return actual;
-    }
-    else
-    {
-        cout << "La especie ingresada no existe." << endl;
-        actual = nullptr;
-        return actual;
-    }
+    cout << "La especie ingresada no existe." << endl;
+    return nullptr;
 }
 
 // para crear personajes.
@@ -582,6 +514,7 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
         cout << actual->identificador << "-";
         cout << "Nombre= " << actual->nombre << endl;
         cout << "Especie= " << actual->tipo->nombre_especie << endl;
+        cout << endl;
         actual = actual->siguiente;
     }
     cout << "No hay mas personajes.\n"
@@ -658,10 +591,229 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
     if (!encontrado)
     {
         cout << "No se encontró ningún tipo de orco con el ID: " << referencia << ".\n";
-        cout << "actualizacion fallida \n";
+        cout << "Actualizacion fallida \n";
     }
 }
 
+// para borrar un personaje.
+void borrar_personaje(personaje &lista, int tipo){
+    if (tipo == 1){ // para orcos.
+        if (cantidad_personaje_orco == 0){
+            cout << "\nNo hay personajes orcos para eliminar actualente \n";
+            cout << "Primero debe crearlos\n";
+            return;
+        }
+    }else{ // para heroes
+        if (cantidad_personaje_heroe == 0){
+            cout << "\nNo hay personajes heroes para eliminar actualmente \n";
+            cout << "Primero debe crearlos\n";
+            return;
+        }
+    }
+    
+    int identificador = 0;
+    personaje *actual = lista.siguiente; // aounta al primero de la lista
+    personaje *anterior = nullptr;
+
+    cout << "Los personajes disponibles son: \n";
+    mostrar_personajes(lista,tipo);
+    identificador = obtener_entero("Coloque el numero del personaje a modificar: ");
+
+    if ((actual != nullptr) && (actual->identificador == identificador)){
+        lista.siguiente = actual->siguiente;
+        cout << "El personaje: " << actual->nombre << " fue borrado axitosamente." << endl;
+        delete actual;
+        if (tipo == 1){
+            regulador_personaje_orco +=1;
+            cantidad_personaje_orco -=1;
+        }else{
+            regulador_personaje_heroe +=1;
+            cantidad_personaje_heroe  -=1;
+        }
+        return;
+    }
+
+    while ((actual != nullptr) && (actual->identificador != identificador)){
+        anterior = actual;
+        actual = actual->siguiente;
+    }
+    
+    if (actual != nullptr){
+        personaje *eliminar = actual;
+        anterior->siguiente = actual->siguiente;
+        cout << "El personaje " << eliminar->nombre << " se elimino correctapente. \n ";
+        delete eliminar; 
+        
+        
+        if (tipo == 1){
+            regulador_personaje_orco +=1;
+            cantidad_personaje_orco -=1;
+        } else {
+            regulador_personaje_heroe +=1;
+            cantidad_personaje_heroe -=1;
+        }
+        
+        
+    }else{
+        cout << "El numero de personaje: " << identificador << " no se encuentra en la lista \n ";
+        cout << "Eliminacion fallida \n";   
+    }
+}
+
+// borra todos los personajes de un tipo (epecie).
+void borrar_personajes_de_tipo(personaje &lista_personajes, Especie *tipo_borrar, int tipo) {
+    personaje *actual = lista_personajes.siguiente; // El primero en la lista (después del nodo cabeza)
+    personaje *anterior = &lista_personajes;      // El anterior al que se elimina (inicialmente la cabeza)
+    personaje *eliminar = nullptr;               // Para almacenar el nodo a eliminar
+
+    while (actual != nullptr) {
+        if (actual->tipo != nullptr && actual->tipo->identificador == tipo_borrar->identificador) {
+            eliminar = actual;
+            anterior->siguiente = actual->siguiente; // Enlaza el anterior con el siguiente del nodo a eliminar
+            actual = actual->siguiente;             // Avanza actual para seguir buscando
+
+            cout << "El personaje: " << eliminar->nombre << " fue borrado." << endl;
+            delete eliminar; // Se libera la memoria del personaje borrado
+
+            if (tipo == 1) {
+                regulador_personaje_orco++;
+                cantidad_personaje_orco--;
+            } else {
+                regulador_personaje_heroe++;
+                cantidad_personaje_heroe--;
+            }
+        } else {
+            anterior = actual; // Si no se borra, el actual se convierte en el anterior
+            actual = actual->siguiente; // Avanza al siguiente personaje
+        }
+    }
+}
+
+// pra saber cuantos pesonajes hay de una especie
+int cantidad_personajes_por_especie(personaje &lista_personajes, Especie *mostrar){
+    personaje *actual = lista_personajes.siguiente;
+    int contador=0;
+    while ((actual != nullptr)){
+        if (actual->tipo->identificador == mostrar->identificador){
+            contador +=1;
+        }
+        actual = actual->siguiente;
+    }
+    return contador;
+}
+
+// esta funcion la coloque
+// para eliminar un elemento de la lista 
+void eliminar_elemento_lista(Lista_especie &lista,personaje lista_personajes, int tipo)
+{
+    if (lista.cantidad == 0)
+    {
+        cout << "No hay elementos en la lista para borrar\n";
+        return;
+    }
+    cout << "Las especies disponibles son: \n";
+    mostrar_lista(lista, tipo);
+
+    int identificador = 0;
+
+    identificador = obtener_entero("Ingrese el numero del tipo que desea borrar: ");
+
+    if (identificador > 0)
+    {
+        int controlador_eliminar=0; // para controlar si se va a eliminar o no el tipo
+        
+        // respecto a los tipos
+        Especie *actual = lista.primero_especie;
+        Especie *anterior = nullptr; // Inicializamos anterior como nullptr
+        
+        // respecto a los personajes
+        Especie *especie_borrar=encontrar_especie(lista, identificador);
+        int cantida_personajes=0;
+        // Caso especial: el elemento a eliminar es el primero de la lista
+        
+        
+            // para ver la cntidad de personajes que exixten con el tipo que desea borrar el usuario.
+            cantida_personajes= cantidad_personajes_por_especie(lista_personajes,especie_borrar);
+            
+            // si si hay personajes se le dice al usuario a ver si de todas formas decea eliminar el tipo.    
+            if (cantida_personajes > 0){
+                cout << " Hay: " << cantida_personajes << "personajes de esta especie, por lo tanto. \n";
+                cout << "Al eliminar la especie se boraran los personajes del tipo \n";
+                cout << "eliminar de todas formas coloque 1 \n";
+                cout << "no eliminar coloque 2 \n"; 
+                do
+                {
+                    cout << "(1) o (2)\n";
+                    controlador_eliminar=obtener_entero("coloque el numero:");
+                } while ((controlador_eliminar != 1) && (controlador_eliminar != 2) );
+                
+            }else{
+                cout << " no hay personajes atualmente de este tipo, no hay problema al eliminarlo. \n";
+            }
+            // para eliminar si el usuario dice que si
+            if (controlador_eliminar == 1){
+                // procedemos a borrar los personajes del tipo
+                borrar_personajes_de_tipo(lista_personajes,especie_borrar,tipo);
+                
+            }else if (controlador_eliminar == 2)
+            {
+                cout <<"eliminacion del tipo " << especie_borrar->nombre_especie << " fallida.\n";
+                return; 
+            }
+            
+            // sigue el procedimiento normal para elimanar el tipo.  
+            if ((actual != nullptr) && actual->identificador == identificador)
+            {  
+            lista.primero_especie = actual->siguiente;
+            cout << "El tipo " << actual->nombre_especie << " se elimino correctamente" << endl;
+            delete actual;
+            lista.cantidad -= 1;
+            if (tipo == 1)
+            {
+                regulador_tipo_orco += 1;
+            }
+            else
+            {
+                regulador_tipo_heroe += 1;
+            }
+            return; // Salimos de la función después de eliminar el primer elemento
+            }
+        
+
+        // Caso general: el elemento a eliminar no es el primero
+        while ((actual != nullptr) && (actual->identificador != identificador))
+        {
+            anterior = actual;
+            actual = actual->siguiente;
+        }
+
+        if (actual != nullptr)
+        {
+            Especie *eliminar = actual;
+            anterior->siguiente = actual->siguiente;
+            cout << "El tipo " << eliminar->nombre_especie << " se elimino correctamente" << endl;
+            delete eliminar;
+            lista.cantidad -= 1;
+            if (tipo == 1)
+            {
+                regulador_tipo_orco += 1;
+            }
+            else
+            {
+                regulador_tipo_heroe += 1;
+            }
+        }
+        else
+        {
+            cout << "El numero de especie: " << identificador << " no se encuentra en la lista. \n";
+            cout << "Eliminacion fallida \n";
+        }
+    }
+    else
+    {
+        cout << "El numero de especie ingresado no es valido. \n";
+    }
+}
 //-----------------------------------------------------------------------------------------------------
 //------------------------------ EJECUCION DEL PROGRAMA -----------------------------------------------
 
@@ -707,8 +859,9 @@ int main()
                 cout << "5. Crear personaje \n";
                 cout << "6. Mostrar personajes \n";
                 cout << "7. Modificar personaje \n";
+                cout << "8. Eliminar personaje  \n";
                 cout << "------------------------\n";
-                cout << "8.Salir al menu principal.\n";
+                cout << "9.Salir al menu principal.\n";
                 opcion_interna = obtener_opcion();
 
                 switch (opcion_interna)
@@ -725,7 +878,7 @@ int main()
                     break;
                 case 4:
 
-                    eliminar_elemento_lista(tipoEspecieOrco, 1);
+                    eliminar_elemento_lista(tipoEspecieOrco,personajes_orco,1);
                     break;
                 case 5:
                     crear_personaje(personajes_orco, tipoEspecieOrco, 1);
@@ -738,13 +891,16 @@ int main()
                     actualizar_personaje(personajes_orco, tipoEspecieOrco, 1);
                     break;
                 case 8:
+                    borrar_personaje(personajes_orco,1);
+                    break;
+                case 9:
                     cout << "\nSaliendo al Menu Principal... \n";
                     break;
                 default:
                     cout << "Invalido. Ingrese una opcion valida \n";
                     break;
                 }
-            } while (opcion_interna != 8); // Mientras no se salga del menu interno de orcos.
+            } while (opcion_interna != 9); // Mientras no se salga del menu interno de orcos.
             break;
 
         // Menu Heroes
@@ -761,8 +917,9 @@ int main()
                 cout << "5. Crear personaje.\n";
                 cout << "6. Mostrar personajes. \n";
                 cout << "7. Modificar personaje \n";
+                cout << "8. Eliminar personaje  \n";
                 cout << "---------------------\n";
-                cout << "8. Salir al menu principal  \n";
+                cout << "9. Salir al menu principal  \n";
                 opcion_interna = obtener_opcion();
 
                 switch (opcion_interna)
@@ -778,7 +935,7 @@ int main()
                     mostrar_lista(tipoEspecieHeroe, 2);
                     break;
                 case 4:
-                    eliminar_elemento_lista(tipoEspecieHeroe, 2);
+                    eliminar_elemento_lista(tipoEspecieHeroe,personajes_hero, 2);
                     break;
                 case 5:
                     crear_personaje(personajes_hero, tipoEspecieHeroe, 2);
@@ -790,13 +947,16 @@ int main()
                     actualizar_personaje(personajes_hero, tipoEspecieHeroe, 2);
                     break;
                 case 8:
+                    borrar_personaje(personajes_hero,2);
+                    break;
+                case 9:
                     cout << "\nSaliendo al Menu Principal... \n";
                     break;
                 default:
                     cout << "Invalido. Ingrese una opcion valida \n";
                     break;
                 }
-            } while (opcion_interna != 8); // Mientras no se salga del menu interno de heroes.
+            } while (opcion_interna != 9); // Mientras no se salga del menu interno de heroes.
             break;
 
         // Menu Implementos
