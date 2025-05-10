@@ -15,6 +15,7 @@ using namespace std;
 int regulador_tipo_orco = 0;
 int regulador_tipo_heroe = 0;
 
+
 // ESTRUCTURA DE LA MOCHILA
 struct Implemento
 {
@@ -23,21 +24,27 @@ struct Implemento
     string uso_implemento;
     int fortalezanecesaria;
     int valor;
-    Implemento *siguiente;
+    int identificador;
+    Implemento *siguiente = nullptr;
 };
+int cantidad_implementos=0;
+int regulador_implemento=0;
 
 // ESTRUCTURA DE LOS PODERES MAGICOS
 struct Poder_magico
 {
     string nombre_poder;
     string funcion;
-    Poder_magico *siguiente;
+    int identificador;
+    Poder_magico *siguiente = nullptr;
 };
+int cantidad_poderes=0;
+int regulador_poderes=0;
 
 // Estructura para el Mapa
 struct Mapa
 {
-    string nombreSala; // Nombre de la sala
+    string nombreEstacion; // Nombre de la sala
     int distancia_salida;
     int cantidadOrcos; // Cantidad de orcos en la sala
     Mapa *der;
@@ -53,7 +60,7 @@ struct Especie
     int salud;
     int rapidez;
     int identificador;
-    Especie *siguiente;
+    Especie *siguiente; // no se pone como nul poruw ela lista esta planteada de otra manera.
 };
 
 // Estructura para crear las listas enlazadas.
@@ -62,53 +69,6 @@ struct Lista_especie
     Especie *primero_especie = nullptr;
     int cantidad = 0;
 };
-
-//-----------------------------------------------------------------------------------------------------
-//--------------------------------------PARA EL MAPA---------------------------------------------------
-// Función para crear el nuevo nodo
-Mapa* crearMapa(string nombre, int cantidadistancia, int cantidad_orcos) {
-    Mapa* nuevo_mapa = new Mapa();
-    nuevo_mapa->nombreSala = nombre;
-    nuevo_mapa->distancia_salida=cantidadistancia;
-    nuevo_mapa->cantidadOrcos=cantidad_orcos;
-    nuevo_mapa->der = nullptr;
-    nuevo_mapa->izq = nullptr;
-    return nuevo_mapa;
-}
-
-// Función para agregar un nodo
-void insertarMapa(Mapa*& arbol, string nombre, int cantidad, int cantidad2) {
-    if (arbol == nullptr) { // Si el árbol está vacío
-        arbol = crearMapa(nombre, cantidad, cantidad2);
-    } else { // Si el árbol tiene un nodo o más
-        if (nombre < arbol->nombreSala) {
-            insertarMapa(arbol->izq, nombre, cantidad, cantidad2); // Insertar a la izquierda
-        } else {
-            insertarMapa(arbol->der, nombre, cantidad, cantidad2); // Insertar a la derecha
-        }
-    }
-}
-
-// Función para buscar una sala por nombre
-bool buscarSala(Mapa* arbol, string nombre) {
-    if (arbol == nullptr) {
-        return false; // No se encontró
-    }
-    if (arbol->nombreSala == nombre) {
-        return true; // Se encontró
-    }
-    return buscarSala(arbol->izq, nombre) || buscarSala(arbol->der, nombre);
-}
-
-
-// Función para liberar la memoria del árbol
-void liberarMapa(Mapa* arbol) {
-    if (arbol != nullptr) {
-        liberarMapa(arbol->izq);
-        liberarMapa(arbol->der);
-        delete arbol;
-    }
-}
 
 //-----------------------------------------------------------------------------------------------------
 //------------------------------ PARA LOS PERSONAJES --------------------------------------------------
@@ -862,6 +822,288 @@ void eliminar_elemento_lista(Lista_especie &lista,personaje lista_personajes, in
     }
 }
 //-----------------------------------------------------------------------------------------------------
+// FUNCIONES PARA LOS IMPLEMENTOS.
+
+// para destruir la lista de implementos.
+void destruir_implementos(Implemento &lista_implemento){
+    Implemento *actual = lista_implemento.siguiente;
+    Implemento *eliminar=nullptr;
+    while (actual != nullptr){
+        eliminar = actual;
+        actual = actual->siguiente;
+        delete eliminar;
+    }
+    cantidad_implementos=0;
+    regulador_implemento=0;
+}
+
+// para crear implementos.
+void crear_implemento(Implemento &lista_implemento){
+    Implemento *nuevo = new Implemento;
+    cout << "Proceda a llenar las espicificaciones del imlemento. \n\n";
+    nuevo->nombre_implemento = devolver_string_verificada("Nobre:");
+    nuevo->tipo_implemento = devolver_string_verificada("Tipo: ");
+    nuevo->uso_implemento = devolver_string_verificada("Uso: ");
+    nuevo->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usar el implemento: ");
+    nuevo->valor = obtener_entero("valor: ");
+    // lo agregamos a la lista enlazada.
+    nuevo->siguiente = lista_implemento.siguiente;
+    lista_implemento.siguiente = nuevo;
+    cantidad_implementos +=1;
+    nuevo->identificador= cantidad_implementos + regulador_implemento;
+    cout << "El implemento: " << nuevo->nombre_implemento << "se creo correctamente.";
+}
+
+// buscar implemento.
+Implemento* buscar_implemento(Implemento &lista_implemento, int identificador){
+    Implemento *encontrado = lista_implemento.siguiente;
+    while ((encontrado != nullptr) && (encontrado->identificador != identificador)){
+        encontrado= encontrado->siguiente;
+    }
+    if (encontrado->identificador == identificador){
+        return encontrado;
+    } else{
+        return encontrado = nullptr;
+    }
+    
+    
+    
+}
+
+void mostar_implementos(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
+        cout << "No hay implementos disponibles en este momento. \n";
+        return;
+    }else{
+        cout << "la candtad de implementos es: ["<< cantidad_implementos <<"]. \n";
+    }
+    
+    Implemento *actual = lista_implemento.siguiente;
+    while (actual != nullptr){
+        cout << "\nNombre: " << actual->nombre_implemento <<endl;
+        cout << "\nID: " << actual->identificador;
+        cout << "\nTipo: " << actual->tipo_implemento;
+        cout << "\nUso: " << actual->uso_implemento;
+        cout << "\nFortaleza necesaria para usarlo: " << actual->fortalezanecesaria;
+        cout << "\nValor: " << actual->valor;
+        cout <<endl<<endl; 
+        actual = actual->siguiente; 
+    }
+    cout << "no hay mas implementos disponibles\n";
+}
+
+void modificar_implemento(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
+        cout << "No hay implementos disponibles para modificar \n";
+        return;
+    }
+    int identificador=0;
+    cout << "los impplementos disponibles son: \n";
+    mostar_implementos(lista_implemento);
+    identificador = obtener_entero("Coloque el ID del implemento que desea modificar: ");
+    Implemento *actualizar = buscar_implemento(lista_implemento,identificador);
+    if (actualizar == nullptr){
+        cout << "El ID que coloco no es valido.\n";
+        cout << "No hay ninun implemento con ese ID.\n";
+        cout << "Actualizacion fallida.\n";
+        return;
+    } 
+    
+    //                          VERRRRRRRRRRRRRRRRRRRR
+    // coloco este menaje porque no s porque el progra no corre normal.
+    cout << "precione enter para modificar el implemto: " << actualizar->nombre_implemento;
+    // hay que daele enter para que corra.
+
+    cin.ignore();
+    actualizar->nombre_implemento =devolver_string_verificada("Nombre: ");
+    actualizar->tipo_implemento = devolver_string_verificada("Tipo: ");
+    actualizar->uso_implemento = devolver_string_verificada("Uso: ");
+    actualizar->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usarlo:");
+    actualizar->valor = obtener_entero("Valor: ");
+    cout << "Implemento: " << actualizar->nombre_implemento <<", modificado correctamente.\n ";
+}
+
+// para borrar implementos.
+void borrar_implementos(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
+        cout << "No hay implementos para eliminar: \n";
+        cout << "Eliminacion fallida. \n"; 
+    }
+    cout << "Los implementos disponibles son: \n";
+    mostar_implementos(lista_implemento);
+    int identificador = obtener_entero("coloque el ID del implemento que desea eliminar:");
+    Implemento *encontrado = buscar_implemento(lista_implemento,identificador);
+    if (encontrado == nullptr){
+        cout << "  No existe un implemento con el ID: " << identificador;
+        cout << "\nEliminacion fallida. \n";
+        return;
+    }
+
+    // comiza la eliminacion del implemento.
+    Implemento *actual = lista_implemento.siguiente;
+    
+    // si es el primero en la lista.
+    if (actual->identificador == identificador){
+        lista_implemento.siguiente = actual->siguiente;
+        cout << "El implemento: " << actual->nombre_implemento << "se elimino correctamente.\n";
+        delete actual;
+        cantidad_implementos -=1;
+        regulador_implemento +=1;
+        return;
+    }
+    
+    // si no es el primero.
+    Implemento *anterior = nullptr;
+    while ((actual != nullptr) && (actual->identificador != identificador)){
+        anterior = actual;
+        actual = actual->siguiente;
+    }
+    
+    // ahora eliminamos.
+    Implemento *eliminar = actual;
+    anterior->siguiente = actual->siguiente;
+    cout << "El elemento: " << eliminar->nombre_implemento << "se elimino correctamente. ";
+    delete eliminar;
+}
+
+
+// funciones para poderes magicos.
+// para destruir la lista de los poderes.
+void destruir_poder_magico(Poder_magico &lista_poderes){
+    Poder_magico *actual = lista_poderes.siguiente;
+    while (actual != nullptr){
+        Poder_magico *eliminar = actual;
+        actual = actual->siguiente;
+        delete eliminar;
+    }
+    cantidad_poderes=0;
+    regulador_poderes=0;
+}
+
+// para crear poderes.
+void crear_poder(Poder_magico &lista_poderes){
+    Poder_magico *nuevo = new Poder_magico;
+    cout << "Proceda a llenar las espesificaciones del nuevo poder. \n";
+    nuevo->nombre_poder = devolver_string_verificada("Nombre: ");
+    // lo coloco sin validar porque imagino que podra colocar numero y eso en la funcion del poder.
+    cout << "Funcion: ";
+    cin >> nuevo->funcion;
+    cantidad_poderes += 1;
+    nuevo->identificador = cantidad_poderes + regulador_poderes;
+    // lo agregamos a la lista enlazada.
+    nuevo->siguiente = lista_poderes.siguiente;
+    lista_poderes.siguiente = nuevo;
+    cout << "El poder: " << nuevo->nombre_poder << "se creo correctamente.\n";
+}
+
+// para mostrar los poderes.
+void mostar_poderes(Poder_magico &lista_poderes){
+    // para ver si hay poderes creados.
+    if (cantidad_poderes == 0){
+        cout << "No hay poderes disponibles actualmente. \n";
+        return;
+    }
+    Poder_magico *actual = lista_poderes.siguiente;
+    cout << "La cantidad de poderes actualmente es: " << cantidad_poderes <<endl<<endl;
+    while (actual != nullptr){
+        cout << "Nombre: " << actual->nombre_poder <<endl;
+        cout << "ID: " << actual->identificador <<endl;
+        cout << "Funcion: " << actual->funcion <<endl<<endl;
+        actual= actual->siguiente;
+    }
+    cout << "No hay mas poderes disponibles.\n";
+}
+
+// para encontrar un poder
+Poder_magico *encontar_poder(Poder_magico &lista_poderes, int identificador){
+    Poder_magico *encontrar = lista_poderes.siguiente;
+    while ((encontrar != nullptr) && (encontrar->identificador != identificador)){
+        encontrar = encontrar->siguiente;
+    }
+    if (encontrar->identificador == identificador){
+        return encontrar;
+    } else {
+        return encontrar = nullptr;
+    }
+}
+
+
+
+// para modificar los poderes.
+void modificar_poder(Poder_magico &lista_poderes){
+    if (cantidad_poderes == 0){
+        cout << "No hay poder magicos disponibles para modificar.\n";
+        return;
+    }
+    int identificador=0;
+    Poder_magico *actualizar = nullptr;
+    cout << "Los poderes disponibles son: \n";
+    mostar_poderes(lista_poderes);
+    cout << "Coloque el ID del poder magico que desea modificar: ";
+    cin >> identificador;
+    // para valiadar que el poder existe.
+    actualizar = encontar_poder(lista_poderes, identificador);
+    if (actualizar == nullptr){
+        cout << "El ID que coloco no existe. \n";
+        cout << "Modificacion fallida \n";
+        return;
+    }
+    cout << "Proceda a actulizar el poder: " << actualizar->nombre_poder<<endl;
+    actualizar->nombre_poder = devolver_string_verificada("Nombre: ");
+    // lo coloco sin validar porque imagino que podra colocar numero y eso en la funcion del poder.
+    cout << "Funcion: ";
+    cin >> actualizar->funcion;
+
+    cout << "Poder magico: " <<actualizar->nombre_poder << "actualizado correctamente.\n";
+}
+
+// para eliminar un poder.
+void eliminar_poder(Poder_magico &lista_poder){
+    if (cantidad_poderes == 0){
+        cout << "No hay poderes magicos disponibles para eliminar. \n";
+        cout << "Eliminacion fallida. \n";
+        return; 
+    }
+    int identificador = 0;
+    Poder_magico *validar = nullptr;
+    cout << "Los poderes magicos disponibles son: \n";
+    mostar_poderes(lista_poder);
+    identificador = obtener_entero("Coloqe el ID del personaje que desea modificar: ");
+    // para validar que e id exisa.
+    validar = encontar_poder(lista_poder, identificador);
+    if (validar == nullptr){
+        cout << "El ID que coloco no existe.\n";
+        cout << "Eliminacion fallida.\n";
+        return;
+    }
+    // comienza el procedimiento para borrar el poder.
+    Poder_magico *actual = lista_poder.siguiente;
+    Poder_magico *anterior = nullptr;
+    // en caso de que sea el primero de la lista.
+    if (actual->identificador == identificador){
+        lista_poder.siguiente = actual->siguiente;
+        cout << "el poder magico: " << actual->nombre_poder << " se elimino correctamente.\n ";
+        delete actual;
+        cantidad_poderes -=1;
+        regulador_poderes +=1;
+        return;
+    }
+    // en caso de que no sea el primenro.
+    while ((actual != nullptr) && (actual->identificador != identificador)){
+        anterior = actual;
+        actual = actual->siguiente;
+    }
+    // ahora eliminamos.
+    Poder_magico *eliminar = actual;
+    anterior->siguiente = actual->siguiente;
+    cout << "El poder magico: " << eliminar->nombre_poder << " se elimino correctamente.\n";
+    delete eliminar;
+    cantidad_poderes -=1;
+    regulador_poderes +=1;
+}
+
+
+
 //------------------------------ EJECUCION DEL PROGRAMA -----------------------------------------------
 
 int main()
@@ -872,6 +1114,10 @@ int main()
 
     personaje personajes_orco; // lista enlazada de personajes orcos.
     personaje personajes_hero; // lista enlazada de personajes heroes.
+
+    Implemento lista_implementos; // lista de implementos
+
+    Poder_magico lista_podere_magicos; // lista de los poderes.
 
     int opcion_principal = 0;
     int opcion_interna = 0;
@@ -886,7 +1132,8 @@ int main()
         cout << "1. Ingresar al Menu de Orcos" << "\n";
         cout << "2. Ingresar al Menu de Heroes" << "\n";
         cout << "3. Ingresar al Menu de Implementos" << "\n"; // Por agregar
-        cout << "4. Salir de Menu Principal" << "\n";
+        cout << "4. Ingrese al menu de poderes magicos \n";
+        cout << "5. Salir de Menu Principal" << "\n";
         opcion_principal = obtener_opcion();
 
         // Switch para Menu Principal
@@ -909,6 +1156,7 @@ int main()
                 cout << "8. Eliminar personaje  \n";
                 cout << "------------------------\n";
                 cout << "9.Salir al menu principal.\n";
+                cout << "---------------------\n";
                 opcion_interna = obtener_opcion();
 
                 switch (opcion_interna)
@@ -967,6 +1215,7 @@ int main()
                 cout << "8. Eliminar personaje  \n";
                 cout << "---------------------\n";
                 cout << "9. Salir al menu principal  \n";
+                cout << "---------------------\n";
                 opcion_interna = obtener_opcion();
 
                 switch (opcion_interna)
@@ -1008,15 +1257,83 @@ int main()
 
         // Menu Implementos
         case 3:
-            // Cuando se agreguen las cosas, hay que hacer el do while
-            cout << "\n MENU DE IMPLEMENTOS:\n";
-            cout << "TODAVIA NO EXISTE OJO \n";
-            cout << "DEVOLVIENDO AL MENU PRINCIPAL... \n";
-            // opcion_interna = obtener_opcion();
-
+            do
+            {
+                cout << "\n MENU DE IMPLEMENTOS:\n";
+                cout << "------------------------\n";
+                cout << "1. Agregar un implemento. \n";
+                cout << "2. Actualizar un implemento. \n";
+                cout << "3. Mostrar los implementos. \n";
+                cout << "4. Eliminar un implemento \n";
+                cout << "------------------------\n";
+                cout << "5. Salir al menu principal  \n";
+                cout << "------------------------\n";
+                opcion_interna = obtener_opcion();
+                
+                switch (opcion_interna)
+                {
+                case 1:
+                    crear_implemento(lista_implementos);
+                    break;
+                case 2:
+                    modificar_implemento(lista_implementos);
+                    break;
+                case 3:
+                    mostar_implementos(lista_implementos);
+                    break;
+                case 4:
+                    borrar_implementos(lista_implementos);
+                    break;
+                case 5:
+                    cout << "\nSaliendo al Menu Principal... \n";
+                    break;
+                default:
+                    cout << "Invalido. Ingrese una opcion valida \n";
+                    break;
+                }
+            } while (opcion_interna != 5);
+            
             break;
 
-        case 4:
+        case 4:   
+        do
+        {
+            cout << "\n MENU DE PODERES MAGICOS:\n";
+            cout << "---------------------\n";
+            cout << "1. Agregar poder magico. \n";
+            cout << "2. Actualizar poder magico. \n";
+            cout << "3. Mostrar los poderes magicos. \n";
+            cout << "4. Eliminar un poder magico. \n"; 
+            cout << "---------------------\n";
+            cout << "5. Salir al menu principal  \n";
+            cout << "---------------------\n";
+            opcion_interna = obtener_opcion(); 
+
+            switch (opcion_interna)
+            {
+            case 1:
+                crear_poder(lista_podere_magicos);
+                break;
+            case 2:
+                modificar_poder(lista_podere_magicos);
+                break;
+            case 3:
+                mostar_poderes(lista_podere_magicos);
+                break;
+            case 4:
+                eliminar_poder(lista_podere_magicos);
+                break;
+            case 5:
+                cout << "\nSaliendo al Menu Principal... \n";
+                break;
+            default:
+                cout << "Invalido. Ingrese una opcion valida \n";
+                break;
+            }
+
+        } while (opcion_interna != 5);
+
+        case 5:
             cout << "\nSaliendo del Menu Principal... \n";
             cout << "Entrando al Juego... \n";
             break;
@@ -1027,7 +1344,7 @@ int main()
             break;
         }
 
-    } while (opcion_principal != 4);
+    } while (opcion_principal != 5);
 
     // Dejar esto al final del programa para que se destruyan las listas enlazadas.
     // Hay que añadir todos los tipos de listas que se vayan creando.
@@ -1036,6 +1353,10 @@ int main()
 
     destruir_lista_personajes(personajes_orco);
     destruir_lista_personajes(personajes_hero);
+
+    destruir_implementos(lista_implementos);
+
+    destruir_poder_magico(lista_podere_magicos);
 
     cout << "Gracias por usar el programa. \n";
     return 0;
