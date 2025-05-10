@@ -41,17 +41,6 @@ struct Poder_magico
 int cantidad_poderes=0;
 int regulador_poderes=0;
 
-// Estructura para el Mapa
-struct Mapa
-{
-    string nombreEstacion; // Nombre de la sala
-    int distancia_salida;
-    int cantidadOrcos; // Cantidad de orcos en la sala
-    Mapa *der;
-    // Mapa *med;
-    Mapa *izq;
-};
-
 // ESTRUCTURA para los tipos de especies. orcos y heroes
 struct Especie
 {
@@ -69,6 +58,101 @@ struct Lista_especie
     Especie *primero_especie = nullptr;
     int cantidad = 0;
 };
+
+//-----------------------------------------------------------------------------------------------------
+//--------------------------------------PARA EL MAPA---------------------------------------------------
+// Estructura para el Mapa
+struct Sala
+{
+    string nombreSala; // Nombre de la sala
+    int distancia_salida;
+    int cantidadOrcos; // Cantidad de orcos en la sala
+    Sala *adyacencia;
+};
+
+// Función para crear el nuevo nodo
+Sala* crearMapa(string nombre) {
+    Sala* nuevo_mapa = new Sala();
+    nuevo_mapa->nombreSala = nombre;
+    nuevo_mapa->adyacencia = nullptr;
+    return nuevo_mapa;
+}
+
+// Función para agregar una sala
+void Añadirsala(Sala *&mapa, string nombre){
+    if(mapa!=nullptr){
+        Sala *actual = new Sala();
+        Sala *insertar = new Sala();
+        insertar->nombreSala = nombre;
+        actual = mapa;
+        while(actual->adyacencia=nullptr){
+            actual=actual->adyacencia;
+        }
+        actual->adyacencia = insertar;
+        cout<<"Se inserto correctamente la sala"<<endl;
+    }
+    else{
+        cout<<"Este mapa no existe"<<endl;
+    }
+    return;
+}
+
+// Función para buscar una sala por nombre
+bool buscarSala(Sala* mapa, string nombre) {
+    if (mapa == nullptr) {
+        return false; // No se encontró
+    }
+    if (mapa->nombreSala == nombre) {
+        return true; // Se encontró
+    }
+    return buscarSala(mapa->adyacencia, nombre);
+}
+
+
+// Función para liberar la memoria del árbol
+void liberarMapa(Sala* mapa) {
+    if (mapa != nullptr) {
+        liberarMapa(mapa->adyacencia);
+        delete mapa;
+    }
+}
+
+void MostrarMapa(Sala &mapa){
+    Sala *salaactual = new Sala();
+    salaactual = &mapa;
+    if(salaactual!=nullptr){
+        while(salaactual!=nullptr){
+            cout<<salaactual->nombreSala<<"->";
+            salaactual=salaactual->adyacencia;
+        }
+        cout<<"/null"<<endl;
+    }
+    else{
+        cout<<"Este mapa no existe"<<endl;
+    }
+    delete salaactual;
+    return;
+}
+
+void Modificarsala(Sala*&mapa){
+    if(mapa==nullptr){
+        cout<<"El mapa se encuentra vacio por los momentos"<<endl;
+        return;
+    }
+    else{
+        string nombresala; cout<<"Ingrese el nombre de la sala que va a modificar= "; cin>>nombresala;
+        bool modificado=false;
+        if(buscarSala(mapa,nombresala)==true){
+            modificado=true;
+            mapa->nombreSala=devolver_string_verificada("Nombre de la sala: ");
+            cout<<"La sala ha sido modificada"<<endl;
+        }
+        else{
+            cout<<"La sala no ha sido encontrada";
+        }
+    }
+}
+
 
 //-----------------------------------------------------------------------------------------------------
 //------------------------------ PARA LOS PERSONAJES --------------------------------------------------
