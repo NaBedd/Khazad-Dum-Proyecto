@@ -17,10 +17,11 @@ using namespace std;
 
 // Definiciones de las estructuras
 struct Adyacencia; 
+int regulador_tipo_sala = 0;//Para cuando se elimine una sala del mapa
 
 struct Sala {
     string nombreSala;
-    int distancia_salida;
+    int distancia_sala;
     int cantidadOrcos;
     Adyacencia *adyacencias;
     Sala*siguientesala;
@@ -38,22 +39,17 @@ struct Lista_mapa {
 };
 
 // Función para obtener una entrada de cadena de texto segura
-string obtener_string_verificada(const string& mensaje) {
-    string input;
-    cout << mensaje;
-    getline(cin >> ws, input);
-    return input;
-};
+string devolver_string_verificada();
 
 // Función para crear una nueva sala (modificada para no crear el mapa, solo la sala)
-Sala* crearSala(string& nombre) {
+Sala* crearSala(string& nombre, int& distancia) {
     Sala* nuevaSala = new Sala();
     if (nuevaSala) {
         nuevaSala->nombreSala = nombre;
         nuevaSala->siguientesala = nullptr;
         nuevaSala->adyacencias = nullptr;
-        nuevaSala->distancia_salida = 0;  
-        nuevaSala->cantidadOrcos = 0;
+        nuevaSala->distancia_sala=distancia;  
+        nuevaSala->cantidadOrcos = 0; //cero por ahora porque no se como manejar la distribución de orcos a medida que fluye el jeugo
     } else {
         cout << "Error: No se pudo asignar memoria para la sala.\n";
     }
@@ -61,8 +57,8 @@ Sala* crearSala(string& nombre) {
 }
 
 // Función para agregar una sala a la Lista_mapa
-void AñadirSalaALista(Lista_mapa &lista_mapa, string& nombre) {
-    Sala* nuevaSala = crearSala(nombre); // Usar la función crearSala
+void AñadirSalaALista(Lista_mapa &lista_mapa, string& nombre, int& distancia) {
+    Sala* nuevaSala = crearSala(nombre, distancia); // Usar la función crearSala
     if (nuevaSala) {
         if (lista_mapa.actual_sala == nullptr) {
             lista_mapa.actual_sala = nuevaSala;
@@ -144,7 +140,7 @@ void MostrarMapa(const Lista_mapa& lista_mapa) {
     cout << "Contenido del Mapa:" << endl;
     while (actual != nullptr) {
         cout << "Sala: " << actual->nombreSala
-             << ", Distancia: " << actual->distancia_salida
+             << ", La distancia entre sala"<<actual->nombreSala<< "y sala "<< actual->siguientesala->nombreSala << actual->distancia_sala
              << ", Orcos: " << actual->cantidadOrcos;
 
         if (actual->adyacencias != nullptr) {
@@ -166,18 +162,18 @@ void MostrarMapa(const Lista_mapa& lista_mapa) {
 }
 
 // Función para modificar una sala
-void Modificarsala(Lista_mapa &lista_mapa) { // Recibe la lista por referencia no puntero
+void Modificarsala(Lista_mapa &lista_mapa) { 
     if (lista_mapa.actual_sala == nullptr) {
         cout << "El mapa se encuentra vacío por los momentos" << endl;
         return;
     }
 
-    string nombreSala = obtener_string_verificada("Ingrese el nombre de la sala que va a modificar: ");
+    string nombreSala = devolver_string_verificada("Ingrese el nombre de la sala que va a modificar: ");
     Sala* salaAModificar = buscarSalaEnLista(lista_mapa, nombreSala); // Busca en la lista
 
     if (salaAModificar != nullptr) {
         cout << "Nombre actual de la sala: " << salaAModificar->nombreSala << endl;
-        string nuevoNombre = obtener_string_verificada("Ingrese el nuevo nombre de la sala: ");
+        string nuevoNombre = devolver_string_verificada("Ingrese el nuevo nombre de la sala: ");
         salaAModificar->nombreSala = nuevoNombre;
         cout << "La sala ha sido modificada" << endl;
     } else {
@@ -185,6 +181,72 @@ void Modificarsala(Lista_mapa &lista_mapa) { // Recibe la lista por referencia n
     }
 }
 
+void EliminarSala(Lista_mapa &lista_mapa, string nombresala) {
+    if (lista_mapa.actual_sala == nullptr) {
+        cout << "El mapa se encuentra vacío por los momentos" << endl;
+        return;
+    }
+
+    MostrarMapa(lista_mapa);
+    Sala* salaAEliminar = buscarSalaEnLista(lista_mapa, nombresala); // Busca en la lista
+
+    if (salaAEliminar == nullptr) {
+        cout << "La sala que desea eliminar no existe" << endl;
+        return;
+    }
+
+    Sala* actual = lista_mapa.actual_sala;
+    Sala* anterior = nullptr;
+
+    if (actual == salaAEliminar) {
+        lista_mapa.actual_sala = salaAEliminar->siguientesala;
+        if (lista_mapa.actual_sala != nullptr) {
+            lista_mapa.actual_sala->distancia_sala += salaAEliminar->distancia_sala;
+        }
+        delete salaAEliminar;
+        lista_mapa.cantidad--;
+        cout << "La sala: " << nombresala << " se ha eliminado correctamente" << endl;
+        return;
+    } else {
+        while (actual != nullptr && actual != salaAEliminar) {
+            anterior = actual;
+            actual = actual->siguientesala;
+        }
+        if(actual == nullptr){
+            cout<< "No se encontro la sala"<<endl;
+            return;
+        }
+
+        anterior->siguientesala = salaAEliminar->siguientesala;
+        if (anterior->siguientesala != nullptr) {// Actualizar la distancia de la sala anterior
+            anterior->siguientesala->distancia_sala += salaAEliminar->distancia_sala;
+        }
+        delete salaAEliminar;
+        lista_mapa.cantidad--;
+        cout << "La sala: " << nombresala << " se ha eliminado correctamente" << endl;
+    } 
+    actual = lista_mapa.actual_sala;//Eliminar las adyacentes
+    while(actual!=nullptr){
+        Adyacencia* adyacenciaActual = actual->adyacencias;
+        Adyacencia* adyacenciaAnterior = nullptr;
+        while(adyacenciaActual != nullptr){
+            if(adyacenciaActual->salaAdyacente == salaAEliminar){
+                if(adyacenciaAnterior == nullptr){
+                    actual->adyacencias = adyacenciaActual->siguienteady;
+                }
+                else{
+                    adyacenciaAnterior->siguienteady = adyacenciaActual->siguienteady;
+                }
+                delete adyacenciaActual;
+                break;
+            }
+            adyacenciaAnterior = adyacenciaActual;
+            adyacenciaActual = adyacenciaActual->siguienteady;
+        }
+        actual = actual->siguientesala;
+    }
+
+}
 
 //------------------------------ PARA LOS TIPOS DE ESPECIES -------------------------------------------
 // Regulador para cuando se eliminen tipos de orcos en la lista.
@@ -1913,7 +1975,8 @@ int main()
                     cout << "1. Agregar una sala al mapa.\n";
                     cout << "2. Mostrar el mapa.\n";
                     cout << "3. Modificar una sala.\n";
-                    cout << "4. Salir al menu principal.\n";
+                    cout<<  "4.Eliminar sala. \n";
+                    cout << "5. Salir al menu principal.\n";
                     cout << "---------------------\n";
                     opcion_interna = obtener_opcion();
     
@@ -1921,8 +1984,9 @@ int main()
                     {
                     case 1:
                     {
-                        string nombre_sala = obtener_string_verificada("Ingrese el nombre de la nueva sala: ");
-                        AñadirSalaALista(mapa, nombre_sala);
+                        string nombre_sala = devolver_string_verificada("Ingrese el nombre de la nueva sala: ");
+                        int distancia_sala= obtener_entero("Ingrese la distancia entre salas: ");
+                        AñadirSalaALista(mapa, nombre_sala, distancia_sala);
                         break;
                     }
                     case 2:
@@ -1932,15 +1996,18 @@ int main()
                         Modificarsala(mapa);
                         break;
                     case 4:
+                        string nombre_salaeliminar;
+                        nombre_salaeliminar=devolver_string_verificada("Ingrese el nombre de la sala a eliminar: ");
+                        EliminarSala(mapa,nombre_salaeliminar);
+                        break;
+                    case 5:
                         cout << "\nSaliendo al Menu Principal... \n";
                         break;
                     default:
                         cout << "Invalido. Ingrese una opcion valida \n";
                         break;
                     }
-                } while (opcion_interna != 4);
-    
-                liberarMapa(mapa); // Liberar la memoria del mapa al salir del menú
+                } while (opcion_interna != 5);
                 break;
             }
     
