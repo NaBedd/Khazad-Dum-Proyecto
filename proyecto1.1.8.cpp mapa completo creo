@@ -29,7 +29,7 @@ struct Sala {
 struct Adyacencia {
     string nombre;
     Adyacencia * siguienteady;
-    Sala *salaAdyacente; 
+    Sala *salaAdyacente; // Puntero a la sala adyacente
 };
 
 struct Lista_mapa {
@@ -72,6 +72,27 @@ void AñadirSalaALista(Lista_mapa &lista_mapa, string& nombre) {
                 actual = actual->siguientesala;
             }
             actual->siguientesala = nuevaSala;
+
+            // Agregar adyacencias a las salas existentes y a la nueva sala
+            Sala* otraSala = lista_mapa.actual_sala;
+            while (otraSala != nullptr) {
+                if (otraSala != nuevaSala) { // Evitar crear adyacencia consigo misma
+                    // Crear adyacencia de nuevaSala a otraSala
+                    Adyacencia* nuevaAdyacencia = new Adyacencia;
+                    nuevaAdyacencia->nombre = otraSala->nombreSala; // Usar el nombre de la sala adyacente como nombre de adyacencia
+                    nuevaAdyacencia->salaAdyacente = otraSala;
+                    nuevaAdyacencia->siguienteady = nuevaSala->adyacencias;
+                    nuevaSala->adyacencias = nuevaAdyacencia;
+
+                    // Crear adyacencia de otraSala a nuevaSala
+                    Adyacencia* otraAdyacencia = new Adyacencia;
+                    otraAdyacencia->nombre = nuevaSala->nombreSala;
+                    otraAdyacencia->salaAdyacente = nuevaSala;
+                    otraAdyacencia->siguienteady = otraSala->adyacencias;
+                    otraSala->adyacencias = otraAdyacencia;
+                }
+                otraSala = otraSala->siguientesala;
+            }
         }
         lista_mapa.cantidad++;
         cout << "Se insertó correctamente la sala: " << nombre << endl;
@@ -79,6 +100,7 @@ void AñadirSalaALista(Lista_mapa &lista_mapa, string& nombre) {
         cout << "No se pudo agregar la sala: " << nombre << endl; // Ya se imprime error en crearSala
     }
 }
+
 
 // Función para buscar una sala por nombre en la Lista_mapa
 Sala* buscarSalaEnLista(Lista_mapa& lista_mapa, string& nombre) {
@@ -129,7 +151,7 @@ void MostrarMapa(const Lista_mapa& lista_mapa) {
             cout << " -> Adyacencias: ";
             Adyacencia* adyacente = actual->adyacencias;
             while (adyacente != nullptr) {
-                cout << adyacente->nombre << " (" << adyacente->salaAdyacente->nombreSala << ")";
+                cout << " (" << adyacente->salaAdyacente->nombreSala << ")";
                 if (adyacente->siguienteady != nullptr) {
                     cout << ", ";
                 }
