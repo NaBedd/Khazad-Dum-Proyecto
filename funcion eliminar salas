@@ -1,0 +1,63 @@
+void EliminarSala(Lista_mapa &lista_mapa, string nombresala) {
+    if (lista_mapa.actual_sala == nullptr) {
+        cout << "El mapa se encuentra vacío por los momentos" << endl;
+        return;
+    }
+
+    MostrarMapa(lista_mapa);
+    Sala* salaAEliminar = buscarSalaEnLista(lista_mapa, nombresala); 
+
+    if (salaAEliminar == nullptr) {
+        cout << "La sala que desea eliminar no existe" << endl;
+        return;
+    }
+
+    Sala* actual = lista_mapa.actual_sala;
+    Sala* anterior = nullptr;
+
+    if (actual == salaAEliminar) {
+        lista_mapa.actual_sala = salaAEliminar->siguientesala;
+        delete salaAEliminar;
+        lista_mapa.cantidad--;
+        cout << "La sala: " << nombresala << " se ha eliminado correctamente" << endl;
+        return;
+    } else {
+        while (actual != nullptr && actual != salaAEliminar) {
+            anterior = actual;
+            actual = actual->siguientesala;
+        }
+        if(actual == nullptr){
+            cout<< "No se encontro la sala"<<endl;
+            return;
+        }
+
+        anterior->siguientesala = salaAEliminar->siguientesala;
+        if (anterior->siguientesala != nullptr) {// Actualizar la distancia de la sala anterior
+            anterior->siguientesala->distancia_sala += salaAEliminar->distancia_sala;
+        }
+        delete salaAEliminar;
+        lista_mapa.cantidad--;
+        cout << "La sala: " << nombresala << " se ha eliminado correctamente" << endl;
+    } 
+    actual = lista_mapa.actual_sala;//Eliminar las adyacentes
+    while(actual!=nullptr){
+        Adyacencia* adyacenciaActual = actual->adyacencias;
+        Adyacencia* adyacenciaAnterior = nullptr;
+        while(adyacenciaActual != nullptr){
+            if(adyacenciaActual->salaAdyacente == salaAEliminar){
+                if(adyacenciaAnterior == nullptr){
+                    actual->adyacencias = adyacenciaActual->siguienteady;
+                }
+                else{
+                    adyacenciaAnterior->siguienteady = adyacenciaActual->siguienteady;
+                }
+                delete adyacenciaActual;
+                break;
+            }
+            adyacenciaAnterior = adyacenciaActual;
+            adyacenciaActual = adyacenciaActual->siguienteady;
+        }
+        actual = actual->siguientesala;
+    }
+
+}
