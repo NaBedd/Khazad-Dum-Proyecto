@@ -1630,7 +1630,7 @@ void destruir_personaje_jugar(personaje *&lista_jugar){
 
 int main()
 {
-
+    Lista_mapa mapa;
     Lista_especie tipoEspecieOrco;  // lista enlazada que contiene todos los tipos de orcos.
     Lista_especie tipoEspecieHeroe; // lista enlazada que contiene todos los tipos de heroes.
 
@@ -1903,7 +1903,6 @@ int main()
 
         case 6: // Menu del Mapa
             {
-                Lista_mapa mapa;
                 mapa.actual_sala = nullptr; // Inicializa el puntero al primer nodo
                 mapa.cantidad = 0;
     
@@ -1972,6 +1971,7 @@ int main()
     destruir_poder_magico(lista_podere_magicos);
 
     destruir_personaje_jugar(personajes_jugar);
+    liberarMapa(mapa);
 
     cout << "Gracias por usar el programa. \n";
     return 0;
