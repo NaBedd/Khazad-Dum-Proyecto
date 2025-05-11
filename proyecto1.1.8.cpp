@@ -16,7 +16,7 @@ using namespace std;
 
 
 // Definiciones de las estructuras
-struct Adyacencia; // Declaración adelantada
+struct Adyacencia; 
 
 struct Sala {
     string nombreSala;
@@ -29,7 +29,7 @@ struct Sala {
 struct Adyacencia {
     string nombre;
     Adyacencia * siguienteady;
-    Sala *salaAdyacente; // Puntero a la sala adyacente
+    Sala *salaAdyacente; 
 };
 
 struct Lista_mapa {
