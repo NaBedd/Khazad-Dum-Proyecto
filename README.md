@@ -13,7 +13,8 @@
 - [x] Crud de armas  
 
 - [x] Borrar todos los datos dinamicos siempre al final del programa (actualmente solo se hace si el usuario elige la opcion)  
-- [x] Validaciones (No explotar al meter letras en Danno)  
+- [x] Validaciones (No explotar al meter letras en Danno)
+- [x] Que las Magias esten limitadas a 1 por personaje
   
 - [x] Menu ajustes personaje:  
   - [x] Crear  
