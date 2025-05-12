@@ -476,7 +476,7 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
             cout << "Especies disponibles: " << endl;
             mostrar_lista(lista_tipos, tipo);
 
-            cout << "Ingrese la especie del Personaje" << nuevo->nombre << ":";
+            cout << "Ingrese la especie del Personaje " << nuevo->nombre << ":";
             num_tipo = obtener_entero("");
 
             puntero_especie = encontrar_especie(lista_tipos, num_tipo);
@@ -485,7 +485,7 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
 
         if (puntero_especie == nullptr)
         {
-            cout << " La especie debe crearse primero." << endl;
+            cout << "La especie debe crearse primero." << endl;
             cout << "Creacion del personaje: " << nuevo->nombre << " fue fallida " << endl;
             delete nuevo; // liberamos memoria dinamica
             return;
@@ -560,8 +560,8 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
     while (actual != nullptr)
     { // si es igual a nullptr significa que es el ultimo elemento de la lista.
         cout << actual->identificador << "-";
-        cout << "Nombre= " << actual->nombre << endl;
-        cout << "Especie= " << actual->tipo->nombre_especie << endl;
+        cout << "Nombre: " << actual->nombre << endl;
+        cout << "Especie: " << actual->tipo->nombre_especie << endl;
         cout << endl;
         actual = actual->siguiente;
     }
@@ -638,7 +638,7 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
     }
     if (!encontrado)
     {
-        cout << "No se encontró ningún tipo de orco con el ID: " << referencia << ".\n";
+        cout << "No se encontró ningún personaje con el ID: " << referencia << ".\n";
         cout << "Actualizacion fallida \n";
     }
 }
@@ -964,18 +964,15 @@ void crear_implemento(Implemento &lista_implemento)
 Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
 {
     Implemento *encontrado = lista_implemento.siguiente;
-    while ((encontrado != nullptr) && (encontrado->identificador != identificador))
+    while (encontrado != nullptr)
     {
+        if (encontrado->identificador == identificador)
+        {
+            return encontrado; // Si lo encuentra, lo retorna
+        }
         encontrado = encontrado->siguiente;
     }
-    if (encontrado->identificador == identificador)
-    {
-        return encontrado;
-    }
-    else
-    {
-        return encontrado = nullptr;
-    }
+    return nullptr; // Si no lo encuentra, retorna nulo
 }
 
 void mostrar_implementos(Implemento &lista_implemento)
@@ -1148,18 +1145,15 @@ void mostrar_poderes(Poder_magico &lista_poderes)
 Poder_magico *encontrar_poder(Poder_magico &lista_poderes, int identificador)
 {
     Poder_magico *encontrar = lista_poderes.siguiente;
-    while ((encontrar != nullptr) && (encontrar->identificador != identificador))
+    while ((encontrar != nullptr))
     {
+        if (encontrar->identificador == identificador)
+        {
+            return encontrar;
+        }
         encontrar = encontrar->siguiente;
     }
-    if (encontrar->identificador == identificador)
-    {
-        return encontrar;
-    }
-    else
-    {
-        return encontrar = nullptr;
-    }
+    return nullptr; // Si no lo encuentra, retorna nulo
 }
 
 // para modificar los poderes.
@@ -1271,7 +1265,13 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
                 cout << "coloque el ID del implemento que desea colocar: ";
                 identificador = obtener_entero("");
                 nuevo_implemento = buscar_implemento(Implementos, identificador);
-                if (nuevo_implemento == nullptr)
+
+                if (nuevo_implemento->fortalezanecesaria > personaje_a_llenar->tipo->danno_fortaleza)
+                {
+                    cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
+                    cout << "Coloque uno valido.\n";
+                }
+                else if (nuevo_implemento == nullptr)
                 {
                     cout << "El ID: " << identificador << " no existe.\n";
                     cout << "coloque uno valido.\n";
@@ -1305,7 +1305,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
                 nuevo_poder = encontrar_poder(poderes, identificador);
                 if (nuevo_poder == nullptr)
                 {
-                    cout << "El ID: " << identificador << " no exste.\n";
+                    cout << "El ID: " << identificador << " no existe.\n";
                     cout << "coloque uno valido.\n";
                 }
                 else
@@ -1379,13 +1379,13 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
         return;
     }
     cantidad_personajes_jugar += 1;
-    // se copia para evtiar probles (dava error si no lo hacia asi)
+    // se copia para evitar probles (daba error si no lo hacia asi)
     personaje *nuevo_para_jugar = new personaje;
     nuevo_para_jugar->nombre = seleccionado->nombre;
     nuevo_para_jugar->tipo = seleccionado->tipo;
     nuevo_para_jugar->identificador = cantidad_personajes_jugar + regulador_personajes_jugar; // Nuevo ID para el equipo
     nuevo_para_jugar->mochila = new mochila;
-    nuevo_para_jugar->mochila->implementos = nullptr; // porcia
+    nuevo_para_jugar->mochila->implementos = nullptr; // porsia
     nuevo_para_jugar->mochila->poderes = nullptr;
     nuevo_para_jugar->siguiente = nullptr;
 
@@ -2044,6 +2044,7 @@ int main()
     int opcion_interna = 0;
 
     cout << "¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
+    cout << "Se recomienda visitar todos los menus en orden ascendente para una mejor experiencia de juego." << endl;
     cout << "¿Que desea hacer? \n";
 
     // Menu mientras.
@@ -2070,17 +2071,17 @@ int main()
         case 1:
             do
             {
-                cout << "\n MENU ORCOS:\n";
+                cout << "\n MENU ORCOS\n";
                 cout << "---------------------\n";
-                cout << "1. Agregar una especie de Orco \n";
-                cout << "2. Actualizar los datos de un tipo de Orco \n";
-                cout << "3. Mostrar los tipos de Orcos disponibles \n";
-                cout << "4. Eliminar un tipo de especie \n";
+                cout << "1. Agregar una especie de Orco. \n";
+                cout << "2. Actualizar los datos de un tipo de Orco. \n";
+                cout << "3. Mostrar los tipos de Orcos disponibles. \n";
+                cout << "4. Eliminar un tipo de especie. \n";
                 cout << "------------------------\n";
-                cout << "5. Crear personaje \n";
-                cout << "6. Mostrar personajes \n";
-                cout << "7. Modificar personaje \n";
-                cout << "8. Eliminar personaje  \n";
+                cout << "5. Crear personajes Orco. \n";
+                cout << "6. Mostrar personajes Orco. \n";
+                cout << "7. Modificar personajes Orco. \n";
+                cout << "8. Eliminar personajes Orco.  \n";
                 cout << "------------------------\n";
                 cout << "9.Salir al menu principal.\n";
                 cout << "---------------------\n";
@@ -2129,7 +2130,7 @@ int main()
         case 2:
             do
             {
-                cout << "\n MENU DE HEROES Y PERSONAJES:\n";
+                cout << "\n MENU DE HEROES Y PERSONAJES\n";
                 cout << "---------------------\n";
                 cout << "1. Agregar una especie de Heroe \n";
                 cout << "2. Actualizar los datos de un tipo de Heroe \n";
@@ -2186,7 +2187,7 @@ int main()
         case 3:
             do
             {
-                cout << "\n MENU DE IMPLEMENTOS:\n";
+                cout << "\n MENU DE IMPLEMENTOS\n";
                 cout << "------------------------\n";
                 cout << "1. Agregar un implemento. \n";
                 cout << "2. Actualizar un implemento. \n";
@@ -2224,7 +2225,7 @@ int main()
         case 4:
             do
             {
-                cout << "\n MENU DE PODERES MAGICOS:\n";
+                cout << "\n MENU DE PODERES MAGICOS\n";
                 cout << "---------------------\n";
                 cout << "1. Agregar poder magico. \n";
                 cout << "2. Actualizar poder magico. \n";
@@ -2262,11 +2263,11 @@ int main()
         case 5:
             do
             {
-                cout << "\n MENU DE SELECCION DE PERSONAJE:\n";
+                cout << "\n MENU DE SELECCION DE PERSONAJE\n";
                 cout << "---------------------\n";
-                cout << "1. Elegir personaje y objetos \n"; // eligue el personaje y llena la mochila.
+                cout << "1. Elegir personaje y objetos \n"; // elige el personaje y llena la mochila.
                 cout << "2. Mostrar personaje del equipo. \n";
-                cout << "3. modificar mochila. \n";
+                cout << "3. Modificar mochila. \n";
                 cout << "4. Eliminar personaje. \n";
                 cout << "---------------------\n";
                 cout << "5. Salir al menu principal  \n";
