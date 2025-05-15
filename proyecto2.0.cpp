@@ -24,7 +24,7 @@ struct Implemento
 {
     string nombre_implemento;
     string tipo_implemento;
-    string uso_implemento;
+    int usos;
     int fortalezanecesaria;
     int valor;
     int identificador;
@@ -420,7 +420,7 @@ Especie *encontrar_especie(Lista_especie &lista, int identificador)
         actual = actual->siguiente;
     }
     cout << "La especie ingresada no existe." << endl;
-    return nullptr;
+    return actual = nullptr;
 }
 
 personaje *encontrar_personaje(personaje &lista_personajes, int identificador)
@@ -943,115 +943,100 @@ string tipo_implemento(Implemento *Implemento)
 } // lo marca porque el bucle es infinito.
 
 // para crear implementos.
-void crear_implemento(Implemento &lista_implemento)
-{
+void crear_implemento(Implemento &lista_implemento){
     Implemento *nuevo = new Implemento;
-    cout << "Proceda a llenar las especificaciones del implemento. \n\n";
-    nuevo->nombre_implemento = devolver_string_verificada("Nombre: ");
+    cout << "Proceda a llenar las espicificaciones del imlemento. \n\n";
+    nuevo->nombre_implemento = devolver_string_verificada("Nobre:");
     nuevo->tipo_implemento = tipo_implemento(nuevo); // funcion para obteren el tipo de implemento.
-    nuevo->uso_implemento = devolver_string_verificada("Uso: ");
+    nuevo->usos = obtener_entero("Usos: ");
     nuevo->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usar el implemento: ");
-    nuevo->valor = obtener_entero("Valor: ");
+    nuevo->valor = obtener_entero("valor: ");
     // lo agregamos a la lista enlazada.
     nuevo->siguiente = lista_implemento.siguiente;
     lista_implemento.siguiente = nuevo;
-    cantidad_implementos += 1;
-    nuevo->identificador = cantidad_implementos + regulador_implemento;
+    cantidad_implementos +=1;
+    nuevo->identificador= cantidad_implementos + regulador_implemento;
     cout << "El implemento: " << nuevo->nombre_implemento << "se creo correctamente.";
 }
 
 // buscar implemento.
-Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
-{
+Implemento* buscar_implemento(Implemento &lista_implemento, int identificador){
     Implemento *encontrado = lista_implemento.siguiente;
-    while (encontrado != nullptr)
-    {
-        if (encontrado->identificador == identificador)
-        {
-            return encontrado; // Si lo encuentra, lo retorna
+    while (encontrado != nullptr){
+        if (encontrado->identificador == identificador){
+            return encontrado;
         }
         encontrado = encontrado->siguiente;
     }
-    return nullptr; // Si no lo encuentra, retorna nulo
+    return encontrado = nullptr;
 }
 
-void mostrar_implementos(Implemento &lista_implemento)
-{
-    if (cantidad_implementos == 0)
-    {
+void mostrar_implementos(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
         cout << "No hay implementos disponibles en este momento. \n";
         return;
+    }else{
+        cout << "la candtad de implementos es: ["<< cantidad_implementos <<"]. \n";
     }
-    else
-    {
-        cout << "La cantidad de implementos es de: [" << cantidad_implementos << "]. \n";
-    }
-
+    
     Implemento *actual = lista_implemento.siguiente;
-    while (actual != nullptr)
-    {
-        cout << "\nNombre: " << actual->nombre_implemento << endl;
-        cout << "\nID: " << actual->identificador;
-        cout << "\nTipo: " << actual->tipo_implemento;
-        cout << "\nUso: " << actual->uso_implemento;
-        cout << "\nFortaleza necesaria para usarlo: " << actual->fortalezanecesaria;
-        cout << "\nValor: " << actual->valor;
-        cout << endl
-             << endl;
-        actual = actual->siguiente;
+    while (actual != nullptr){
+        cout << "Nombre: " << actual->nombre_implemento <<endl;
+        cout << "ID: " << actual->identificador<<endl;
+        cout << "Tipo: " << actual->tipo_implemento<<endl;
+        cout << "Uso: " << actual->usos<<endl;
+        cout << "Fortaleza necesaria para usarlo: " << actual->fortalezanecesaria<<endl;
+        cout << "Valor: " << actual->valor<<endl<<endl; 
+        actual = actual->siguiente; 
     }
     cout << "no hay mas implementos disponibles\n";
 }
 
 // para modificar los implementos.
-void modificar_implemento(Implemento &lista_implemento)
-{
-    if (cantidad_implementos == 0)
-    {
+void modificar_implemento(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
         cout << "No hay implementos disponibles para modificar \n";
+        cout << "modificacion fallida.\n";
         return;
     }
-    int identificador = 0;
-    cout << "los implementos disponibles son: \n";
+    int identificador=0;
+    cout << "los impplementos disponibles son: \n";
     mostrar_implementos(lista_implemento);
     identificador = obtener_entero("Coloque el ID del implemento que desea modificar: ");
-    Implemento *actualizar = buscar_implemento(lista_implemento, identificador);
-    if (actualizar == nullptr)
-    {
+    Implemento *actualizar = buscar_implemento(lista_implemento,identificador);
+    if (actualizar == nullptr){
         cout << "El ID que coloco no es valido.\n";
-        cout << "No hay ninun implemento con ese ID.\n";
+        cout << "No hay ningun implemento con ese ID.\n";
         cout << "Actualizacion fallida.\n";
         return;
-    }
-
-    //
-    // coloco este mensaje porque no se porque el programa no corre normal.
-    cout << "Presione enter para modificar el implemento: " << actualizar->nombre_implemento;
+    } 
+    
+    //                          VERRRRRRRRRRRRRRRRRRRR
+    // coloco este mensaje porque no se porque el progra no corre normal.
+    cout << "precione enter para modificar el implemto: " << actualizar->nombre_implemento;
     // hay que darle enter para que corra.
 
     cin.ignore();
-    actualizar->nombre_implemento = devolver_string_verificada("Nuevo Nombre: ");
+    actualizar->nombre_implemento =devolver_string_verificada("Nombre: ");
     actualizar->tipo_implemento = tipo_implemento(actualizar);
-    actualizar->uso_implemento = devolver_string_verificada("Nuevo Uso: ");
-    actualizar->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usarlo: ");
+    actualizar->usos = obtener_entero("Usos: ");
+    actualizar->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usarlo:");
     actualizar->valor = obtener_entero("Valor: ");
-    cout << "Implemento: " << actualizar->nombre_implemento << ", modificado correctamente.\n ";
+    cout << "Implemento: " << actualizar->nombre_implemento <<", modificado correctamente.\n ";
 }
 
 // para borrar implementos.
-void borrar_implementos(Implemento &lista_implemento)
-{
-    if (cantidad_implementos == 0)
-    {
+void borrar_implementos(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
         cout << "No hay implementos para eliminar: \n";
-        cout << "Eliminacion fallida. \n";
+        cout << "Eliminacion fallida. \n"; 
+        return;
     }
     cout << "Los implementos disponibles son: \n";
     mostrar_implementos(lista_implemento);
     int identificador = obtener_entero("coloque el ID del implemento que desea eliminar:");
-    Implemento *encontrado = buscar_implemento(lista_implemento, identificador);
-    if (encontrado == nullptr)
-    {
+    Implemento *encontrado = buscar_implemento(lista_implemento,identificador);
+    if (encontrado == nullptr){
         cout << "  No existe un implemento con el ID: " << identificador;
         cout << "\nEliminacion fallida. \n";
         return;
@@ -1059,26 +1044,24 @@ void borrar_implementos(Implemento &lista_implemento)
 
     // comiza la eliminacion del implemento.
     Implemento *actual = lista_implemento.siguiente;
-
+    
     // si es el primero en la lista.
-    if (actual->identificador == identificador)
-    {
+    if (actual->identificador == identificador){
         lista_implemento.siguiente = actual->siguiente;
         cout << "El implemento: " << actual->nombre_implemento << "se elimino correctamente.\n";
         delete actual;
-        cantidad_implementos -= 1;
-        regulador_implemento += 1;
+        cantidad_implementos -=1;
+        regulador_implemento +=1;
         return;
     }
-
+    
     // si no es el primero.
     Implemento *anterior = nullptr;
-    while ((actual != nullptr) && (actual->identificador != identificador))
-    {
+    while ((actual != nullptr) && (actual->identificador != identificador)){
         anterior = actual;
         actual = actual->siguiente;
     }
-
+    
     // ahora eliminamos.
     Implemento *eliminar = actual;
     anterior->siguiente = actual->siguiente;
@@ -1102,58 +1085,50 @@ void destruir_poder_magico(Poder_magico &lista_poderes)
 }
 
 // para crear poderes.
-void crear_poder(Poder_magico &lista_poderes)
-{
+void crear_poder(Poder_magico &lista_poderes){
     Poder_magico *nuevo = new Poder_magico;
     cout << "Proceda a llenar las espesificaciones del nuevo poder. \n";
     nuevo->nombre_poder = devolver_string_verificada("Nombre: ");
     // lo coloco sin validar porque imagino que podra colocar numero y eso en la funcion del poder.
     cout << "Funcion: ";
-    getline(cin, nuevo->funcion);
+    getline(cin,nuevo->funcion);
+    cin.ignore();
     cantidad_poderes += 1;
     nuevo->identificador = cantidad_poderes + regulador_poderes;
     // lo agregamos a la lista enlazada.
     nuevo->siguiente = lista_poderes.siguiente;
     lista_poderes.siguiente = nuevo;
-    cout << "El poder: " << nuevo->nombre_poder << " se creo correctamente.\n";
+    cout << "El poder: " << nuevo->nombre_poder << "se creo correctamente.\n";
 }
 
 // para mostrar los poderes.
-void mostrar_poderes(Poder_magico &lista_poderes)
-{
+void mostrar_poderes(Poder_magico &lista_poderes){
     // para ver si hay poderes creados.
-    if (cantidad_poderes == 0)
-    {
+    if (cantidad_poderes == 0){
         cout << "No hay poderes disponibles actualmente. \n";
         return;
     }
     Poder_magico *actual = lista_poderes.siguiente;
-    cout << "La cantidad de poderes actualmente es: " << cantidad_poderes << endl
-         << endl;
-    while (actual != nullptr)
-    {
-        cout << "Nombre: " << actual->nombre_poder << endl;
-        cout << "ID: " << actual->identificador << endl;
-        cout << "Funcion: " << actual->funcion << endl
-             << endl;
-        actual = actual->siguiente;
+    cout << "La cantidad de poderes actualmente es: " << cantidad_poderes <<endl<<endl;
+    while (actual != nullptr){
+        cout << "Nombre: " << actual->nombre_poder <<endl;
+        cout << "ID: " << actual->identificador <<endl;
+        cout << "Funcion: " << actual->funcion <<endl<<endl;
+        actual= actual->siguiente;
     }
     cout << "No hay mas poderes disponibles.\n";
 }
 
 // para encontrar un poder
-Poder_magico *encontrar_poder(Poder_magico &lista_poderes, int identificador)
-{
+Poder_magico *encontrar_poder(Poder_magico &lista_poderes, int identificador){
     Poder_magico *encontrar = lista_poderes.siguiente;
-    while ((encontrar != nullptr))
-    {
-        if (encontrar->identificador == identificador)
-        {
+    while (encontrar != nullptr){    
+        if (encontrar->identificador == identificador){
             return encontrar;
         }
         encontrar = encontrar->siguiente;
     }
-    return nullptr; // Si no lo encuentra, retorna nulo
+    return encontrar = nullptr;
 }
 
 // para modificar los poderes.
