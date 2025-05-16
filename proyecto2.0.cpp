@@ -961,7 +961,7 @@ void crear_implemento(Implemento &lista_implemento){
 
 // buscar implemento.
 Implemento* buscar_implemento(Implemento &lista_implemento, int identificador){
-    Implemento *encontrado = lista_implemento.siguiente;
+    Implemento *encontrado = &lista_implemento;
     while (encontrado != nullptr){
         if (encontrado->identificador == identificador){
             return encontrado;
@@ -1121,7 +1121,7 @@ void mostrar_poderes(Poder_magico &lista_poderes){
 
 // para encontrar un poder
 Poder_magico *encontrar_poder(Poder_magico &lista_poderes, int identificador){
-    Poder_magico *encontrar = lista_poderes.siguiente;
+    Poder_magico *encontrar = &lista_poderes;
     while (encontrar != nullptr){    
         if (encontrar->identificador == identificador){
             return encontrar;
@@ -1241,15 +1241,15 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
                 identificador = obtener_entero("");
                 nuevo_implemento = buscar_implemento(Implementos, identificador);
 
-                if (nuevo_implemento->fortalezanecesaria > personaje_a_llenar->tipo->danno_fortaleza)
-                {
-                    cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
-                    cout << "Coloque uno valido.\n";
-                }
-                else if (nuevo_implemento == nullptr)
+
+                if (nuevo_implemento == nullptr)
                 {
                     cout << "El ID: " << identificador << " no existe.\n";
                     cout << "coloque uno valido.\n";
+                
+                } else if (nuevo_implemento->fortalezanecesaria > personaje_a_llenar->tipo->danno_fortaleza){
+                    cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
+                    cout << "Coloque uno valido.\n";
                 }
                 else
                 {
