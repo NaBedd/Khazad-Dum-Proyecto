@@ -124,46 +124,46 @@ int regulador_adyacencias = 0; // para el id tambien
 // Funciones para verificar formato de respuesta
 
 // Función para validar y leer un entero con mensaje personalizado
-int obtener_entero(const string &mensaje)
-{
+int obtener_entero(const string &mensaje) {
     string entrada;
     int valor;
+    const size_t MAX_DIGITOS = 10; // Un límite seguro para la mayoría de los 'int'
 
-    while (true)
-    {
+    while (true) {
         cout << mensaje;
         getline(cin, entrada);
 
-        // Para verificar si el número es válido
         bool es_valido = true;
 
-        // La entrada nunca deberia ser solo 0
-        // De ser el caso, se modifican los parametros
-        if (entrada == "0")
-        {
+        if (entrada == "0") {
             es_valido = false;
         }
 
-        // Revisa cada caracter
-        for (size_t i = 0; i < entrada.size(); ++i) // entrada.size() devuelve la longitud de la cadena.
-        {
-            if (es_valido && !isdigit(entrada[i])) // isdigit( es para comprovar si el caracter es un numero)
-            {
+        if (entrada.length() > MAX_DIGITOS) {
+            es_valido = false;
+            cout << "Error. El número ingresado es demasiado grande.\n";
+            continue; // Volver al inicio del bucle para pedir una nueva entrada
+        }
+
+        for (char c : entrada) {
+            if (!isdigit(c)) {
                 es_valido = false;
                 break;
             }
         }
 
-        // Convierte a entero mientras sea valido y no este vacio
-        if (es_valido && !entrada.empty()) // empty() es para verificar si no esta vai la cadena.
-        {
-            valor = stoi(entrada); // stoi convierte una cadena de caracter en entero
-
-            return valor;
+        if (es_valido && !entrada.empty()) { 
+            try {
+                valor = stoi(entrada);
+                return valor;
+            } catch (const std::out_of_range& oor) {
+                cout << "Error. El número ingresado está fuera del rango permitido.\n";
+                // No es estrictamente necesario aquí si ya validamos la longitud,
+                // pero es una buena práctica para cubrir otros casos.
+            }
+        } else {
+            cout << "Error. Ingrese solo números naturales.\n";
         }
-
-        // Mensaje de error
-        cout << "Error. Ingrese solo numeros naturales \n";
     }
 }
 
