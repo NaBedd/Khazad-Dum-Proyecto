@@ -24,11 +24,11 @@
 - [ ] En el menu de batalla, se deben de poder elegir entre varias armas para atacar
 
 ### Opcional
-- [ ] usar system("cls") para limpiar la pantalla de Menus
-- [ ] Podemos hacer una opcion de eliminar, o sino hacer que el usuario ingrese 0 en todas las caracteristicas
-
+- [ ] usar system("cls") para limpiar la pantalla de Menus 
+- [ ] Podemos hacer una opcion de eliminar, o sino hacer que el usuario ingrese 0 en todas las caracteristicas 
+ 
 ### Nuevos errores conocidos
-- [ ] asd
+- [ ] asd 
 
 
 
@@ -51,16 +51,9 @@
 - [x] Menu ajustes personaje:  
   - [x] Crear  
   - [x] Modificar
-  - [x] Destruir
-
-### Errores Conocidos
+  - [x] Destruir 
+ 
+### Errores Conocidos 
 - [x] Al agregar especie orco tienes que darle a Enter por alguna razon
 - [x] Al terminar de agregar especie orco, el obtener_opcion() te marca como si hubieras puesto una opcion invalida
 
-
-  
-
-  
-### Cosas importantes que todavia no podemos/sabemos hacer:
-
-  
