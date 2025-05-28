@@ -39,7 +39,7 @@ struct Lista_mapa {
 };
 
 // Función para obtener una entrada de cadena de texto segura
-string devolver_string_verificada();
+string devolver_string_verificada(const string &mensaje);
 
 // Función para crear una nueva sala (modificada para no crear el mapa, solo la sala)
 Sala* crearSala(string& nombre, int& distancia) {
@@ -139,6 +139,13 @@ void MostrarMapa(const Lista_mapa& lista_mapa) {
     }
     cout << "Contenido del Mapa:" << endl;
     while (actual != nullptr) {
+        if (actual->siguientesala != nullptr) {
+            cout << ", La distancia entre sala " << actual->nombreSala
+                 << " y sala " << actual->siguientesala->nombreSala
+                 << ": " << actual->distancia_sala;
+        } else {
+            cout << ", No hay siguiente sala";
+        }
         cout << "Sala: " << actual->nombreSala
              << ", La distancia entre sala"<<actual->nombreSala<< "y sala "<< actual->siguientesala->nombreSala << actual->distancia_sala
              << ", Orcos: " << actual->cantidadOrcos;
