@@ -23,6 +23,7 @@
 ### Sistemas y Jugabilidad
 
 - [ ] Hacer sistema de combate (pelear, curar, magia, huir)
+- [ ] Implementar todos los poderes
 - [ ] Los poderes magicos se usan SOLO en batalla
 - [ ] En el menu de batalla, se deben de poder elegir entre varias armas para atacar
 
@@ -34,7 +35,7 @@
 
 ### Nuevos errores conocidos
 
-- [ ] asd
+- [ ] De momento, inexistentes
 
 ### Para la primera entrega (Listo):
 
