@@ -14,40 +14,12 @@
 using namespace std;
 
 //-----------------------------------------------------------------------------------------------------
-//-------------------------------------- Estructuras -----------------------------------------
+//------------------------------ PARA LOS TIPOS DE ESPECIES -------------------------------------------
 
-// Tipos de especies: Heroes y Orcos
-struct Especie
-{
-    string nombre_especie;
-    int danno_fortaleza;
-    int salud;
-    int rapidez;
-    int identificador;
-    Especie *siguiente; // no se pone como null porque ela lista esta planteada de otra manera.
-};
+// Regulador para cuando se eliminen tipos de orcos en la lista.
+int regulador_tipo_orco = 0;
+int regulador_tipo_heroe = 0;
 
-// Listas enlazadas de Especies
-struct Lista_especie
-{
-    Especie *primero_especie = nullptr;
-    int cantidad = 0;
-};
-
-// Personajes
-struct personaje
-{
-    mochila *mochila = nullptr;
-    string nombre;
-    Especie *tipo;
-    // Double porque puede explotar con el poder vigor enano
-    double vitalidad;
-    int fortaleza;
-    int identificador;
-    personaje *siguiente = nullptr;
-};
-
-// Implementos
 struct Implemento
 {
     string nombre_implemento;
@@ -58,17 +30,10 @@ struct Implemento
     int identificador;
     Implemento *siguiente = nullptr;
 };
+int cantidad_implementos = 0;
+int regulador_implemento = 0;
 
-// Mochila
-struct mochila
-{
-    int identificador; // sera el mismo del personaje al que pernenezca.
-    Implemento *implementos = nullptr;
-    Poder_magico *poderes = nullptr;
-    // aqui va el mapa.
-};
-
-// Poderes Magicos
+// ESTRUCTURA DE LOS PODERES MAGICOS
 struct Poder_magico
 {
     string nombre_poder;
@@ -76,18 +41,67 @@ struct Poder_magico
     int identificador;
     Poder_magico *siguiente = nullptr;
 };
+int cantidad_poderes = 0;
+int regulador_poderes = 0;
 
-// Mapa
-// CAMBIAR
+// ESTRUCTURA para los tipos de especies. orcos y heroes
+struct Especie
+{
+    string nombre_especie;
+    int danno_fortaleza;
+    int salud;
+    int rapidez;
+    int identificador;
+    Especie *siguiente; // no se pone como null porque ela lista esta planteada de otra manera.
+};
+
+// Estructura para crear las listas enlazadas.
+struct Lista_especie
+{
+    Especie *primero_especie = nullptr;
+    int cantidad = 0;
+};
+
+// ESTRUCTURA DE LA MOCHILA
+struct mochila
+{
+    int identificador; // sera el mismo del personaje al que pernenezca.
+    Implemento *implementos = nullptr;
+    Poder_magico *poderes = nullptr;
+    // aqui va el mapa.
+};
+//-----------------------------------------------------------------------------------------------------
+//------------------------------ PARA LOS PERSONAJES --------------------------------------------------
+int regulador_personaje_orco = 0;
+int cantidad_personaje_orco = 0;
+
+int regulador_personaje_heroe = 0;
+int cantidad_personaje_heroe = 0;
+
+struct personaje
+{
+    mochila *mochila = nullptr;
+    string nombre;
+    Especie *tipo;
+    int identificador;
+    personaje *siguiente = nullptr;
+};
+
+int cantidad_personajes_jugar = 0;
+int regulador_personajes_jugar = 0;
+
+// para el mapa.
+// para las adyacencias.
 struct adyacencia
 {
-    string nombre; // compartira el nombre de la sala a la que pertenece. con otro que le ponga el usuario.
+    string nombre; // conmpartira el nombre de la sala a la que pertenece. con otro que le ponga el usuario.
     int distancia;
     int energia_requerida;
     int identificador_adyacencia;
     adyacencia *siguiente = nullptr;
 };
 
+// para la sala como tal.
 struct sala
 {
     string nombre;
@@ -98,33 +112,6 @@ struct sala
     adyacencia *adyacencia_siguiente = nullptr;
     sala *sala_siguiente = nullptr;
 };
-
-//-----------------------------------------------------------------------------------------------------
-//--------------------------- Inicializacion cantidades y reguladores -----------------------------------
-
-// Regulador para cuando se eliminen tipos de orcos en la lista.
-int regulador_tipo_orco = 0;
-int regulador_tipo_heroe = 0;
-
-// Para los personajes
-int regulador_personaje_orco = 0;
-int cantidad_personaje_orco = 0;
-
-int regulador_personaje_heroe = 0;
-int cantidad_personaje_heroe = 0;
-
-int cantidad_personajes_jugar = 0;
-int regulador_personajes_jugar = 0;
-
-// Para implementos
-int cantidad_implementos = 0;
-int regulador_implemento = 0;
-
-// Para Poderes
-int cantidad_poderes = 0;
-int regulador_poderes = 0;
-
-// Para el mapa (Salas y adyacencias) (CAMBIAR)
 int cantidad_salas = 0;
 int regulador_salas = 0;
 
@@ -132,60 +119,49 @@ int cantidad_adyacencias = 0;  // para el id de las adyacencias
 int regulador_adyacencias = 0; // para el id tambien
 
 //-----------------------------------------------------------------------------------------------------
-//-------------------------------------- FUNCIONES GENERAlES-------------------------------------------
+//-------------------------------------- FUNCIONES ----------------------------------------------------
 
 // Funciones para verificar formato de respuesta
+
 // Función para validar y leer un entero con mensaje personalizado
-int obtener_entero(const string &mensaje)
-{
+int obtener_entero(const string &mensaje) {
     string entrada;
     int valor;
     const size_t MAX_DIGITOS = 10; // Un límite seguro para la mayoría de los 'int'
 
-    while (true)
-    {
+    while (true) {
         cout << mensaje;
         getline(cin, entrada);
 
         bool es_valido = true;
 
-        if (entrada == "0")
-        {
+        if (entrada == "0") {
             es_valido = false;
         }
 
-        if (entrada.length() > MAX_DIGITOS)
-        {
+        if (entrada.length() > MAX_DIGITOS) {
             es_valido = false;
             cout << "Error. El número ingresado es demasiado grande.\n";
             continue; // Volver al inicio del bucle para pedir una nueva entrada
         }
 
-        for (char c : entrada)
-        {
-            if (!isdigit(c))
-            {
+        for (char c : entrada) {
+            if (!isdigit(c)) {
                 es_valido = false;
                 break;
             }
         }
 
-        if (es_valido && !entrada.empty())
-        {
-            try
-            {
+        if (es_valido && !entrada.empty()) { 
+            try {
                 valor = stoi(entrada);
                 return valor;
-            }
-            catch (const std::out_of_range &oor)
-            {
+            } catch (const std::out_of_range& oor) {
                 cout << "Error. El número ingresado está fuera del rango permitido.\n";
                 // No es estrictamente necesario aquí si ya validamos la longitud,
                 // pero es una buena práctica para cubrir otros casos.
             }
-        }
-        else
-        {
+        } else {
             cout << "Error. Ingrese solo números naturales.\n";
         }
     }
@@ -241,8 +217,20 @@ string devolver_string_verificada(const string &mensaje)
     return (entrada);
 }
 
-//-----------------------------------------------------------------------------------------------------
-//------------------------------ PARA LOS TIPOS DE ESPECIES -------------------------------------------
+// funcion para liberar memoria dinamica.
+void destruir_lista_especie(Lista_especie &lista)
+{                                            // Toma la direccion de memoria de la lista que se le pase (del tipo).
+    Especie *actual = lista.primero_especie; // declara un nodo actual para igualarlo al primer elemento de la lista.
+    while (actual != nullptr)
+    {                               // si es nullptr es porque es el ultimo elemento.
+        Especie *eliminar = actual; // se crea una variable aux (eliminar) para darle la direccion de memoria de actual.
+        actual = actual->siguiente; // se manda al siguente nodo al actual.
+        delete eliminar;            // se elimina la variable aux (eliminar).
+    }
+    // la declaramos en null a la lista.
+    lista.primero_especie = nullptr;
+    lista.cantidad = 0;
+}
 
 // PARA CREAR UN NUEVO TIPO DE ORCO.
 void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
@@ -418,21 +406,7 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
     }
 }
 
-// funcion para liberar memoria dinamica.
-void destruir_lista_especie(Lista_especie &lista)
-{                                            // Toma la direccion de memoria de la lista que se le pase (del tipo).
-    Especie *actual = lista.primero_especie; // declara un nodo actual para igualarlo al primer elemento de la lista.
-    while (actual != nullptr)
-    {                               // si es nullptr es porque es el ultimo elemento.
-        Especie *eliminar = actual; // se crea una variable aux (eliminar) para darle la direccion de memoria de actual.
-        actual = actual->siguiente; // se manda al siguente nodo al actual.
-        delete eliminar;            // se elimina la variable aux (eliminar).
-    }
-    // la declaramos en null a la lista.
-    lista.primero_especie = nullptr;
-    lista.cantidad = 0;
-}
-
+// FUNCIONES REFERENTES A PERSONAJES.
 // Funcion que retorna un puntero a una especie.
 Especie *encontrar_especie(Lista_especie &lista, int identificador)
 {
@@ -449,10 +423,21 @@ Especie *encontrar_especie(Lista_especie &lista, int identificador)
     return actual = nullptr;
 }
 
-//-----------------------------------------------------------------------------------------------------
-//----------------------------------- PARA LOS PERSONAJES ---------------------------------------------
+personaje *encontrar_personaje(personaje &lista_personajes, int identificador)
+{
+    personaje *actual = lista_personajes.siguiente;
+    while (actual != nullptr)
+    {
+        if (actual->identificador == identificador)
+        {
+            return actual;
+        }
+        actual = actual->siguiente;
+    }
+    return actual = nullptr;
+}
 
-// Para crear personajes.
+// para crear personajes.
 void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int tipo)
 {
     if (lista_tipos.cantidad == 0)
@@ -528,6 +513,19 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
     }
 }
 
+// Funcion para destruir la lista de personajes.
+void destruir_lista_personajes(personaje &lista)
+{                                        // Toma la direccion de memoria de la lista que se le pase (del tipo).
+    personaje *actual = lista.siguiente; // declara un nodo actual para igualarlo al primer elemento de la lista.
+    while (actual != nullptr)
+    {                                 // si es nullptr es porque es el ultimo elemento.
+        personaje *eliminar = actual; // se crea una variable aux (eliminar) para darle la direccion de memoria de actual.
+        actual = actual->siguiente;   // se manda al siguente nodo al actual.
+        delete eliminar;              // se elimina la variable aux (eliminar).
+    }
+    // la declaramos en null a la lista.
+}
+
 // Funcion para mostrar los personajes
 void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 heroe
 {                                                   // toma la direccion de memoria.
@@ -546,7 +544,7 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
         if (cantidad_personaje_heroe == 0)
         {
             cout << "\nno hay personajes heroes para mostra actualmente \n";
-            cout << "primero debe crerlos\n";
+            cout << "primero deve crerlos\n";
         }
     }
 
@@ -569,37 +567,6 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
     }
     cout << "No hay mas personajes.\n"
          << endl;
-}
-
-// Encontrar un personaje
-personaje *encontrar_personaje(personaje &lista_personajes, int identificador)
-{
-    personaje *actual = lista_personajes.siguiente;
-    while (actual != nullptr)
-    {
-        if (actual->identificador == identificador)
-        {
-            return actual;
-        }
-        actual = actual->siguiente;
-    }
-    return actual = nullptr;
-}
-
-// para saber cuantos pesonajes hay de una especie
-int cantidad_personajes_por_especie(personaje &lista_personajes, Especie *mostrar)
-{
-    personaje *actual = lista_personajes.siguiente;
-    int contador = 0;
-    while ((actual != nullptr))
-    {
-        if (actual->tipo->identificador == mostrar->identificador)
-        {
-            contador += 1;
-        }
-        actual = actual->siguiente;
-    }
-    return contador;
 }
 
 // funcion para modificar a los personajes.
@@ -676,7 +643,7 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
     }
 }
 
-// Para borrar un personaje.
+// para borrar un personaje.
 void borrar_personaje(personaje &lista, int tipo)
 {
     if (tipo == 1)
@@ -755,17 +722,57 @@ void borrar_personaje(personaje &lista, int tipo)
     }
 }
 
-// Funcion para destruir la lista de personajes.
-void destruir_lista_personajes(personaje &lista)
-{                                        // Toma la direccion de memoria de la lista que se le pase (del tipo).
-    personaje *actual = lista.siguiente; // declara un nodo actual para igualarlo al primer elemento de la lista.
+// borra todos los personajes de un tipo (epecie).
+void borrar_personajes_de_tipo(personaje &lista_personajes, Especie *tipo_borrar, int tipo)
+{
+    personaje *actual = lista_personajes.siguiente; // El primero en la lista (después del nodo cabeza)
+    personaje *anterior = &lista_personajes;        // El anterior al que se elimina (inicialmente la cabeza)
+    personaje *eliminar = nullptr;                  // Para almacenar el nodo a eliminar
+
     while (actual != nullptr)
-    {                                 // si es nullptr es porque es el ultimo elemento.
-        personaje *eliminar = actual; // se crea una variable aux (eliminar) para darle la direccion de memoria de actual.
-        actual = actual->siguiente;   // se manda al siguente nodo al actual.
-        delete eliminar;              // se elimina la variable aux (eliminar).
+    {
+        if (actual->tipo != nullptr && actual->tipo->identificador == tipo_borrar->identificador)
+        {
+            eliminar = actual;
+            anterior->siguiente = actual->siguiente; // Enlaza el anterior con el siguiente del nodo a eliminar
+            actual = actual->siguiente;              // Avanza actual para seguir buscando
+
+            cout << "El personaje: " << eliminar->nombre << " fue borrado." << endl;
+            delete eliminar; // Se libera la memoria del personaje borrado
+
+            if (tipo == 1)
+            {
+                regulador_personaje_orco++;
+                cantidad_personaje_orco--;
+            }
+            else
+            {
+                regulador_personaje_heroe++;
+                cantidad_personaje_heroe--;
+            }
+        }
+        else
+        {
+            anterior = actual;          // Si no se borra, el actual se convierte en el anterior
+            actual = actual->siguiente; // Avanza al siguiente personaje
+        }
     }
-    // la declaramos en null a la lista.
+}
+
+// pra saber cuantos pesonajes hay de una especie
+int cantidad_personajes_por_especie(personaje &lista_personajes, Especie *mostrar)
+{
+    personaje *actual = lista_personajes.siguiente;
+    int contador = 0;
+    while ((actual != nullptr))
+    {
+        if (actual->tipo->identificador == mostrar->identificador)
+        {
+            contador += 1;
+        }
+        actual = actual->siguiente;
+    }
+    return contador;
 }
 
 // esta funcion la coloque
@@ -881,90 +888,22 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         cout << "El numero de especie ingresado no es valido. \n";
     }
 }
-
-// borra todos los personajes de un tipo (epecie).
-void borrar_personajes_de_tipo(personaje &lista_personajes, Especie *tipo_borrar, int tipo)
-{
-    personaje *actual = lista_personajes.siguiente; // El primero en la lista (después del nodo cabeza)
-    personaje *anterior = &lista_personajes;        // El anterior al que se elimina (inicialmente la cabeza)
-    personaje *eliminar = nullptr;                  // Para almacenar el nodo a eliminar
-
-    while (actual != nullptr)
-    {
-        if (actual->tipo != nullptr && actual->tipo->identificador == tipo_borrar->identificador)
-        {
-            eliminar = actual;
-            anterior->siguiente = actual->siguiente; // Enlaza el anterior con el siguiente del nodo a eliminar
-            actual = actual->siguiente;              // Avanza actual para seguir buscando
-
-            cout << "El personaje: " << eliminar->nombre << " fue borrado." << endl;
-            delete eliminar; // Se libera la memoria del personaje borrado
-
-            if (tipo == 1)
-            {
-                regulador_personaje_orco++;
-                cantidad_personaje_orco--;
-            }
-            else
-            {
-                regulador_personaje_heroe++;
-                cantidad_personaje_heroe--;
-            }
-        }
-        else
-        {
-            anterior = actual;          // Si no se borra, el actual se convierte en el anterior
-            actual = actual->siguiente; // Avanza al siguiente personaje
-        }
-    }
-}
-
 //-----------------------------------------------------------------------------------------------------
-//----------------------------------- FUNCIONES IMPLEMENTOS --------------------------------------------
+// FUNCIONES PARA LOS IMPLEMENTOS.
 
-// para crear implementos.
-void crear_implemento(Implemento &lista_implemento)
+// para destruir la lista de implementos.
+void destruir_implementos(Implemento &lista_implemento)
 {
-    Implemento *nuevo = new Implemento;
-    cout << "Proceda a llenar las espicificaciones del imlemento. \n\n";
-    nuevo->nombre_implemento = devolver_string_verificada("Nobre:");
-    nuevo->tipo_implemento = tipo_implemento(nuevo); // funcion para obteren el tipo de implemento.
-    nuevo->usos = obtener_entero("Usos: ");
-    nuevo->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usar el implemento: ");
-    nuevo->valor = obtener_entero("valor: ");
-    // lo agregamos a la lista enlazada.
-    nuevo->siguiente = lista_implemento.siguiente;
-    lista_implemento.siguiente = nuevo;
-    cantidad_implementos += 1;
-    nuevo->identificador = cantidad_implementos + regulador_implemento;
-    cout << "El implemento: " << nuevo->nombre_implemento << "se creo correctamente.";
-}
-
-void mostrar_implementos(Implemento &lista_implemento)
-{
-    if (cantidad_implementos == 0)
-    {
-        cout << "No hay implementos disponibles en este momento. \n";
-        return;
-    }
-    else
-    {
-        cout << "la candtad de implementos es: [" << cantidad_implementos << "]. \n";
-    }
-
     Implemento *actual = lista_implemento.siguiente;
+    Implemento *eliminar = nullptr;
     while (actual != nullptr)
     {
-        cout << "Nombre: " << actual->nombre_implemento << endl;
-        cout << "ID: " << actual->identificador << endl;
-        cout << "Tipo: " << actual->tipo_implemento << endl;
-        cout << "Uso: " << actual->usos << endl;
-        cout << "Fortaleza necesaria para usarlo: " << actual->fortalezanecesaria << endl;
-        cout << "Valor: " << actual->valor << endl
-             << endl;
+        eliminar = actual;
         actual = actual->siguiente;
+        delete eliminar;
     }
-    cout << "no hay mas implementos disponibles\n";
+    cantidad_implementos = 0;
+    regulador_implemento = 0;
 }
 
 // para obtener el tipo de implemento.
@@ -987,7 +926,7 @@ string tipo_implemento(Implemento *Implemento)
         }
         else if (opcion == 2)
         {
-            return tipo = "Proteccion";
+            return tipo = "proteccion";
         }
         else if (opcion == 3)
         {
@@ -1003,14 +942,28 @@ string tipo_implemento(Implemento *Implemento)
     return tipo;
 } // lo marca porque el bucle es infinito.
 
+// para crear implementos.
+void crear_implemento(Implemento &lista_implemento){
+    Implemento *nuevo = new Implemento;
+    cout << "Proceda a llenar las espicificaciones del imlemento. \n\n";
+    nuevo->nombre_implemento = devolver_string_verificada("Nobre:");
+    nuevo->tipo_implemento = tipo_implemento(nuevo); // funcion para obteren el tipo de implemento.
+    nuevo->usos = obtener_entero("Usos: ");
+    nuevo->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usar el implemento: ");
+    nuevo->valor = obtener_entero("valor: ");
+    // lo agregamos a la lista enlazada.
+    nuevo->siguiente = lista_implemento.siguiente;
+    lista_implemento.siguiente = nuevo;
+    cantidad_implementos +=1;
+    nuevo->identificador= cantidad_implementos + regulador_implemento;
+    cout << "El implemento: " << nuevo->nombre_implemento << "se creo correctamente.";
+}
+
 // buscar implemento.
-Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
-{
+Implemento* buscar_implemento(Implemento &lista_implemento, int identificador){
     Implemento *encontrado = &lista_implemento;
-    while (encontrado != nullptr)
-    {
-        if (encontrado->identificador == identificador)
-        {
+    while (encontrado != nullptr){
+        if (encontrado->identificador == identificador){
             return encontrado;
         }
         encontrado = encontrado->siguiente;
@@ -1018,72 +971,72 @@ Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
     return encontrado = nullptr;
 }
 
+void mostrar_implementos(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
+        cout << "No hay implementos disponibles en este momento. \n";
+        return;
+    }else{
+        cout << "la candtad de implementos es: ["<< cantidad_implementos <<"]. \n";
+    }
+    
+    Implemento *actual = lista_implemento.siguiente;
+    while (actual != nullptr){
+        cout << "Nombre: " << actual->nombre_implemento <<endl;
+        cout << "ID: " << actual->identificador<<endl;
+        cout << "Tipo: " << actual->tipo_implemento<<endl;
+        cout << "Uso: " << actual->usos<<endl;
+        cout << "Fortaleza necesaria para usarlo: " << actual->fortalezanecesaria<<endl;
+        cout << "Valor: " << actual->valor<<endl<<endl; 
+        actual = actual->siguiente; 
+    }
+    cout << "no hay mas implementos disponibles\n";
+}
+
 // para modificar los implementos.
-void modificar_implemento(Implemento &lista_implemento)
-{
-    if (cantidad_implementos == 0)
-    {
+void modificar_implemento(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
         cout << "No hay implementos disponibles para modificar \n";
         cout << "modificacion fallida.\n";
         return;
     }
-    int identificador = 0;
+    int identificador=0;
     cout << "los impplementos disponibles son: \n";
     mostrar_implementos(lista_implemento);
     identificador = obtener_entero("Coloque el ID del implemento que desea modificar: ");
-    Implemento *actualizar = buscar_implemento(lista_implemento, identificador);
-    if (actualizar == nullptr)
-    {
+    Implemento *actualizar = buscar_implemento(lista_implemento,identificador);
+    if (actualizar == nullptr){
         cout << "El ID que coloco no es valido.\n";
         cout << "No hay ningun implemento con ese ID.\n";
         cout << "Actualizacion fallida.\n";
         return;
-    }
-
+    } 
+    
     //                          VERRRRRRRRRRRRRRRRRRRR
     // coloco este mensaje porque no se porque el progra no corre normal.
     cout << "precione enter para modificar el implemto: " << actualizar->nombre_implemento;
     // hay que darle enter para que corra.
 
     cin.ignore();
-    actualizar->nombre_implemento = devolver_string_verificada("Nombre: ");
+    actualizar->nombre_implemento =devolver_string_verificada("Nombre: ");
     actualizar->tipo_implemento = tipo_implemento(actualizar);
     actualizar->usos = obtener_entero("Usos: ");
     actualizar->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usarlo:");
     actualizar->valor = obtener_entero("Valor: ");
-    cout << "Implemento: " << actualizar->nombre_implemento << ", modificado correctamente.\n ";
-}
-
-// para destruir la lista de implementos.
-void destruir_implementos(Implemento &lista_implemento)
-{
-    Implemento *actual = lista_implemento.siguiente;
-    Implemento *eliminar = nullptr;
-    while (actual != nullptr)
-    {
-        eliminar = actual;
-        actual = actual->siguiente;
-        delete eliminar;
-    }
-    cantidad_implementos = 0;
-    regulador_implemento = 0;
+    cout << "Implemento: " << actualizar->nombre_implemento <<", modificado correctamente.\n ";
 }
 
 // para borrar implementos.
-void borrar_implementos(Implemento &lista_implemento)
-{
-    if (cantidad_implementos == 0)
-    {
+void borrar_implementos(Implemento &lista_implemento){
+    if (cantidad_implementos == 0){
         cout << "No hay implementos para eliminar: \n";
-        cout << "Eliminacion fallida. \n";
+        cout << "Eliminacion fallida. \n"; 
         return;
     }
     cout << "Los implementos disponibles son: \n";
     mostrar_implementos(lista_implemento);
     int identificador = obtener_entero("coloque el ID del implemento que desea eliminar:");
-    Implemento *encontrado = buscar_implemento(lista_implemento, identificador);
-    if (encontrado == nullptr)
-    {
+    Implemento *encontrado = buscar_implemento(lista_implemento,identificador);
+    if (encontrado == nullptr){
         cout << "  No existe un implemento con el ID: " << identificador;
         cout << "\nEliminacion fallida. \n";
         return;
@@ -1091,26 +1044,24 @@ void borrar_implementos(Implemento &lista_implemento)
 
     // comiza la eliminacion del implemento.
     Implemento *actual = lista_implemento.siguiente;
-
+    
     // si es el primero en la lista.
-    if (actual->identificador == identificador)
-    {
+    if (actual->identificador == identificador){
         lista_implemento.siguiente = actual->siguiente;
         cout << "El implemento: " << actual->nombre_implemento << "se elimino correctamente.\n";
         delete actual;
-        cantidad_implementos -= 1;
-        regulador_implemento += 1;
+        cantidad_implementos -=1;
+        regulador_implemento +=1;
         return;
     }
-
+    
     // si no es el primero.
     Implemento *anterior = nullptr;
-    while ((actual != nullptr) && (actual->identificador != identificador))
-    {
+    while ((actual != nullptr) && (actual->identificador != identificador)){
         anterior = actual;
         actual = actual->siguiente;
     }
-
+    
     // ahora eliminamos.
     Implemento *eliminar = actual;
     anterior->siguiente = actual->siguiente;
@@ -1118,190 +1069,8 @@ void borrar_implementos(Implemento &lista_implemento)
     delete eliminar;
 }
 
-//-----------------------------------------------------------------------------------------------------
-//----------------------------------- FUNCIONES MOCHILA -----------------------------------------------
-
-// para llenar la mochila de un personaje.
-void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Poder_magico &poderes)
-{
-    int opcio = 0;
-    int cantidad_objetos = 0;
-    int identificador = 0;
-    int contrilador_interno = 0;
-    cout << "Puede escoger un maximo 5 objetos, entre poderes magicos o implementos. \n";
-    do
-    {
-        cout << "Tiene " << cantidad_objetos << " objetos en la mochila.\n";
-        cout << " Que tipo de objeto desea agregar.\n";
-        cout << "1. Implemento.\n";
-        cout << "2. Poderes Magicos.\n";
-        cout << "3. Salir.\n";
-        opcio = obtener_entero("");
-        if (opcio == 1)
-        {
-            Implemento *nuevo_implemento = nullptr;
-            // para verificar si el ID es valido, lo pone bien o lo pone bien.
-            do
-            {
-                cout << "Los implementos disponibles son:\n";
-                mostrar_implementos(Implementos);
-                cout << "coloque el ID del implemento que desea colocar: ";
-                identificador = obtener_entero("");
-                nuevo_implemento = buscar_implemento(Implementos, identificador);
-
-                if (nuevo_implemento == nullptr)
-                {
-                    cout << "El ID: " << identificador << " no existe.\n";
-                    cout << "coloque uno valido.\n";
-                }
-                else if (nuevo_implemento->fortalezanecesaria > personaje_a_llenar->tipo->danno_fortaleza)
-                {
-                    cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
-                    cout << "Coloque uno valido.\n";
-                }
-                else
-                {
-                    contrilador_interno = 1;
-                }
-            } while (contrilador_interno != 1);
-            // procedemos a colocar el implemento en la mochila.
-            // cramos nuva memoria dinamica.
-            Implemento *colocar = new Implemento;
-            *colocar = *nuevo_implemento;
-            // ahora la asignamos a la mochila.
-            colocar->siguiente = personaje_a_llenar->mochila->implementos;
-            personaje_a_llenar->mochila->implementos = colocar;
-            cantidad_objetos += 1;
-            contrilador_interno = 0; // poria.
-            cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
-        }
-        else if (opcio == 2)
-        {
-            Poder_magico *nuevo_poder = nullptr;
-            // para verificar si el ID es valido, lo pone bien o lo pone bien.
-            do
-            {
-                cout << "Los poderes magicos disponibles son:\n";
-                mostrar_poderes(poderes);
-                cout << "coloque el ID del poder que desea colocar: ";
-                identificador = obtener_entero("");
-                nuevo_poder = encontrar_poder(poderes, identificador);
-                if (nuevo_poder == nullptr)
-                {
-                    cout << "El ID: " << identificador << " no existe.\n";
-                    cout << "coloque uno valido.\n";
-                }
-                else
-                {
-                    contrilador_interno = 1;
-                }
-            } while (contrilador_interno != 1);
-            // procedemos a colocar el poder en la mochila.
-            // cramos nuva memoria dinamica.
-            Poder_magico *colocar = new Poder_magico;
-            *colocar = *nuevo_poder;
-            // ajhora la asignamos a la mochila.
-            colocar->siguiente = personaje_a_llenar->mochila->poderes;
-            personaje_a_llenar->mochila->poderes = colocar;
-            cantidad_objetos += 1;
-            contrilador_interno = 0; // porcia.
-            cout << "El poder " << colocar->nombre_poder << " se agrego correctamente a la mochila.\n";
-        }
-        else if (opcio == 3)
-        {
-            cout << "La cantidad de objetos que coloco fue: " << cantidad_objetos << endl;
-        }
-        else
-        {
-            cout << "opcion invaida, el numero " << opcio << " no es una opcion valida.\n";
-        }
-
-    } while ((opcio != 3) && (cantidad_objetos != 5));
-    if (cantidad_objetos == 5)
-    {
-        cout << "Ya no pudes agregar mas objetos.\n";
-        cout << "La mochila del personaje " << personaje_a_llenar->nombre << " se lleno correctamente. ";
-    }
-}
-
-// para editar los personajes
-void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Poder_magico &poderes)
-{
-    if (cantidad_personajes_jugar == 0)
-    {
-        cout << "No hay personajes en el equipo para modificar\n";
-        cout << "Modificacion fallida\n";
-        return;
-    }
-
-    int identificador;
-    cout << "Los personajes que forman parte del equipo son: \n";
-    mostrar_personajes_jugar(personajes_jugar);
-    cout << "Coloque el ID del personaje cuya mochila desea modificar: ";
-    identificador = obtener_entero("");
-
-    personaje *actual = personajes_jugar;
-    while ((actual != nullptr) && (actual->identificador != identificador))
-    {
-        actual = actual->siguiente;
-    }
-
-    if (actual != nullptr)
-    {
-        cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
-
-        // Liberamos la memoria de los poderes actuales.
-        Implemento *actual_implemento = actual->mochila->implementos;
-        while (actual_implemento != nullptr)
-        {
-            Implemento *siguiente_implemento = actual_implemento->siguiente;
-            delete actual_implemento;
-            actual_implemento = siguiente_implemento;
-        }
-        actual->mochila->implementos = nullptr; // la ponemos vacia
-
-        // Liberar mos la memoria de los poderes actuales.
-        Poder_magico *actual_poder = actual->mochila->poderes;
-        while (actual_poder != nullptr)
-        {
-            Poder_magico *siguiente_poder = actual_poder->siguiente;
-            delete actual_poder;
-            actual_poder = siguiente_poder;
-        }
-        actual->mochila->poderes = nullptr; // la ponemso vacia.
-
-        // se llama a la funcion llenar mochila.
-        llenar_mochila(actual, Implementos, poderes);
-        cout << "Actualización de la mochila completa para el personaje: " << actual->nombre << endl;
-    }
-    else
-    {
-        cout << "El ID " << identificador << " no existe en el equipo.\n";
-        cout << "Modificación fallida.\n";
-    }
-}
-
-//-----------------------------------------------------------------------------------------------------
-//----------------------------------- FUNCIONES PODERES MAGICOS ---------------------------------------
-
-// para crear poderes.
-void crear_poder(Poder_magico &lista_poderes)
-{
-    Poder_magico *nuevo = new Poder_magico;
-    cout << "Proceda a llenar las espesificaciones del nuevo poder. \n";
-    nuevo->nombre_poder = devolver_string_verificada("Nombre: ");
-    // lo coloco sin validar porque imagino que podra colocar numero y eso en la funcion del poder.
-    cout << "Funcion: ";
-    getline(cin, nuevo->funcion);
-    cin.ignore();
-    cantidad_poderes += 1;
-    nuevo->identificador = cantidad_poderes + regulador_poderes;
-    // lo agregamos a la lista enlazada.
-    nuevo->siguiente = lista_poderes.siguiente;
-    lista_poderes.siguiente = nuevo;
-    cout << "El poder: " << nuevo->nombre_poder << "se creo correctamente.\n";
-}
-
+// funciones para poderes magicos.
+// para destruir la lista de los poderes.
 void destruir_poder_magico(Poder_magico &lista_poderes)
 {
     Poder_magico *actual = lista_poderes.siguiente;
@@ -1315,37 +1084,46 @@ void destruir_poder_magico(Poder_magico &lista_poderes)
     regulador_poderes = 0;
 }
 
+// para crear poderes.
+void crear_poder(Poder_magico &lista_poderes){
+    Poder_magico *nuevo = new Poder_magico;
+    cout << "Proceda a llenar las espesificaciones del nuevo poder. \n";
+    nuevo->nombre_poder = devolver_string_verificada("Nombre: ");
+    // lo coloco sin validar porque imagino que podra colocar numero y eso en la funcion del poder.
+    cout << "Funcion: ";
+    getline(cin,nuevo->funcion);
+    cin.ignore();
+    cantidad_poderes += 1;
+    nuevo->identificador = cantidad_poderes + regulador_poderes;
+    // lo agregamos a la lista enlazada.
+    nuevo->siguiente = lista_poderes.siguiente;
+    lista_poderes.siguiente = nuevo;
+    cout << "El poder: " << nuevo->nombre_poder << "se creo correctamente.\n";
+}
+
 // para mostrar los poderes.
-void mostrar_poderes(Poder_magico &lista_poderes)
-{
+void mostrar_poderes(Poder_magico &lista_poderes){
     // para ver si hay poderes creados.
-    if (cantidad_poderes == 0)
-    {
+    if (cantidad_poderes == 0){
         cout << "No hay poderes disponibles actualmente. \n";
         return;
     }
     Poder_magico *actual = lista_poderes.siguiente;
-    cout << "La cantidad de poderes actualmente es: " << cantidad_poderes << endl
-         << endl;
-    while (actual != nullptr)
-    {
-        cout << "Nombre: " << actual->nombre_poder << endl;
-        cout << "ID: " << actual->identificador << endl;
-        cout << "Funcion: " << actual->funcion << endl
-             << endl;
-        actual = actual->siguiente;
+    cout << "La cantidad de poderes actualmente es: " << cantidad_poderes <<endl<<endl;
+    while (actual != nullptr){
+        cout << "Nombre: " << actual->nombre_poder <<endl;
+        cout << "ID: " << actual->identificador <<endl;
+        cout << "Funcion: " << actual->funcion <<endl<<endl;
+        actual= actual->siguiente;
     }
     cout << "No hay mas poderes disponibles.\n";
 }
 
 // para encontrar un poder
-Poder_magico *encontrar_poder(Poder_magico &lista_poderes, int identificador)
-{
+Poder_magico *encontrar_poder(Poder_magico &lista_poderes, int identificador){
     Poder_magico *encontrar = &lista_poderes;
-    while (encontrar != nullptr)
-    {
-        if (encontrar->identificador == identificador)
-        {
+    while (encontrar != nullptr){    
+        if (encontrar->identificador == identificador){
             return encontrar;
         }
         encontrar = encontrar->siguiente;
@@ -1435,59 +1213,110 @@ void eliminar_poder(Poder_magico &lista_poder)
     regulador_poderes += 1;
 }
 
-// Pendiente revisar, mejorar e implementar en el programa
-void poder_vigor_enano(personaje *lista_personajes_jugar)
+// para llenar la mochila de un personaje.
+void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Poder_magico &poderes)
 {
-
-    // Creacion del poder magico:
-
-    // nuevo->nombre_poder = "Vigor de Enanos";
-    // nuevo->funcion = "Poder magico que recupera la salud de todos los enanos.
-    // Aumenta su salud en 100 y su fortaleza en 1000";
-
-    personaje *actual_personaje = lista_personajes_jugar;
-    bool modificado = false;
-
-    if (actual_personaje == nullptr)
+    int opcio = 0;
+    int cantidad_objetos = 0;
+    int identificador = 0;
+    int contrilador_interno = 0;
+    cout << "Puede escoger un maximo 5 objetos, entre poderes magicos o implementos. \n";
+    do
     {
-        cout << "No hay personajes disponibles en el equipo" << endl;
-    };
-    while (actual_personaje != nullptr)
-    {
-        // SOLO FUNCIONA SI ENANO ESTA BIEN ESCRITO. "Enano" !!!!!!
-        if (actual_personaje->tipo->nombre_especie == "Enano")
+        cout << "Tiene " << cantidad_objetos << " objetos en la mochila.\n";
+        cout << " Que tipo de objeto desea agregar.\n";
+        cout << "1. Implemento.\n";
+        cout << "2. Poderes Magicos.\n";
+        cout << "3. Salir.\n";
+        opcio = obtener_entero("");
+        if (opcio == 1)
         {
-            modificado = true;
-            // Le recupera toda la vida (La devuelve a su valor original)
-            actual_personaje->vitalidad = actual_personaje->tipo->salud;
-            cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido regenerada por completo (" << actual_personaje->vitalidad << ")" << endl;
-            ;
+            Implemento *nuevo_implemento = nullptr;
+            // para verificar si el ID es valido, lo pone bien o lo pone bien.
+            do
+            {
+                cout << "Los implementos disponibles son:\n";
+                mostrar_implementos(Implementos);
+                cout << "coloque el ID del implemento que desea colocar: ";
+                identificador = obtener_entero("");
+                nuevo_implemento = buscar_implemento(Implementos, identificador);
 
-            // Le aumenta la vida en 100
-            actual_personaje->vitalidad += 100;
-            cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido aumentada en 100 (" << actual_personaje->vitalidad << ")" << endl;
 
-            // Le aumenta la fortaleza en 1000
-            actual_personaje->fortaleza += 1000;
-            cout << "La fuerza del personaje ha sido aumentada en 1000 (" << actual_personaje->fortaleza << ")";
+                if (nuevo_implemento == nullptr)
+                {
+                    cout << "El ID: " << identificador << " no existe.\n";
+                    cout << "coloque uno valido.\n";
+                
+                } else if (nuevo_implemento->fortalezanecesaria > personaje_a_llenar->tipo->danno_fortaleza){
+                    cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
+                    cout << "Coloque uno valido.\n";
+                }
+                else
+                {
+                    contrilador_interno = 1;
+                }
+            } while (contrilador_interno != 1);
+            // procedemos a colocar el implemento en la mochila.
+            // cramos nuva memoria dinamica.
+            Implemento *colocar = new Implemento;
+            *colocar = *nuevo_implemento;
+            // ahora la asignamos a la mochila.
+            colocar->siguiente = personaje_a_llenar->mochila->implementos;
+            personaje_a_llenar->mochila->implementos = colocar;
+            cantidad_objetos += 1;
+            contrilador_interno = 0; // porcia.
+            cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
+        }
+        else if (opcio == 2)
+        {
+            Poder_magico *nuevo_poder = nullptr;
+            // para verificar si el ID es valido, lo pone bien o lo pone bien.
+            do
+            {
+                cout << "Los poderes magicos disponibles son:\n";
+                mostrar_poderes(poderes);
+                cout << "coloque el ID del poder que desea colocar: ";
+                identificador = obtener_entero("");
+                nuevo_poder = encontrar_poder(poderes, identificador);
+                if (nuevo_poder == nullptr)
+                {
+                    cout << "El ID: " << identificador << " no existe.\n";
+                    cout << "coloque uno valido.\n";
+                }
+                else
+                {
+                    contrilador_interno = 1;
+                }
+            } while (contrilador_interno != 1);
+            // procedemos a colocar el poder en la mochila.
+            // cramos nuva memoria dinamica.
+            Poder_magico *colocar = new Poder_magico;
+            *colocar = *nuevo_poder;
+            // ahora lo asignamos a la mochila.
+            colocar->siguiente = personaje_a_llenar->mochila->poderes;
+            personaje_a_llenar->mochila->poderes = colocar;
+            cantidad_objetos += 1;
+            contrilador_interno = 0; // porcia.
+            cout << "El poder " << colocar->nombre_poder << " se agrego correctamente a la mochila.\n";
+        }
+        else if (opcio == 3)
+        {
+            cout << "La cantidad de objetos que coloco fue: " << cantidad_objetos << endl;
+        }
+        else
+        {
+            cout << "opcion invalida, el numero " << opcio << " no es una opcion valida.\n";
+        }
 
-            actual_personaje = actual_personaje->siguiente;
-        };
-    };
-    if (modificado == true)
+    } while ((opcio != 3) && (cantidad_objetos != 5));
+    if (cantidad_objetos == 5)
     {
-        cout << "Los personajes Enanos han sido modificados" << endl;
-    }
-    else
-    {
-        cout << "No hay personajes Enanos en el equipo" << endl;
+        cout << "Ya no puedes agregar mas objetos.\n";
+        cout << "La mochila del personaje " << personaje_a_llenar->nombre << " se lleno correctamente. ";
     }
 }
 
-//-----------------------------------------------------------------------------------------------------
-//----------------------------------- FUNCIONES PERSONAJES JUGAR --------------------------------------
-
-// para elegir el personaje y llenar la mochila.
+// para elgir el personaje y llenar la mochila.
 void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &implementos, Poder_magico &poderes)
 {
     if (cantidad_personaje_heroe <= 0)
@@ -1607,6 +1436,63 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
     cout << "\n No hay mas personajes en el equipo\n\n ";
 }
 
+// para editar los personajes
+void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Poder_magico &poderes)
+{
+    if (cantidad_personajes_jugar == 0)
+    {
+        cout << "No hay personajes en el equipo para modificar\n";
+        cout << "Modificacion fallida\n";
+        return;
+    }
+
+    int identificador;
+    cout << "Los personajes que forman parte del equipo son: \n";
+    mostrar_personajes_jugar(personajes_jugar);
+    cout << "Coloque el ID del personaje cuya mochila desea modificar: ";
+    identificador = obtener_entero("");
+
+    personaje *actual = personajes_jugar;
+    while ((actual != nullptr) && (actual->identificador != identificador))
+    {
+        actual = actual->siguiente;
+    }
+
+    if (actual != nullptr)
+    {
+        cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
+
+        // Liberamos la memoria de los poderes actuales.
+        Implemento *actual_implemento = actual->mochila->implementos;
+        while (actual_implemento != nullptr)
+        {
+            Implemento *siguiente_implemento = actual_implemento->siguiente;
+            delete actual_implemento;
+            actual_implemento = siguiente_implemento;
+        }
+        actual->mochila->implementos = nullptr; // la ponemos vacia
+
+        // Liberar mos la memoria de los poderes actuales.
+        Poder_magico *actual_poder = actual->mochila->poderes;
+        while (actual_poder != nullptr)
+        {
+            Poder_magico *siguiente_poder = actual_poder->siguiente;
+            delete actual_poder;
+            actual_poder = siguiente_poder;
+        }
+        actual->mochila->poderes = nullptr; // la ponemso vacia.
+
+        // se llama a la funcion llenar mochila.
+        llenar_mochila(actual, Implementos, poderes);
+        cout << "Actualización de la mochila completa para el personaje: " << actual->nombre << endl;
+    }
+    else
+    {
+        cout << "El ID " << identificador << " no existe en el equipo.\n";
+        cout << "Modificación fallida.\n";
+    }
+}
+
 void eliminar_personaje_jugar(personaje *&lista_jugar)
 {
     if (cantidad_personajes_jugar == 0)
@@ -1702,12 +1588,7 @@ void destruir_personaje_jugar(personaje *&lista_jugar)
     }
 }
 
-//-----------------------------------------------------------------------------------------------------
-//----------------------------------- FUNCIONES MAPA ---------------------------------------
-
-// Hay que modificar TOODOOO esto
-
-// para el mapa.
+// Funciones para para el mapa
 
 // crear sala con sus adyacencias.
 void crear_sala(sala &lista_sala)
@@ -2025,7 +1906,7 @@ void eliminar_sala_adyacencia(sala &lista_sala)
         }
         else
         {
-            // porcia , esta vina esta loca. ( no deberia pasar.)
+            // porcia , esta vina esta loca. ( no deveria pasar.)
             cout << "Error: Sala con ID " << identificador << " no encontrada\n";
             return;
         }
@@ -2087,7 +1968,7 @@ void eliminar_sala_adyacencia(sala &lista_sala)
         }
         else
         {
-            // en caso no se encuetre. no deberia pasar creo.
+            // en caso no se encuetre. no deveria pasar creo.
             cout << "El ID de la adyacencia " << identificador_adyacencia << " no se encontró en la sala " << validar_existencia->nombre << ".\n";
             cout << "Eliminacion  de la adyacencia fallida.\n";
             return;
@@ -2114,13 +1995,7 @@ void destruir_mapa(sala &lista_mapa)
         delete eliminar_sala;
     }
 }
-
-//-----------------------------------------------------------------------------------------------------
-//----------------------------------- FUNCIONES JUGABILIDAD -------------------------------------------
-
-// Aqui va todo lo que sea juego como tal, menu de acciones, para usar objetos, etc
-
-//-----------------------------------------------------------------------------------------------------
+//------------------------------ ------------------------------  ------------------------------ -------
 //------------------------------ EJECUCION DEL PROGRAMA -----------------------------------------------
 
 int main()
@@ -2142,6 +2017,7 @@ int main()
 
     int opcion_principal = 0;
     int opcion_interna = 0;
+    int res=0; // para usar en case7
 
     cout << "¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
     cout << "Se recomienda visitar todos los menus en orden ascendente para una mejor experiencia de juego." << endl;
@@ -2157,11 +2033,11 @@ int main()
         cout << "---------------------\n";
         cout << "3. Menu de Implementos" << "\n";
         cout << "4. Menu de Poderes Magicos \n";
-        cout << "5. Seleccion de Personajes.\n"; // aqui hay que darle dos veces a la opcion salir
         cout << "---------------------\n";
-        cout << "6. Editar Mapa.\n";
-        cout << "7. Salir de Menu Principal" << "\n";
+        cout << "5. Editar Mapa.\n";
+        cout << "6. Salir de Menu Principal" << "\n";
         cout << "---------------------\n";
+        cout << "7. EMPEZAR EL JUEGO \n ";
         opcion_principal = obtener_opcion();
 
         // Switch para Menu Principal
@@ -2358,47 +2234,9 @@ int main()
                     break;
                 }
             } while (opcion_interna != 5);
-            break;
+                break;
 
         case 5:
-            do
-            {
-                cout << "\n MENU DE SELECCION DE PERSONAJE\n";
-                cout << "---------------------\n";
-                cout << "1. Elegir personaje y objetos \n"; // elige el personaje y llena la mochila.
-                cout << "2. Mostrar personaje del equipo. \n";
-                cout << "3. Modificar mochila. \n";
-                cout << "4. Eliminar personaje. \n";
-                cout << "---------------------\n";
-                cout << "5. Salir al menu principal  \n";
-                cout << "---------------------\n";
-                opcion_interna = obtener_opcion();
-
-                switch (opcion_interna)
-                {
-                case 1:
-                    eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos, lista_podere_magicos);
-                    break;
-                case 2:
-                    mostrar_personajes_jugar(personajes_jugar);
-                    break;
-                case 3:
-                    modificar_mochila(personajes_jugar, lista_implementos, lista_podere_magicos);
-                    break;
-                case 4:
-                    eliminar_personaje_jugar(personajes_jugar);
-                    break;
-                case 5:
-                    cout << "\nSaliendo al Menu Principal... \n";
-                    break;
-                default:
-                    cout << "Invalido. Ingrese una opcion valida \n";
-                    break;
-                }
-            } while (opcion_interna != 5);
-            break;
-
-        case 6:
             do
             {
                 cout << "\n MENU DE MAPAS:\n";
@@ -2436,19 +2274,101 @@ int main()
             } while (opcion_interna != 5);
             break;
 
-        case 7:
+        case 6:
             cout << "\nSaliendo del Menu Principal... \n";
             cout << "Entrando al Juego... \n";
             cout << "\nJuego en desarrollo, paciencia por favor... \n";
             break;
 
+        case 7:
+            if (cantidad_personaje_heroe < 4){
+                cout <<"No hay heroes suficientes para empezar el juego."<<endl;
+                cout <<"Saliendo al menu principal..."<<endl;
+                break;
+            } else if (cantidad_personaje_orco <4){
+                cout <<"No hay orcos suficientes para empezar el juego."<<endl;
+                cout <<"Saliendo al menu principal..."<<endl;
+                break;
+            }else if (cantidad_implementos < 5){
+                cout <<"No hay implementos suficientes para empezar el juego."<<endl;
+                cout <<"Saliendo al menu principal..."<<endl;
+                break;
+            }
+            // faltaria el validar que este el mapa 
+            // los poderes no porque ya son funciones predeterminadas.
+            cout <<"Esta contento con las modificaciones realizadas."<<endl;
+            cout <<"Tomar en cuenta que al empezar el juego no podra relizar modificaciones de:"<<endl;
+            cout <<"Tipos de heroes y orcos, personajes heroes y orcos, poderes, implementos ni mapa."<<endl;
+            cout <<"Los cambios realizados anterior mente seran permanentes para esta partida"<<endl;
+            cout <<"1. Si esta conforme"<<endl;
+            cout <<"2. No esta conforme"<<endl;
+            cout <<"respuesta: ";
+            res=obtener_entero("");
+            if (res == 1){
+                cout <<"esoo"<<endl; // no se que mensaje poner jaja
+                opcion_principal = 6;
+                break;
+            } else if (res == 2){
+                cout <<"saliendo al menu principl..."<<endl;
+                break;
+            }else{
+                cout <<"la opcion "<<res<<" no existe"<<endl;
+                cout <<"saliendo al menu principl..."<<endl;
+                break;
+            }   
+            break; 
+
+            
         // Default del Menu Principal:
         default:
             cout << "Invalido. Ingrese una opcion valida";
             break;
         }
 
-    } while (opcion_principal != 7);
+    } while (opcion_principal != 6 );
+    // empieza el juego
+    cout << "empieza la seleccio  de personajes"<<endl;
+    do
+        {
+            cout << "\n MENU DE PERSONAJES PARA JUGAR:\n";
+            cout << "---------------------\n";
+            cout << "1. Elegir personaje y objetos del mismo \n";
+            cout << "2. Mostrar personaje del equipo. \n";
+            cout << "3. Modificar mochila. \n";
+            cout << "4. Eliminar personaje. \n";
+            cout << "---------------------\n";
+            cout << "5. EQUIPO TERMINADO  \n";
+            cout << "---------------------\n";
+            opcion_interna = obtener_opcion();
+
+                switch (opcion_interna)
+                {
+                case 1:
+                    eleccion_personaje(personajes_jugar,personajes_hero,lista_implementos,lista_podere_magicos);
+                    break;
+                case 2:
+                    mostrar_personajes_jugar(personajes_jugar);
+                    break;
+                case 3:
+                    modificar_mochila(personajes_jugar,lista_implementos,lista_podere_magicos);
+                    break;
+                case 4:
+                    eliminar_personaje_jugar(personajes_jugar);
+                    break;
+                case 5:
+                    cout << "\nIMPLEMENTAR JUEGO JAJAJAJA... \n";
+                    break;
+                default:
+                    cout << "Invalido. Ingrese una opcion valida \n";
+                    break;
+                }
+
+            } while (opcion_interna != 5);
+
+
+
+
+
 
     // Dejar esto al final del programa para que se destruyan las listas enlazadas.
     // Hay que añadir todos los tipos de listas que se vayan creando.
