@@ -80,7 +80,7 @@ int cantidad_personaje_heroe = 0;
 
 struct personaje
 {
-    mochila *mochila = nullptr;
+    mochila *Mimochila = nullptr;
     string nombre;
     Especie *tipo;
     int identificador;
@@ -1261,8 +1261,8 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
             Implemento *colocar = new Implemento;
             *colocar = *nuevo_implemento;
             // ahora la asignamos a la mochila.
-            colocar->siguiente = personaje_a_llenar->mochila->implementos;
-            personaje_a_llenar->mochila->implementos = colocar;
+            colocar->siguiente = personaje_a_llenar->Mimochila->implementos;
+            personaje_a_llenar->Mimochila->implementos = colocar;
             cantidad_objetos += 1;
             contrilador_interno = 0; // porcia.
             cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
@@ -1293,8 +1293,8 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
             Poder_magico *colocar = new Poder_magico;
             *colocar = *nuevo_poder;
             // ahora lo asignamos a la mochila.
-            colocar->siguiente = personaje_a_llenar->mochila->poderes;
-            personaje_a_llenar->mochila->poderes = colocar;
+            colocar->siguiente = personaje_a_llenar->Mimochila->poderes;
+            personaje_a_llenar->Mimochila->poderes = colocar;
             cantidad_objetos += 1;
             contrilador_interno = 0; // porcia.
             cout << "El poder " << colocar->nombre_poder << " se agrego correctamente a la mochila.\n";
@@ -1359,9 +1359,9 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     nuevo_para_jugar->nombre = seleccionado->nombre;
     nuevo_para_jugar->tipo = seleccionado->tipo;
     nuevo_para_jugar->identificador = cantidad_personajes_jugar + regulador_personajes_jugar; // Nuevo ID para el equipo
-    nuevo_para_jugar->mochila = new mochila;
-    nuevo_para_jugar->mochila->implementos = nullptr; // porsia
-    nuevo_para_jugar->mochila->poderes = nullptr;
+    nuevo_para_jugar->Mimochila = new mochila;
+    nuevo_para_jugar->Mimochila->implementos = nullptr; // porsia
+    nuevo_para_jugar->Mimochila->poderes = nullptr;
     nuevo_para_jugar->siguiente = nullptr;
 
     cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl
@@ -1398,7 +1398,7 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
         // para la mochila.
         cout << "Objetos de la mochila: " << endl;
 
-        Implemento *actual_implemento = actual_personaje->mochila->implementos;
+        Implemento *actual_implemento = actual_personaje->Mimochila->implementos;
         cout << "  Implementos: ";
         if (actual_implemento == nullptr)
         {
@@ -1415,7 +1415,7 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
         }
 
         // Mostrar poderes de la mochila
-        Poder_magico *actual_poder = actual_personaje->mochila->poderes;
+        Poder_magico *actual_poder = actual_personaje->Mimochila->poderes;
         cout << "  Poderes Magicos: ";
         if (actual_poder == nullptr)
         {
@@ -1463,24 +1463,24 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
         cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
 
         // Liberamos la memoria de los poderes actuales.
-        Implemento *actual_implemento = actual->mochila->implementos;
+        Implemento *actual_implemento = actual->Mimochila->implementos;
         while (actual_implemento != nullptr)
         {
             Implemento *siguiente_implemento = actual_implemento->siguiente;
             delete actual_implemento;
             actual_implemento = siguiente_implemento;
         }
-        actual->mochila->implementos = nullptr; // la ponemos vacia
+        actual->Mimochila->implementos = nullptr; // la ponemos vacia
 
         // Liberar mos la memoria de los poderes actuales.
-        Poder_magico *actual_poder = actual->mochila->poderes;
+        Poder_magico *actual_poder = actual->Mimochila->poderes;
         while (actual_poder != nullptr)
         {
             Poder_magico *siguiente_poder = actual_poder->siguiente;
             delete actual_poder;
             actual_poder = siguiente_poder;
         }
-        actual->mochila->poderes = nullptr; // la ponemso vacia.
+        actual->Mimochila->poderes = nullptr; // la ponemso vacia.
 
         // se llama a la funcion llenar mochila.
         llenar_mochila(actual, Implementos, poderes);
@@ -1521,7 +1521,7 @@ void eliminar_personaje_jugar(personaje *&lista_jugar)
     {
         // Liberar la memoria de la mochila del personaje a eliminar
         // implemento
-        Implemento *actual_implemento = actual->mochila->implementos;
+        Implemento *actual_implemento = actual->Mimochila->implementos;
         while (actual_implemento != nullptr)
         {
             Implemento *siguiente_implemento = actual_implemento->siguiente;
@@ -1529,7 +1529,7 @@ void eliminar_personaje_jugar(personaje *&lista_jugar)
             actual_implemento = siguiente_implemento;
         }
         // poder magico.
-        Poder_magico *actual_poder = actual->mochila->poderes;
+        Poder_magico *actual_poder = actual->Mimochila->poderes;
         while (actual_poder != nullptr)
         {
             Poder_magico *siguiente_poder = actual_poder->siguiente;
@@ -1567,7 +1567,7 @@ void destruir_personaje_jugar(personaje *&lista_jugar)
     {
         // para liberar la memoria de la mochila.
         // Implementos.
-        Implemento *actual_implemento = actual->mochila->implementos;
+        Implemento *actual_implemento = actual->Mimochila->implementos;
         while (actual_implemento != nullptr)
         {
             Implemento *siguiente_implemento = actual_implemento->siguiente;
@@ -1575,7 +1575,7 @@ void destruir_personaje_jugar(personaje *&lista_jugar)
             actual_implemento = siguiente_implemento;
         }
         // poderes.
-        Poder_magico *actual_poder = actual->mochila->poderes;
+        Poder_magico *actual_poder = actual->Mimochila->poderes;
         while (actual_poder != nullptr)
         {
             Poder_magico *siguiente_poder = actual_poder->siguiente;
