@@ -34,7 +34,6 @@ struct Lista_especie
     int cantidad = 0;
 };
 
-
 // Implementos
 struct Implemento
 {
@@ -178,7 +177,7 @@ int obtener_entero(const string &mensaje)
                 valor = stoi(entrada);
                 return valor;
             }
-            catch (const std::out_of_range &oor)
+            catch (const out_of_range &oor)
             {
                 cout << "Error. El número ingresado está fuera del rango permitido.\n";
                 // No es estrictamente necesario aquí si ya validamos la longitud,
@@ -806,7 +805,6 @@ void borrar_personajes_de_tipo(personaje &lista_personajes, Especie *tipo_borrar
     }
 }
 
-
 // esta funcion la coloque
 // para eliminar un elemento de la lista
 void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, int tipo)
@@ -960,7 +958,6 @@ string tipo_implemento(Implemento *Implemento)
     return tipo;
 } // lo marca porque el bucle es infinito.
 
-
 // para crear implementos.
 void crear_implemento(Implemento &lista_implemento)
 {
@@ -1005,7 +1002,6 @@ void mostrar_implementos(Implemento &lista_implemento)
     }
     cout << "no hay mas implementos disponibles\n";
 }
-
 
 // buscar implemento.
 Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
@@ -1121,7 +1117,6 @@ void borrar_implementos(Implemento &lista_implemento)
     cout << "El elemento: " << eliminar->nombre_implemento << "se elimino correctamente. ";
     delete eliminar;
 }
-
 
 //-----------------------------------------------------------------------------------------------------
 //----------------------------------- FUNCIONES PODERES MAGICOS ---------------------------------------
@@ -1433,7 +1428,6 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
     }
 }
 
-
 // para elegir el personaje y llenar la mochila.
 void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &implementos, Poder_magico &poderes)
 {
@@ -1511,8 +1505,11 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
     while (actual_personaje != nullptr)
     {
         cout << "Nombre: " << actual_personaje->nombre << endl;
-        cout << "ID: " << actual_personaje->identificador << endl;
-        cout << "Especie: " << actual_personaje->tipo->nombre_especie << endl; // Asumiendo que 'tipo' es un puntero a Especie
+        cout << "   ID: " << actual_personaje->identificador << endl;
+        cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl; // Asumiendo que 'tipo' es un puntero a Especie
+        cout << "   Vitalidad: " << actual_personaje->vitalidad << endl;
+        cout << "   Fortaleza: " << actual_personaje->fortaleza << endl;
+
         // para la mochila.
         cout << "Objetos de la mochila: " << endl;
 
@@ -1520,7 +1517,7 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
         cout << "  Implementos: ";
         if (actual_implemento == nullptr)
         {
-            cout << "Ninguno" << endl;
+            cout << "La mochila esta vacia" << endl; // Antes decia "ninguno". Verificar
         }
         else
         {
@@ -1705,8 +1702,6 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
         cout << "Modificación fallida.\n";
     }
 }
-
-
 
 //-----------------------------------------------------------------------------------------------------
 //----------------------------------- FUNCIONES MAPA ---------------------------------------
@@ -2130,7 +2125,6 @@ void destruir_mapa(sala &lista_mapa)
 //------------------------------ EJECUCION DEL PROGRAMA -----------------------------------------------
 int main()
 {
-
     Lista_especie tipoEspecieOrco;  // lista enlazada que contiene todos los tipos de orcos.
     Lista_especie tipoEspecieHeroe; // lista enlazada que contiene todos los tipos de heroes.
 
@@ -2147,10 +2141,10 @@ int main()
 
     int opcion_principal = 0;
     int opcion_interna = 0;
-    int res=0; // para usar en case7
+    int res = 0; // para usar en case7
 
     cout << "¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
-    cout << "Se recomienda visitar todos los menus en orden ascendente para una mejor experiencia de juego." << endl;
+    cout << "Se recomienda visitar todos los menus en orden descendente para una mejor experiencia de juego." << endl;
     cout << "¿Que desea hacer? \n";
 
     // Menu mientras.
@@ -2164,10 +2158,11 @@ int main()
         cout << "3. Menu de Implementos" << "\n";
         cout << "4. Menu de Poderes Magicos \n";
         cout << "---------------------\n";
-        cout << "5. Editar Mapa.\n";
-        cout << "6. Salir de Menu Principal" << "\n";
+        cout << "5. Menu del Mapa.\n";
         cout << "---------------------\n";
-        cout << "7. EMPEZAR EL JUEGO \n ";
+        cout << "6. EMPEZAR EL JUEGO. \n ";
+        cout << "---------------------\n";
+        cout << "7. Salir del programa." << "\n";
         opcion_principal = obtener_opcion();
 
         // Switch para Menu Principal
@@ -2325,9 +2320,10 @@ int main()
                     cout << "Invalido. Ingrese una opcion valida \n";
                     break;
                 }
-            } while (opcion_interna != 5);
+            } while (opcion_interna != 5); // Mientras no desee salir a menu principal
             break;
 
+        // Menu de poderes magicos
         case 4:
             do
             {
@@ -2364,8 +2360,9 @@ int main()
                     break;
                 }
             } while (opcion_interna != 5);
-                break;
+            break;
 
+        // Menu de Mapa
         case 5:
             do
             {
@@ -2404,110 +2401,136 @@ int main()
             } while (opcion_interna != 5);
             break;
 
+        // Menu para Jugar
         case 6:
-            cout << "\nSaliendo del Menu Principal... \n";
-            cout << "Entrando al Juego... \n";
-            cout << "\nJuego en desarrollo, paciencia por favor... \n";
-            break;
+            do
+            {
 
-        case 7:
-            if (cantidad_personaje_heroe < 4){
-                cout <<"No hay heroes suficientes para empezar el juego."<<endl;
-                cout <<"Saliendo al menu principal..."<<endl;
-                break;
-            } else if (cantidad_personaje_orco <4){
-                cout <<"No hay orcos suficientes para empezar el juego."<<endl;
-                cout <<"Saliendo al menu principal..."<<endl;
-                break;
-            }else if (cantidad_implementos < 5){
-                cout <<"No hay implementos suficientes para empezar el juego."<<endl;
-                cout <<"Saliendo al menu principal..."<<endl;
-                break;
-            } else if (cantidad_poderes < 4){
-                cout <<"No hay poderes suficientes para empezar el juego."<<endl;
-                cout <<"Saliendo al menu principal..."<<endl;
-                break;
-            }
-             
-            
-            // faltaria el validar que este el mapa 
-            // los poderes no porque ya son funciones predeterminadas.
-            cout <<"Esta contento con las modificaciones realizadas."<<endl;
-            cout <<"Tomar en cuenta que al empezar el juego no podra relizar modificaciones de:"<<endl;
-            cout <<"Tipos de heroes y orcos, personajes heroes y orcos, poderes, implementos ni mapa."<<endl;
-            cout <<"Los cambios realizados anterior mente seran permanentes para esta partida"<<endl;
-            cout <<"1. Si esta conforme"<<endl;
-            cout <<"2. No esta conforme"<<endl;
-            cout <<"respuesta: ";
-            res=obtener_entero("");
-            if (res == 1){
-                cout <<"esoo"<<endl; // no se que mensaje poner jaja
-                opcion_principal = 6;
-                break;
-            } else if (res == 2){
-                cout <<"saliendo al menu principl..."<<endl;
-                break;
-            }else{
-                cout <<"la opcion "<<res<<" no existe"<<endl;
-                cout <<"saliendo al menu principl..."<<endl;
-                break;
-            }   
-            break; 
+                // VERIRICACIONES
+                if (cantidad_personaje_heroe < 4)
+                {
+                    cout << "No hay heroes suficientes para empezar el juego." << endl;
+                    cout << "Saliendo al menu principal..." << endl;
+                    break;
+                }
+                else if (cantidad_personaje_orco < 4)
+                {
+                    cout << "No hay orcos suficientes para empezar el juego." << endl;
+                    cout << "Saliendo al menu principal..." << endl;
+                    break;
+                }
+                else if (cantidad_implementos < 5)
+                {
+                    cout << "No hay implementos suficientes para empezar el juego." << endl;
+                    cout << "Saliendo al menu principal..." << endl;
+                    break;
+                }
+                else if (cantidad_poderes < 4)
+                {
+                    cout << "No hay poderes suficientes para empezar el juego." << endl;
+                    cout << "Saliendo al menu principal..." << endl;
+                    break;
+                }
 
-            
-        // Default del Menu Principal:
-        default:
-            cout << "Invalido. Ingrese una opcion valida";
-            break;
-        }
+                // faltaria el validar que este el mapa
+                // los poderes no porque ya son funciones predeterminadas.
+                cout << "¿Esta contento con las modificaciones realizadas?" << endl;
+                cout << "Tome en cuenta que al empezar el juego no podra modificar lo siguiente:" << endl;
+                cout << "   Tipos de heroes y orcos." << endl;
+                cout << "   Personajes heroes y orcos." << endl;
+                cout << "   Poderes, implementos y mapa.\n"
+                     << endl;
+                cout << "Los cambios realizados anteriormente seran permanentes para esta partida" << endl;
+                cout << "1. Si, estoy conforme" << endl;
+                cout << "2. No, no estoy conforme" << endl;
 
-    } while (opcion_principal != 6 );
-    // empieza el juego
-    cout << "empieza la seleccio  de personajes"<<endl;
-    do
-        {
-            cout << "\n MENU DE PERSONAJES PARA JUGAR:\n";
-            cout << "---------------------\n";
-            cout << "1. Elegir personaje y objetos del mismo \n";
-            cout << "2. Mostrar personaje del equipo. \n";
-            cout << "3. Modificar mochila. \n";
-            cout << "4. Eliminar personaje. \n";
-            cout << "---------------------\n";
-            cout << "5. EQUIPO TERMINADO  \n";
-            cout << "---------------------\n";
-            opcion_interna = obtener_opcion();
+                // Pregunta al usuario si desea jugar o seguir editando
+                // Si la respuesta es no, hace el break
+                while (res != 1 && res != 2)
+                {
+                    cout << "Respuesta: ";
+                    res = obtener_entero("");
+                    if (res == 1)
+                    {
+                        cout << "Inicializando juego..." << endl; // no se que mensaje poner jaja
+                    }
+                    else if (res == 2)
+                    {
+                        cout << "Retornando al menu principal..." << endl;
+                        break;
+                    }
+                    else
+                    {
+                        cout << "La opcion " << res << " no existe" << endl;
+                        cout << "Ingrese una opcion valida" << endl;
+                    }
+                }
+
+                // Si el usuario ingreso que desea seguir jugando:
+                // Empieza el juego
+                cout << "Seleccion de Personajes" << endl;
+
+                cout << "\n MENU DE PERSONAJES PARA JUGAR:\n";
+                cout << "---------------------\n";
+                cout << "1. Elegir personaje y sus objetos\n";
+                cout << "2. Mostrar personaje del equipo actual. \n";
+                cout << "3. Modificar mochila. \n";
+                // Eliminar personaje del equipo o en general (???)
+                cout << "4. Eliminar personaje del equipo. \n";
+                cout << "---------------------\n";
+                cout << "5. EQUIPO TERMINADO. Empezar a jugar.  \n";
+                cout << "---------------------\n";
+                opcion_interna = obtener_opcion();
 
                 switch (opcion_interna)
                 {
                 case 1:
-                    eleccion_personaje(personajes_jugar,personajes_hero,lista_implementos,lista_podere_magicos);
+                    eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos, lista_podere_magicos);
                     break;
                 case 2:
                     mostrar_personajes_jugar(personajes_jugar);
                     break;
                 case 3:
-                    modificar_mochila(personajes_jugar,lista_implementos,lista_podere_magicos);
+                    modificar_mochila(personajes_jugar, lista_implementos, lista_podere_magicos);
                     break;
                 case 4:
                     eliminar_personaje_jugar(personajes_jugar);
                     break;
                 case 5:
+                    cout << "Equipo actual: " << endl;
+                    mostrar_personajes_jugar(personajes_jugar);
+
+                    cout << "Entrando al juego..." << endl;
                     cout << "\nIMPLEMENTAR JUEGO JAJAJAJA... \n";
                     break;
                 default:
                     cout << "Invalido. Ingrese una opcion valida \n";
                     break;
                 }
+            } while (opcion_principal != 5);
+            break;
 
-            } while (opcion_interna != 5);
+        case 7:
+            cout << "Saliendo del programa... " << endl;
+            break;
 
+        // Default del Menu Principal:
+        default:
+            cout << "Invalido. Ingrese una opcion valida";
+            break;
+        }
+    } while (opcion_principal != 6 && opcion_principal != 7); // Ambas opciones hacen que salga del menu
 
+    // --------------------------------------------------------------------------------
+    // ---------------------------------- GAMEPLAY ------------------------------------
 
+    // A la hora de hacer todo, hay que poner que si la opcion principal (la anterior)
+    // es igual a 7, no ejecute el programa y vaya directo al final
 
-
+    // --------------------------------------------------------------------------------
+    // --------------- FIN DEL GAMEPLAY. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
     // Dejar esto al final del programa para que se destruyan las listas enlazadas.
-    // Hay que añadir todos los tipos de listas que se vayan creando.
     // Destructor de especies
     destruir_lista_especie(tipoEspecieHeroe);
     destruir_lista_especie(tipoEspecieOrco); // se destruye la lista al final del programa.
@@ -2518,11 +2541,8 @@ int main()
 
     // Destructor de implementos, personajes para jugar, poderes y mapa
     destruir_implementos(lista_implementos);
-
     destruir_poder_magico(lista_podere_magicos);
-
     destruir_personaje_jugar(personajes_jugar);
-
     destruir_mapa(mapa);
 
     cout << "Gracias por usar el programa. \n";
