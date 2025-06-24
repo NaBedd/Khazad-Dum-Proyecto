@@ -85,8 +85,14 @@ struct personaje
 struct sala;
 struct arista;
 struct mapaGrafo;
-struct personaje_heroe;
-struct personaje_orco;
+struct personaje_heroe
+{
+    int datotesteo;
+};
+struct personaje_orco
+{
+    int datotesteo;
+};
 
 struct sala // Salas
 {
@@ -440,7 +446,7 @@ void destruir_lista_especie(Lista_especie &lista)
 }
 
 // Funcion que retorna un puntero a una especie.
-Especie *encontrar_especie(Lista_especie &lista, int identificador)
+Especie *encontrar_especie_id(Lista_especie &lista, int identificador)
 {
     Especie *actual = lista.primero_especie;
     while (actual != nullptr)
@@ -485,7 +491,7 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
             cout << "Ingrese la especie del Orco " << nuevo->nombre << ": ";
             num_tipo = obtener_entero("");
 
-            puntero_especie = encontrar_especie(lista_tipos, num_tipo);
+            puntero_especie = encontrar_especie_id(lista_tipos, num_tipo);
         }
         else
         { // lo mismo pero para heroes.
@@ -500,7 +506,7 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
             cout << "Ingrese la especie del Personaje " << nuevo->nombre << ":";
             num_tipo = obtener_entero("");
 
-            puntero_especie = encontrar_especie(lista_tipos, num_tipo);
+            puntero_especie = encontrar_especie_id(lista_tipos, num_tipo);
             // para validar que si esta la especie en la lista.
         }
 
@@ -660,7 +666,7 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
             // Identificador
             identificador_tipo = obtener_entero("Coloque el numero del tipo del personaje: ");
 
-            especie_nueva = encontrar_especie(lista_tipo, identificador_tipo);
+            especie_nueva = encontrar_especie_id(lista_tipo, identificador_tipo);
 
             if (especie_nueva == nullptr)
             {
@@ -836,7 +842,7 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         Especie *anterior = nullptr; // Inicializamos anterior como nullptr
 
         // respecto a los personajes
-        Especie *especie_borrar = encontrar_especie(lista, identificador);
+        Especie *especie_borrar = encontrar_especie_id(lista, identificador);
         int cantida_personajes = 0;
         // Caso especial: el elemento a eliminar es el primero de la lista
 
@@ -1711,7 +1717,17 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 
 //-----------------------------------------------------------------------------------------------------
 //----------------------------------- FUNCIONES MAPA ---------------------------------------
-sala *encontrar_sala(const mapaGrafo &grafo, int idSalaBuscar) // Encuentra una sala por ID
+bool grafo_vacio(const mapaGrafo &grafo)
+{
+    if (grafo.mapa_salas.empty())
+    {
+        cout << "El mapa esta vacio" << endl;
+        return true;
+    }
+    return false;
+}
+
+sala *encontrar_sala(const mapaGrafo &grafo, int idSalaBuscar) // Encuentra y devuelve la sala por su ID
 {
     for (sala *sala : grafo.mapa_salas)
     {
@@ -1723,11 +1739,35 @@ sala *encontrar_sala(const mapaGrafo &grafo, int idSalaBuscar) // Encuentra una 
     return nullptr;
 }
 
+sala *encontrar_sala_nombre(const mapaGrafo &grafo, string nombre_sala) // Encuentra y devuelve la sala por su Nombre
+{
+    if (grafo_vacio(grafo))
+    {
+        return nullptr;
+    }
+
+    sala *actual = nullptr;
+    for (size_t i = 0; i < grafo.mapa_salas.size(); i++)
+    {
+        actual = grafo.mapa_salas[i];
+        if (actual->nombre == nombre_sala)
+        {
+            return actual;
+        }
+    }
+    return nullptr;
+}
+
 sala *verificar_existencia_sala(const mapaGrafo &grafo, string mensaje) // Funcion generica para verificar si la sala existe
 {
 
     sala *sala_buscar = nullptr;
     int id_sala_verificar;
+
+    if (grafo_vacio(grafo))
+    {
+        return nullptr;
+    }
 
     id_sala_verificar = obtener_entero(mensaje);
     sala_buscar = encontrar_sala(grafo, id_sala_verificar);
@@ -1738,7 +1778,61 @@ sala *verificar_existencia_sala(const mapaGrafo &grafo, string mensaje) // Funci
         cout << "Saliendo al menu principal..." << endl;
         return sala_buscar;
     }
-    return sala_buscar;
+    return nullptr;
+}
+
+void mostrar_salas_grafo(const mapaGrafo &grafo) // Mostrar el grafo completo
+{
+    if (grafo_vacio(grafo))
+    {
+        return;
+    }
+
+    for (sala *salaActual : grafo.mapa_salas)
+    {
+        cout << salaActual->id << "." << salaActual->nombre << endl;
+    }
+    cout << endl;
+}
+
+void crear_adyacencia(sala *salaOrigen, sala *salaDestino, int distancia) // Crea una adyacencia
+{
+    // Comprueba que no exista:
+    for (size_t i = 0; i < salaOrigen->lista_adyacentes.size(); i++)
+    {
+        if (salaOrigen->lista_adyacentes[i].destino == salaDestino)
+        {
+            cout << "Ya existe una adyacencia entre " << salaOrigen->lista_adyacentes[i].destino->nombre << " y " << salaDestino->nombre << endl;
+            cout << "Puede editar la adyacencia en el menu principal si desea modificarla" << endl;
+            return;
+        }
+        if (salaOrigen->lista_adyacentes[i].destino == salaOrigen)
+        {
+            cout << "La sala no puede ser adyacente a si misma en este juego" << endl;
+            return;
+        }
+    }
+    // Si no existe, la crea
+    salaOrigen->lista_adyacentes.push_back({salaDestino, distancia});
+    cout << "Adyacencia creada con exito" << endl;
+}
+
+void crear_adyacencia_usuario(mapaGrafo &grafo, sala *salaModificar) // Crea adyacencia manualmente
+{
+
+    sala *nuevaAdyacencia = nullptr;
+    int idNuevaAdyacencia;
+
+    // Comprueba si las IDs ingresadas existen
+    nuevaAdyacencia = verificar_existencia_sala(grafo, "Ingrese el ID de la nueva sala adyacente: ");
+    if (!nuevaAdyacencia)
+    {
+        return;
+    }
+
+    int distanciaNuevaAdyacencia = obtener_entero("Ingrese la distancia entre salas: ");
+
+    crear_adyacencia(salaModificar, nuevaAdyacencia, distanciaNuevaAdyacencia);
 }
 
 void crear_sala(mapaGrafo &grafo, string nombre) // Funcion primitiva para crear salas e IDs
@@ -1752,23 +1846,77 @@ void crear_sala(mapaGrafo &grafo, string nombre) // Funcion primitiva para crear
 
 void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
 {
+    sala *sala_modificar = nullptr;
+    int resp;
+    int resp_interna;
+
     string nombreNuevaSala = devolver_string_verificada("Ingrese el nombre de la nueva sala: ");
     crear_sala(grafo, nombreNuevaSala);
     cout << "Sala " << nombreNuevaSala << " creada con exito" << endl;
-}
 
-void mostrar_salas_grafo(const mapaGrafo &grafo) // Mostrar el grafo completo
-{
-
-    for (sala *salaActual : grafo.mapa_salas)
+    cout << "¿Desea agregarle adyacencias a la sala?" << endl;
+    cout << "1. Si" << endl;
+    cout << "2. No" << endl;
+    resp = obtener_opcion();
+    switch (resp)
     {
-        cout << salaActual->id << "." << salaActual->nombre << endl;
+    case 1: // Pregunta para mostrar las salas. Agrega Adyacencias
+    {
+        cout << "¿Desea ver todas las salas del mapa?" << endl;
+        cout << "1. Si" << endl;
+        cout << "2. No" << endl;
+        resp_interna = obtener_opcion();
+        switch (resp_interna) // Para mostrar o no las salas del mapa
+        {
+        case 1: // Muestra las salas del mapa
+        {
+            cout << "-------------- Salas Del Juego --------------" << endl;
+            mostrar_salas_grafo(grafo);
+            break;
+        }
+        case 2: // No muestra las salas
+        {
+            cout << "No se mostraran las salas del mapa" << endl;
+            break;
+        }
+        default: // Default
+        {
+            cout << "Ingrese una opcion valida" << endl;
+            break;
+        }
+        }
+
+        // Conseguir la sala por el nombre
+        sala_modificar = encontrar_sala_nombre(grafo, nombreNuevaSala);
+        crear_adyacencia_usuario(grafo, sala_modificar);
+        break;
     }
-    cout << endl;
+    case 2: // No se crean adyacencias
+    {
+        cout << "No se crearan adyacencias para la sala" << endl;
+        break;
+    }
+    default: // Default
+    {
+        cout << "Ingrese una opcion valida: " << endl;
+        break;
+    }
+    }
 }
 
-void mostrar_adyacencias(sala *salaOrigen) // Muestra las adyacencias de la sala origen
+void mostrar_adyacencias(const mapaGrafo &grafo, sala *salaOrigen) // Muestra las adyacencias de la sala origen
 {
+    if (grafo_vacio(grafo))
+    {
+        return;
+    }
+
+    if (salaOrigen == nullptr)
+    {
+        cout << "La sala no existe." << endl;
+        return;
+    }
+
     cout << salaOrigen->nombre << " tiene como adyacentes: " << endl;
     cout << "ID.Sala Adyacente" << "   " << "Distancia" << endl;
     for (arista &adyacente : salaOrigen->lista_adyacentes)
@@ -1792,55 +1940,15 @@ int encontrar_indice_sala(const mapaGrafo &grafo, int idSalaBuscar) // Devuelve 
     return -1;
 }
 
-void crear_adyacencia(sala *salaOrigen, sala *salaDestino, int distancia) // Crea una adyacencia
-{
-    // Comprueba que no exista:
-    for (size_t i = 0; i < salaOrigen->lista_adyacentes.size(); i++)
-    {
-        if (salaOrigen->lista_adyacentes[i].destino == salaDestino)
-        {
-            cout << "Ya existe una adyacencia entre " << salaOrigen->lista_adyacentes[i].destino->nombre << " y " << salaDestino->nombre << endl;
-            cout << "Puede editar la adyacencia en el menu principal si desea modificarla" << endl;
-            return;
-        }
-    }
-    // Si no existe, la crea
-    salaOrigen->lista_adyacentes.push_back({salaDestino, distancia});
-    cout << "Adyacencia creada con exito" << endl;
-}
-
-void crear_adyacencia_usuario(mapaGrafo &grafo) // Crea adyacencia manualmente
-{
-    sala *salaModificar = nullptr;
-    sala *nuevaAdyacencia = nullptr;
-    int idSalaModificar;
-    int idNuevaAdyacencia;
-
-    cout << "Salas disponibles: " << endl;
-    mostrar_salas_grafo(grafo);
-
-    // Comprueba si las IDs ingresadas existen
-    salaModificar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala a modificar: ");
-    if (!salaModificar)
-    {
-        return;
-    }
-
-    nuevaAdyacencia = verificar_existencia_sala(grafo, "Ingrese el ID de la nueva sala adyacente: ");
-    if (!nuevaAdyacencia)
-    {
-        return;
-    }
-
-    int distanciaNuevaAdyacencia = obtener_entero("Ingrese la distancia entre salas: ");
-
-    crear_adyacencia(salaModificar, nuevaAdyacencia, distanciaNuevaAdyacencia);
-}
-
 void borrar_sala_usuario(mapaGrafo &grafo) // Borrar sala del grafo y listas de adyacencias
 {
     sala *salaBorrar = nullptr;
     int indiceBorrar;
+
+    if (grafo_vacio(grafo))
+    {
+        return;
+    }
 
     salaBorrar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala a borrar: ");
     if (!salaBorrar)
@@ -1996,9 +2104,8 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
     int idBorrarAdyacencia;
     int opcion = 0;
 
-    if (grafo.mapa_salas.empty()) // Si el grafo esta vacio:
+    if (grafo_vacio(grafo))
     {
-        cout << "Todavia no existe ninguna sala" << endl;
         return;
     }
 
@@ -2011,7 +2118,7 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
 
     do
     {
-        mostrar_adyacencias(sala_editar);
+        mostrar_adyacencias(grafo, sala_editar);
         cout << "Menu de Adyacencias" << endl;
         cout << "---------------------" << endl;
         cout << "1. Crear nueva adyacencia" << endl;
@@ -2082,9 +2189,8 @@ void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
     int opcion;
     string nuevo_nombre;
 
-    if (grafo.mapa_salas.empty()) // Si el grafo esta vacio:
+    if (grafo_vacio(grafo)) // Si el grafo esta vacio:
     {
-        cout << "Todavia no existe ninguna sala" << endl;
         return;
     }
 
@@ -2284,7 +2390,7 @@ void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos)
 }
 
 // para encontrar una especie(tipo) por su nombre.
-Especie *encontra_especie_nombre(Lista_especie lista, string nombre)
+Especie *encontrar_especie_nombre(Lista_especie lista, string nombre)
 {
     Especie *actual = lista.primero_especie;
     while (actual != nullptr)
@@ -2337,10 +2443,10 @@ void cargar_personajes(personaje &lis_heroes, personaje &lis_orco, Lista_especie
                 else if (controlador_colocar == 2)
                 {
 
-                    nuevo->tipo = encontra_especie_nombre(tipos_heroes, obtener_str_limitado(linea));
+                    nuevo->tipo = encontrar_especie_nombre(tipos_heroes, obtener_str_limitado(linea));
                     if (nuevo->tipo == nullptr)
                     { // no es tipo heroe.
-                        nuevo->tipo = encontra_especie_nombre(tipos_orcos, obtener_str_limitado(linea));
+                        nuevo->tipo = encontrar_especie_nombre(tipos_orcos, obtener_str_limitado(linea));
                         if (nuevo->tipo == nullptr)
                         {
                             cout << "el tipo " << linea << " no existe." << endl;
@@ -2757,10 +2863,11 @@ int main()
                 cout << "---------------------\n";
                 cout << "1. Crear sala \n";
                 cout << "2. Mostrar mapa. \n";
-                cout << "3. Borrar sala. \n";
-                cout << "4. Editar sala. \n";
+                cout << "3. Mostrar adyacencias de una sala. \n";
+                cout << "4. Borrar sala. \n";
+                cout << "5. Editar sala. \n";
                 cout << "---------------------\n";
-                cout << "5. Salir al menu principal  \n";
+                cout << "6. Salir al menu principal  \n";
                 cout << "---------------------\n";
                 opcion_interna = obtener_opcion();
 
@@ -2775,14 +2882,59 @@ int main()
                 {
                     cout << "-------------- Salas Del Juego -------------- " << endl; // Cambiar por un nombre mas epico
                     mostrar_salas_grafo(grafo);
+                    break;
                 }
-                case 3: // Borrar sala
+                case 3: // Muestra adyacencias
+                {
+                    int resp_interna;
+                    if (grafo_vacio(grafo))
+                    {
+                        break;
+                    }
+
+                    cout << "¿Desea ver todas las salas del mapa?" << endl;
+                    cout << "1. Si" << endl;
+                    cout << "2. No" << endl;
+                    resp_interna = obtener_opcion();
+                    switch (resp_interna) // Para mostrar o no las salas del mapa
+                    {
+                    case 1: // Muestra las salas del mapa
+                    {
+                        cout << "-------------- Salas Del Juego --------------" << endl;
+                        mostrar_salas_grafo(grafo);
+                        break;
+                    }
+                    case 2: // No muestra las salas
+                    {
+                        cout << "No se mostraran las salas del mapa" << endl;
+                        break;
+                    }
+                    default: // Default
+                    {
+                        cout << "Ingrese una opcion valida" << endl;
+                        break;
+                    }
+                    }
+
+                    // Verifica que exista y muestra adyacencias:
+                    sala_modificar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala a mostrar adyacencias: ");
+                    mostrar_adyacencias(grafo, sala_modificar);
+                    break;
+                }
+                case 4: // Borrar sala
                 {
                     borrar_sala_usuario(grafo);
+                    break;
                 }
-                case 4: // Editar sala
+                case 5: // Editar sala
                 {
                     int resp = 0;
+
+                    if (grafo_vacio(grafo)) // Verifica que el grafo no este vacio
+                    {
+                        cout << "No hay salas para editar" << endl;
+                        break;
+                    }
                     cout << "Antes de ingresar el ID de la sala para modificar. " << endl;
                     cout << "¿Desea ver todas las salas del mapa?" << endl;
                     cout << "1. Si" << endl;
@@ -2810,8 +2962,9 @@ int main()
 
                     sala_modificar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala que desea modificar: ");
                     editar_sala(grafo, sala_modificar->id);
+                    break;
                 }
-                case 5: // Salir al menu
+                case 6: // Salir al menu
                 {
                     cout << "Saliendo al menu principal..." << endl;
                     break;
@@ -2822,7 +2975,7 @@ int main()
                     break;
                 }
                 }
-            } while (opcion_interna != 5);
+            } while (opcion_interna != 6);
             break;
 
         // Menu para Jugar
@@ -2930,7 +3083,7 @@ int main()
                     cout << "Invalido. Ingrese una opcion valida \n";
                     break;
                 }
-            } while (opcion_principal != 5);
+            } while (opcion_interna != 5);
             break;
 
         case 8:
