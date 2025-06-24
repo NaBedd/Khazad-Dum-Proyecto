@@ -119,9 +119,9 @@ struct sala // Salas
     int id;
     string nombre;
     vector<arista> lista_adyacentes;
-    vector<personaje_heroe> lista_heroes;
-    vector<personaje_orco> lista_orcos;
-    bool contiene_puerta_destino; // Habra una lista que contenga todas las ubicaciones previas de la puerta, para evitar repeticiones
+    vector<personaje_heroe> lista_heroes; // Lista con los personajes heroes en la sala.
+    vector<personaje_orco> lista_orcos;   // Lista con los personajes orcos  en la sala.
+    bool contiene_puerta_destino;         // Habra una lista que contenga todas las ubicaciones previas de la puerta, para evitar repeticiones
 };
 
 struct arista // Caminos entre las salas
@@ -259,7 +259,7 @@ void crear_adyacencia_usuario(mapaGrafo &grafo) // Crea adyacencia manualmente
     crear_adyacencia(salaModificar, nuevaAdyacencia, distanciaNuevaAdyacencia);
 }
 
-void borrar_sala(mapaGrafo &grafo) // Borrar sala del grafo y listas de adyacencias
+void borrar_sala_usuario(mapaGrafo &grafo) // Borrar sala del grafo y listas de adyacencias
 {
     sala *salaBorrar = nullptr;
     int indiceBorrar;
@@ -292,6 +292,38 @@ void borrar_sala(mapaGrafo &grafo) // Borrar sala del grafo y listas de adyacenc
 
     // Se borra el auxiliar usado
     delete salaBorrar;
+}
+
+void borrar_sala(mapaGrafo &grafo, int sala_borrar_id) // Borra sala. Solo usar para borrar_grafo
+{
+    // Esta funcion solo se usa para eliminar el grafo completo
+    // No agrega 1 al regulador de IDs
+    {
+        sala *salaBorrar = nullptr;
+        int indiceBorrar;
+
+        salaBorrar = encontrar_sala(grafo, sala_borrar_id);
+        indiceBorrar = encontrar_indice_sala(grafo, salaBorrar->id);
+
+        // Es removido de la lista de adyacencias de todas las salas que lo apunten
+        for (size_t i = 0; i < grafo.mapa_salas.size(); i++)
+        {
+            sala *actual = grafo.mapa_salas[i];
+            for (int j = actual->lista_adyacentes.size() - 1; j >= 0; j--) // Se recorre en reversa para evitar problemas
+            {
+                if (salaBorrar->id == actual->lista_adyacentes[j].destino->id)
+                {
+                    actual->lista_adyacentes.erase(actual->lista_adyacentes.begin() + j);
+                }
+            }
+        }
+
+        // Se borra del grafo (vector)
+        grafo.mapa_salas.erase(grafo.mapa_salas.begin() + indiceBorrar);
+
+        // Se borra el auxiliar usado
+        delete salaBorrar;
+    }
 }
 
 void borrar_grafo(mapaGrafo &grafo) // Borra el grafo completo
