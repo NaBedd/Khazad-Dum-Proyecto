@@ -119,14 +119,14 @@ struct mapaGrafo // Mapa que contiene todas las salas
 //--------------------------- Inicializacion cantidades y reguladores -----------------------------------
 
 // Regulador para cuando se eliminen tipos de orcos en la lista.
-int regulador_tipo_orco = 7;    // por el archivo
-int regulador_tipo_heroe = 7;   // por el atchivo
+int regulador_tipo_orco = 7;  // por el archivo
+int regulador_tipo_heroe = 7; // por el archivo
 
 // Para los personajes
 int regulador_personaje_orco = 7; // por el archivo
 int cantidad_personaje_orco = 0;
 
-int regulador_personaje_heroe = 7; //por el archivo
+int regulador_personaje_heroe = 7; // por el archivo
 int cantidad_personaje_heroe = 0;
 
 int cantidad_personajes_jugar = 0;
@@ -141,7 +141,7 @@ int cantidad_poderes = 0;
 int regulador_poderes = 0;
 
 // Para el mapa (Salas)
-int regulador_salas = 61; //empiza en 60 por el archivo.
+int regulador_salas = 61; // empieza en 60 por el archivo.
 int cantidad_salas = 0;
 
 //-----------------------------------------------------------------------------------------------------
@@ -1839,7 +1839,7 @@ void crear_adyacencia_usuario(mapaGrafo &grafo, sala *salaModificar) // Crea ady
 void crear_sala(mapaGrafo &grafo, string nombre) // Funcion primitiva para crear salas e IDs
 {
     sala *salaNueva = new sala;
-    salaNueva->id = grafo.mapa_salas.size() + regulador_salas; //para que no se  
+    salaNueva->id = grafo.mapa_salas.size() + regulador_salas; // para que no se
     salaNueva->nombre = nombre;
     salaNueva->contiene_puerta_destino = false;
     grafo.mapa_salas.push_back(salaNueva);
@@ -2123,9 +2123,10 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
         cout << "Menu de Adyacencias" << endl;
         cout << "---------------------" << endl;
         cout << "1. Crear nueva adyacencia" << endl;
-        cout << "2. Borrar adyacencia existente" << endl;
-        cout << "3. Cambiar distancia entre salas" << endl;
-        cout << "4. Cancelar edicion" << endl;
+        cout << "2. Mostrar Adyacencias actuales" << endl;
+        cout << "3. Borrar adyacencia existente" << endl;
+        cout << "4. Cambiar distancia entre salas" << endl;
+        cout << "5. Cancelar edicion" << endl;
         cout << "---------------------" << endl;
 
         opcion = obtener_opcion();
@@ -2149,7 +2150,12 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             crear_adyacencia(sala_editar, nuevaAdyacencia, distanciaNuevaAdyacencia);
             break;
         }
-        case 2: // Borrar Adyacencia
+        case 2:
+        {
+            mostrar_adyacencias(grafo, sala_editar);
+            break;
+        }
+        case 3: // Borrar Adyacencia
         {
             sala_borrar = verificar_existencia_sala(grafo, "Ingrese el ID de la adyacencia a borrar: ");
             if (!sala_borrar)
@@ -2160,7 +2166,7 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             borrar_adyacencia(sala_editar, idBorrarAdyacencia);
             break;
         }
-        case 3: // Modificar Distancias entre salas
+        case 4: // Modificar Distancias entre salas
         {
             sala_objetivo = verificar_existencia_sala(grafo, "Ingrese el ID de la sala con la distancia a modificar: ");
             if (!sala_objetivo)
@@ -2170,7 +2176,7 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             cambiar_distancias_sala(grafo, sala_editar->id, sala_objetivo->id);
             break;
         }
-        case 4: // Salir al menu principal
+        case 5: // Salir al menu principal
         {
             cout << "Saliendo al menu principal" << endl;
             break;
@@ -2181,7 +2187,7 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             break;
         }
         }
-    } while (opcion != 4);
+    } while (opcion != 5);
 }
 
 void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
@@ -2561,7 +2567,8 @@ void cargar_implementos(Implemento &lista_implemento)
     archivo.close();
 }
 
-void carga_salas(mapaGrafo &grafo){
+void carga_salas(mapaGrafo &grafo)
+{
     ifstream archivo;
     string linea; // guardara una linea de archivo.
 
@@ -2576,33 +2583,39 @@ void carga_salas(mapaGrafo &grafo){
     int controlador = convertir_entero(linea);
     int fin = 0;
     int controlador_colocar = 0;
-    while (fin != controlador){
+    while (fin != controlador)
+    {
         getline(archivo, linea);
-        if (obtener_str_limitado(linea) == "---"){
+        if (obtener_str_limitado(linea) == "---")
+        {
             sala *nueva = new sala;
             do
             {
                 getline(archivo, linea);
                 controlador_colocar++;
-                if (controlador_colocar == 1){
+                if (controlador_colocar == 1)
+                {
                     nueva->id = convertir_entero(linea);
-                }else if (controlador_colocar == 2){
+                }
+                else if (controlador_colocar == 2)
+                {
                     nueva->nombre = linea;
                     grafo.mapa_salas.push_back(nueva);
                 }
-                                
+
             } while (controlador_colocar != 2);
             fin++;
             controlador_colocar = 0;
-            cout<<"la sala "<<nueva->nombre<<" se agrgo correctamente."<<endl;
-            cout<<"ID: "<<nueva->id<<endl;
+            cout << "la sala " << nueva->nombre << " se agrgo correctamente." << endl;
+            cout << "ID: " << nueva->id << endl;
         }
     }
     cout << "fin " << endl;
     archivo.close();
 }
 
-void cargar_adyacencias(mapaGrafo &grafo){
+void cargar_adyacencias(mapaGrafo &grafo)
+{
     ifstream archivo;
     string linea; // guardara una linea de archivo.
 
@@ -2617,52 +2630,58 @@ void cargar_adyacencias(mapaGrafo &grafo){
     int controlador = convertir_entero(linea);
     int fin = 0;
     int id_sala = 0;
-    int id_sala_destino=0;
-    int peso=0;
+    int id_sala_destino = 0;
+    int peso = 0;
     string colocar = "";
 
-
-    string ir_colocando="";
-    while (fin != controlador){
+    string ir_colocando = "";
+    while (fin != controlador)
+    {
         getline(archivo, linea);
-        if (obtener_str_limitado(linea) == "---"){
+        if (obtener_str_limitado(linea) == "---")
+        {
             getline(archivo, linea);
             id_sala = convertir_entero(linea);
-            sala *nueva=encontrar_sala(grafo,id_sala);
-            sala *destino=nullptr;
-            // ara llegra al la linea donde estan las adyacencias. 
+            sala *nueva = encontrar_sala(grafo, id_sala);
+            sala *destino = nullptr;
+            // ara llegra al la linea donde estan las adyacencias.
             getline(archivo, linea);
             getline(archivo, linea);
             getline(archivo, linea);
-            for (char caracter : linea){
-                if (caracter == ':'){
-                    id_sala_destino=convertir_entero(colocar);
+            for (char caracter : linea)
+            {
+                if (caracter == ':')
+                {
+                    id_sala_destino = convertir_entero(colocar);
                     // buscamos la sala destino.
-                    destino=encontrar_sala(grafo,id_sala_destino);
-                    colocar="";
-                    continue;
-                }else if (caracter =='|' ){ // agregamos la adyacencia.
-                    peso = convertir_entero(colocar);
-                    // creamos la adyacencia.
-                    crear_adyacencia(nueva,destino,peso);
-                    colocar="";
+                    destino = encontrar_sala(grafo, id_sala_destino);
+                    colocar = "";
                     continue;
                 }
-                colocar= colocar+caracter;
-            } 
+                else if (caracter == '|')
+                { // agregamos la adyacencia.
+                    peso = convertir_entero(colocar);
+                    // creamos la adyacencia.
+                    crear_adyacencia(nueva, destino, peso);
+                    colocar = "";
+                    continue;
+                }
+                colocar = colocar + caracter;
+            }
             // la ultima no se agrega ya que no tine |.
-            if (!colocar.empty() && nueva != nullptr && destino != nullptr) {
+            if (!colocar.empty() && nueva != nullptr && destino != nullptr)
+            {
                 peso = convertir_entero(colocar);
                 crear_adyacencia(nueva, destino, peso);
-            } 
+            }
             fin++;
-            cout<<"la sala "<<nueva->nombre<<" se le colocaron sus adyacencias."<<endl;
-            cout<<"ID: "<<nueva->id<<endl;     
-            mostrar_adyacencias(grafo,nueva);   
-        }   
-    }  
+            cout << "la sala " << nueva->nombre << " se le colocaron sus adyacencias." << endl;
+            cout << "ID: " << nueva->id << endl;
+            mostrar_adyacencias(grafo, nueva);
+        }
+    }
     cout << "fin " << endl;
-    archivo.close(); 
+    archivo.close();
 }
 
 //-----------------------------------------------------------------------------------------------------
