@@ -524,7 +524,7 @@ void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
             break;
 
         case 2:
-            editar_adyacencias(grafo);
+            editar_adyacencias(grafo, id_sala_editar);
             break;
 
         case 3:
