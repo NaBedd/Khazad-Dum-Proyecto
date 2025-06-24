@@ -302,7 +302,7 @@ void borrar_grafo(mapaGrafo &grafo) // Borra el grafo completo
     }
 }
 
-void borrar_adyacencia(sala *salaOrigen, int idAdyacenciaBorrar)
+void borrar_adyacencia(sala *salaOrigen, int idAdyacenciaBorrar) // Borra una sala de la lista de adyacencias de la sala origen
 {
     arista adyacenciaActual;
     bool existe = false;
@@ -333,7 +333,7 @@ void borrar_adyacencia(sala *salaOrigen, int idAdyacenciaBorrar)
     }
 }
 
-void cambiar_distancias_sala(mapaGrafo &grafo, int id_sala_editar, int id_sala_destino)
+void cambiar_distancias_sala(mapaGrafo &grafo, int id_sala_editar, int id_sala_destino) // Cambia las distancias entre salas en ambas direcciones
 {
     sala *sala_origen = encontrar_sala(grafo, id_sala_editar);
     sala *sala_destino = encontrar_sala(grafo, id_sala_destino);
@@ -376,7 +376,7 @@ void cambiar_distancias_sala(mapaGrafo &grafo, int id_sala_editar, int id_sala_d
     }
 }
 
-void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar)
+void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacencias
 {
     sala *sala_editar = nullptr;
     sala *sala_objetivo = nullptr;
@@ -454,7 +454,7 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar)
     } while (opcion != 4);
 }
 
-void editar_sala(mapaGrafo &grafo, int id_sala_editar)
+void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
 {
     sala *sala_editar = nullptr;
     int opcion;
