@@ -119,14 +119,14 @@ struct mapaGrafo // Mapa que contiene todas las salas
 //--------------------------- Inicializacion cantidades y reguladores -----------------------------------
 
 // Regulador para cuando se eliminen tipos de orcos en la lista.
-int regulador_tipo_orco = 0;
-int regulador_tipo_heroe = 0;
+int regulador_tipo_orco = 7;    // por el archivo
+int regulador_tipo_heroe = 7;   // por el atchivo
 
 // Para los personajes
-int regulador_personaje_orco = 0;
+int regulador_personaje_orco = 7; // por el archivo
 int cantidad_personaje_orco = 0;
 
-int regulador_personaje_heroe = 0;
+int regulador_personaje_heroe = 7; //por el archivo
 int cantidad_personaje_heroe = 0;
 
 int cantidad_personajes_jugar = 0;
@@ -134,14 +134,15 @@ int regulador_personajes_jugar = 0;
 
 // Para implementos
 int cantidad_implementos = 0;
-int regulador_implemento = 0;
+int regulador_implemento = 13; // por el archivo.
 
 // Para Poderes
 int cantidad_poderes = 0;
 int regulador_poderes = 0;
 
 // Para el mapa (Salas)
-int regulador_id_salas = 0;
+int regulador_salas = 61; //empiza en 60 por el archivo.
+int cantidad_salas = 0;
 
 //-----------------------------------------------------------------------------------------------------
 //-------------------------------------- FUNCIONES GENERAlES-------------------------------------------
@@ -1778,7 +1779,7 @@ sala *verificar_existencia_sala(const mapaGrafo &grafo, string mensaje) // Funci
         cout << "Saliendo al menu principal..." << endl;
         return sala_buscar;
     }
-    return nullptr;
+    return sala_buscar;
 }
 
 void mostrar_salas_grafo(const mapaGrafo &grafo) // Mostrar el grafo completo
@@ -1838,7 +1839,7 @@ void crear_adyacencia_usuario(mapaGrafo &grafo, sala *salaModificar) // Crea ady
 void crear_sala(mapaGrafo &grafo, string nombre) // Funcion primitiva para crear salas e IDs
 {
     sala *salaNueva = new sala;
-    salaNueva->id = grafo.mapa_salas.size() + 1 + regulador_id_salas; // La id es igual al tamaño total del grafo. +1 para que no haya ID 0
+    salaNueva->id = grafo.mapa_salas.size() + regulador_salas; //para que no se  
     salaNueva->nombre = nombre;
     salaNueva->contiene_puerta_destino = false;
     grafo.mapa_salas.push_back(salaNueva);
@@ -1968,7 +1969,7 @@ void borrar_sala_usuario(mapaGrafo &grafo) // Borrar sala del grafo y listas de 
             if (salaBorrar->id == actual->lista_adyacentes[j].destino->id)
             {
                 actual->lista_adyacentes.erase(actual->lista_adyacentes.begin() + j);
-                regulador_id_salas += 1;
+                regulador_salas += 1;
             }
         }
     }
@@ -2340,7 +2341,7 @@ void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos)
                     if (linea.substr(0, 1) == "-")
                     { // es tipo orco
                         cout << "orco." << endl;
-                        nuevo->identificador = id + regulador_tipo_orco;
+                        nuevo->identificador = id;
                         nuevo->siguiente = tipos_orcos.primero_especie;
                         tipos_orcos.primero_especie = nuevo;
                         tipos_orcos.cantidad = tipos_orcos.cantidad + 1;
@@ -2357,7 +2358,7 @@ void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos)
                     if (linea.substr(0, 1) == "-")
                     { // es tipo heroe
                         cout << "heroe" << endl;
-                        nuevo->identificador = id + regulador_tipo_heroe;
+                        nuevo->identificador = id;
                         nuevo->siguiente = tipos_herores.primero_especie;
                         tipos_herores.primero_especie = nuevo;
                         tipos_herores.cantidad = tipos_herores.cantidad + 1;
@@ -2454,7 +2455,7 @@ void cargar_personajes(personaje &lis_heroes, personaje &lis_orco, Lista_especie
                         else
                         {
                             cantidad_personaje_orco++;
-                            nuevo->identificador = (id + regulador_personaje_orco);
+                            nuevo->identificador = id;
                             // lo metemos a la lista de personajes.
                             nuevo->siguiente = lis_orco.siguiente;
                             lis_orco.siguiente = nuevo;
@@ -2464,7 +2465,7 @@ void cargar_personajes(personaje &lis_heroes, personaje &lis_orco, Lista_especie
                     else
                     { // si es heroe.
                         cantidad_personaje_heroe++;
-                        nuevo->identificador = (id + regulador_personaje_heroe);
+                        nuevo->identificador = id;
                         // lo metemos a la lista.
                         nuevo->siguiente = lis_heroes.siguiente;
                         lis_heroes.siguiente = nuevo;
@@ -2524,7 +2525,7 @@ void cargar_implementos(Implemento &lista_implemento)
                 getline(archivo, linea);
                 if (controlador_colocar == 1)
                 {
-                    nuevo->identificador = (convertir_entero(linea) + regulador_implemento);
+                    nuevo->identificador = convertir_entero(linea);
                 }
                 else if (controlador_colocar == 2)
                 {
@@ -2560,7 +2561,109 @@ void cargar_implementos(Implemento &lista_implemento)
     archivo.close();
 }
 
-// falta la funcion de las salas.
+void carga_salas(mapaGrafo &grafo){
+    ifstream archivo;
+    string linea; // guardara una linea de archivo.
+
+    archivo.open("C:/estructura de datos/proyecto/salas.txt", ios::in);
+    if (archivo.fail())
+    {
+        cout << "no se pudo habrir el archivo." << endl;
+        return;
+    }
+
+    getline(archivo, linea);
+    int controlador = convertir_entero(linea);
+    int fin = 0;
+    int controlador_colocar = 0;
+    while (fin != controlador){
+        getline(archivo, linea);
+        if (obtener_str_limitado(linea) == "---"){
+            sala *nueva = new sala;
+            do
+            {
+                getline(archivo, linea);
+                controlador_colocar++;
+                if (controlador_colocar == 1){
+                    nueva->id = convertir_entero(linea);
+                }else if (controlador_colocar == 2){
+                    nueva->nombre = linea;
+                    grafo.mapa_salas.push_back(nueva);
+                }
+                                
+            } while (controlador_colocar != 2);
+            fin++;
+            controlador_colocar = 0;
+            cout<<"la sala "<<nueva->nombre<<" se agrgo correctamente."<<endl;
+            cout<<"ID: "<<nueva->id<<endl;
+        }
+    }
+    cout << "fin " << endl;
+    archivo.close();
+}
+
+void cargar_adyacencias(mapaGrafo &grafo){
+    ifstream archivo;
+    string linea; // guardara una linea de archivo.
+
+    archivo.open("C:/estructura de datos/proyecto/salas.txt", ios::in);
+    if (archivo.fail())
+    {
+        cout << "no se pudo habrir el archivo." << endl;
+        return;
+    }
+
+    getline(archivo, linea);
+    int controlador = convertir_entero(linea);
+    int fin = 0;
+    int id_sala = 0;
+    int id_sala_destino=0;
+    int peso=0;
+    string colocar = "";
+
+
+    string ir_colocando="";
+    while (fin != controlador){
+        getline(archivo, linea);
+        if (obtener_str_limitado(linea) == "---"){
+            getline(archivo, linea);
+            id_sala = convertir_entero(linea);
+            sala *nueva=encontrar_sala(grafo,id_sala);
+            sala *destino=nullptr;
+            // ara llegra al la linea donde estan las adyacencias. 
+            getline(archivo, linea);
+            getline(archivo, linea);
+            getline(archivo, linea);
+            for (char caracter : linea){
+                if (caracter == ':'){
+                    id_sala_destino=convertir_entero(colocar);
+                    // buscamos la sala destino.
+                    destino=encontrar_sala(grafo,id_sala_destino);
+                    colocar="";
+                    continue;
+                }else if (caracter =='|' ){ // agregamos la adyacencia.
+                    peso = convertir_entero(colocar);
+                    // creamos la adyacencia.
+                    crear_adyacencia(nueva,destino,peso);
+                    colocar="";
+                    continue;
+                }
+                colocar= colocar+caracter;
+            } 
+            // la ultima no se agrega ya que no tine |.
+            if (!colocar.empty() && nueva != nullptr && destino != nullptr) {
+                peso = convertir_entero(colocar);
+                crear_adyacencia(nueva, destino, peso);
+            } 
+            fin++;
+            cout<<"la sala "<<nueva->nombre<<" se le colocaron sus adyacencias."<<endl;
+            cout<<"ID: "<<nueva->id<<endl;     
+            mostrar_adyacencias(grafo,nueva);   
+        }   
+    }  
+    cout << "fin " << endl;
+    archivo.close(); 
+}
 
 //-----------------------------------------------------------------------------------------------------
 //----------------------------------- FUNCIONES JUGABILIDAD -------------------------------------------
@@ -2853,6 +2956,16 @@ int main()
                  << endl
                  << "listo.implementos" << endl
                  << endl;
+            carga_salas(grafo);
+            cout << endl
+                 << endl
+                 << "listo.salas" << endl
+                 << endl;
+            cargar_adyacencias(grafo);
+            cout << endl
+                 << endl
+                 << "listo.adyacencias" << endl
+                 << endl;
             break;
 
         // Menu de Mapa
@@ -2983,7 +3096,7 @@ int main()
             do
             {
 
-                // VERIRICACIONES
+                // VERIFICACIONES
                 if (cantidad_personaje_heroe < 4)
                 {
                     cout << "No hay heroes suficientes para empezar el juego." << endl;
