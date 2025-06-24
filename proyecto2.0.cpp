@@ -10,6 +10,7 @@
 #include <string>    // para manejar string
 #include <limits.h>  // para los punteros NEW.
 #include <algorithm> // para usar .erase
+#include <fstream>   // para la lectura de archivos.
 
 using namespace std;
 
@@ -2117,6 +2118,269 @@ void destruir_mapa(sala &lista_mapa)
 }
 
 //-----------------------------------------------------------------------------------------------------
+//---------------------- FUNCIONES PARA CARGAR LOS ARCHIVOS -------------------------------------------
+
+//convierte un str a un int.
+int convertir_entero(string &linea) {
+    string numero_str = "";
+
+    for (char c : linea) {
+        if (isdigit(c)) {
+            numero_str += c;
+        } else {
+            // al encontrar el primer caracter no numerico para.
+            break;
+        }
+    }
+
+    if (numero_str.empty()) {
+        return 0; // No hay números al inicio
+    }
+
+    return stoi(numero_str);
+}
+
+//toma la primpera palabra de un str.
+string obtener_str_limitado(string &linea){
+    string nuevo = "";
+    for (char c : linea) {
+        if (!isspace(c)) { // si no es un espacio en blanco
+            nuevo += c;         
+        } else {
+            
+            break;
+        }
+    }
+    return nuevo;
+}
+
+// para cargar el archivo de especies
+void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos){
+    ifstream archivo;     
+    string linea;            // guardara una linea de archivo.
+
+    // aqui se coloca la direccion del archivo.
+    archivo.open("C:/estructura de datos/proyecto/especie.txt", ios::in);
+    // en caso de que no se habra el archivo.
+    if (archivo.fail()){
+        cout<<"no se pudo habrir el archivo."<<endl;
+        return;
+    }
+    
+    getline(archivo,linea); // sirver para pasar a la siguiente linea del archivo.
+    int controlador = convertir_entero(linea); 
+    int fin = 0;
+    int id; 
+    int controlador_colocar=0; 
+    while (fin != controlador){
+        getline(archivo,linea);
+        //Especie *nuevo = new Especie;
+        if ((linea == "---") && (controlador_colocar == 0)){
+            Especie *nuevo = new Especie;
+            controlador_colocar++;
+            
+            do{
+                getline(archivo,linea);
+                if (controlador_colocar == 1){
+                    id =  convertir_entero(linea);
+                    controlador_colocar++;
+                    
+                } else if (controlador_colocar == 2 ){
+                    nuevo->nombre_especie = obtener_str_limitado(linea);
+                        controlador_colocar++;  
+                        
+                } else if (controlador_colocar == 3){
+                    controlador_colocar++;
+                    if (linea.substr(0,1) == "-"){ // es tipo orco
+                        cout<<"orco."<<endl;
+                        nuevo->identificador = id + regulador_tipo_orco;
+                        nuevo->siguiente = tipos_orcos.primero_especie; 
+                        tipos_orcos.primero_especie = nuevo;            
+                        tipos_orcos.cantidad = tipos_orcos.cantidad + 1;
+                        
+                        
+                    } else { // es tipo heroe.
+                        nuevo->danno_fortaleza = convertir_entero(linea); // toma los primeros 3 caracteres)
+
+                    }
+                        
+                }else if (controlador_colocar == 4){
+                    controlador_colocar++;
+                    
+                    if (linea.substr(0,1) == "-"){ // es tipo heroe
+                        cout<<"heroe"<<endl;
+                        nuevo->identificador = id + regulador_tipo_heroe;
+                        nuevo->siguiente = tipos_herores.primero_especie;
+                        tipos_herores.primero_especie = nuevo;            
+                        tipos_herores.cantidad = tipos_herores.cantidad + 1;
+                            
+                    } else { // es tipo heroe.
+                        nuevo->danno_fortaleza = convertir_entero(linea); // toma los primeros 3 caracteres)
+                        
+                    }
+
+                        
+                }else if (controlador_colocar == 5){
+                    controlador_colocar++;
+                    
+                    nuevo->salud = convertir_entero(linea);
+                }else if (controlador_colocar == 6){
+                    controlador_colocar++;
+                    
+                    nuevo->rapidez = convertir_entero(linea);
+                }     
+            } while (controlador_colocar != 7);
+            fin++;
+            controlador_colocar=0;
+            cout <<"el tipo "<<nuevo->nombre_especie<<" se agrego correctamente."<<endl;
+        }
+    }
+    cout <<"fin "<<endl;   
+    archivo.close(); 
+}
+
+// para encontrar una especie(tipo) por su nombre.
+Especie *encontra_especie_nombre(Lista_especie lista, string nombre){
+    Especie *actual = lista.primero_especie;
+    while (actual != nullptr)
+    {
+        if (actual->nombre_especie == nombre )
+        {
+            return actual;
+        }
+        actual = actual->siguiente;
+    }
+    return actual = nullptr;
+}
+
+// para acargar el archivo de personajes.
+void cargar_personajes(personaje &lis_heroes, personaje &lis_orco,Lista_especie &tipos_heroes, 
+    Lista_especie &tipos_orcos){
+    
+    ifstream archivo;     
+    string linea;            // guardara una linea de archivo.
+
+    archivo.open("C:/estructura de datos/proyecto/Personajes.txt", ios::in);
+    if (archivo.fail()){
+        cout<<"no se pudo habrir el archivo."<<endl;
+        return;
+    }
+
+    getline(archivo,linea);
+    int controlador = convertir_entero(linea);
+    int fin =0;
+    int id =0;
+    int controlador_colocar=0;
+    while (fin != controlador){
+        getline(archivo,linea);
+        if (linea.substr(0,3) == "---"){
+            personaje *nuevo = new personaje;
+
+            do
+            {
+                controlador_colocar++;
+                getline(archivo,linea);
+                if (controlador_colocar == 1){
+                    
+                    id = convertir_entero(linea);
+
+                }else if (controlador_colocar == 2){
+                    
+                    
+                    nuevo->tipo=encontra_especie_nombre(tipos_heroes,obtener_str_limitado(linea));
+                    if (nuevo->tipo == nullptr) { // no es tipo heroe.
+                        nuevo->tipo=encontra_especie_nombre(tipos_orcos,obtener_str_limitado(linea));
+                        if (nuevo->tipo == nullptr){
+                            cout <<"el tipo "<<linea<<" no existe."<<endl;
+
+                        }else{
+                            cantidad_personaje_orco++;
+                            nuevo->identificador = (id + regulador_personaje_orco);
+                            // lo metemos a la lista de personajes.
+                            nuevo->siguiente = lis_orco.siguiente;
+                            lis_orco.siguiente = nuevo;
+                            cout <<"tipo orco. "<<endl;
+                        }
+                    }else{ //si es heroe.
+                        cantidad_personaje_heroe++;
+                        nuevo->identificador = (id + regulador_personaje_heroe);
+                        //lo metemos a la lista.
+                        nuevo->siguiente = lis_heroes.siguiente;
+                        lis_heroes.siguiente = nuevo;
+                        cout <<"tipo heroe."<<endl;
+                    } 
+                }else if (controlador_colocar == 3){
+                    nuevo->nombre = obtener_str_limitado(linea);
+                }
+            } while (controlador_colocar != 3);
+            fin++;
+            controlador_colocar=0;
+            if (nuevo->tipo == nullptr){
+                cout <<"el personaje "<<nuevo->nombre<<" no se agrego."<<endl;
+            } else {
+                cout <<"el personaje "<<nuevo->nombre<<" se agrego correctamente."<<endl<<endl;
+            }
+        }
+    }
+    cout <<"fin "<<endl;   
+    archivo.close(); 
+}
+  
+//para cargar el archivo de implementos.
+void cargar_implementos(Implemento &lista_implemento){
+    
+    ifstream archivo;     
+    string linea;            // guardara una linea de archivo.
+
+    archivo.open("C:/estructura de datos/proyecto/implemento.txt", ios::in);
+    if (archivo.fail()){
+        cout<<"no se pudo habrir el archivo."<<endl;
+        return;
+    }
+
+    getline(archivo,linea);
+    int controlador = convertir_entero(linea);
+    int fin =0;
+    int controlador_colocar=0;
+    while (fin != controlador){
+        getline(archivo,linea);
+        if (obtener_str_limitado(linea) == "---"){
+            Implemento *nuevo = new Implemento;
+            cantidad_implementos++;
+            do
+            {
+                controlador_colocar++;
+                getline(archivo,linea);
+                if (controlador_colocar == 1){
+                    nuevo->identificador=(convertir_entero(linea) + regulador_implemento);
+                }else if (controlador_colocar == 2){
+                    nuevo->nombre_implemento = linea;
+                }else if (controlador_colocar == 3){
+                    nuevo->tipo_implemento = obtener_str_limitado(linea);
+                }else if (controlador_colocar == 4){
+                    nuevo->fortalezanecesaria= convertir_entero(linea);
+                }else if (controlador_colocar == 5){
+                    nuevo->valor = convertir_entero(linea);
+                }else if (controlador_colocar == 6){
+                    nuevo->usos = convertir_entero(linea);
+                    // lo agregamos a la lista enlaada.
+                    nuevo->siguiente = lista_implemento.siguiente;
+                    lista_implemento.siguiente = nuevo;
+                }
+            } while (controlador_colocar != 6);
+
+            fin++;
+            controlador_colocar=0;
+            cout <<"el implemento "<<nuevo->nombre_implemento<<" se agrego correctamente."<<endl;
+        }   
+    }
+    cout <<"fin "<<endl;   
+    archivo.close();
+}
+
+// falta la funcion de las salas.
+
+//-----------------------------------------------------------------------------------------------------
 //----------------------------------- FUNCIONES JUGABILIDAD -------------------------------------------
 
 // Aqui va todo lo que sea juego como tal, menu de acciones, para usar objetos, etc
@@ -2172,12 +2436,13 @@ int main()
         cout << "---------------------\n";
         cout << "3. Menu de Implementos" << "\n";
         cout << "4. Menu de Poderes Magicos \n";
+        cout << "5. cargar archivos predeterminados del juego.\n";
         cout << "---------------------\n";
-        cout << "5. Menu del Mapa.\n";
+        cout << "6. Menu del Mapa.\n";
         cout << "---------------------\n";
-        cout << "6. EMPEZAR EL JUEGO. \n ";
+        cout << "7. EMPEZAR EL JUEGO. \n ";
         cout << "---------------------\n";
-        cout << "7. Salir del programa." << "\n";
+        cout << "8. Salir del programa." << "\n";
         opcion_principal = obtener_opcion();
 
         // Switch para Menu Principal
@@ -2384,8 +2649,19 @@ int main()
             } while (opcion_interna != 9);
             break;
 
+            //carga de archivos.
+            case 5:
+                cout<<"caragando.."<<endl;
+                cargar_especies(tipoEspecieHeroe,tipoEspecieOrco);
+                cout <<endl<<endl<<"listo.tipos"<<endl<<endl;
+                cargar_personajes(personajes_hero,personajes_orco,tipoEspecieHeroe,tipoEspecieOrco);
+                cout <<endl<<endl<<"listo.personajes"<<endl<<endl;
+                cargar_implementos(lista_implementos);
+                cout <<endl<<endl<<"listo.implementso"<<endl<<endl;
+                break;
+        
         // Menu de Mapa
-        case 5:
+        case 6:
             do
             {
                 cout << "\n MENU DE MAPAS:\n";
@@ -2424,7 +2700,7 @@ int main()
             break;
 
         // Menu para Jugar
-        case 6:
+        case 7:
             do
             {
 
@@ -2497,7 +2773,6 @@ int main()
                 cout << "1. Elegir personaje y sus objetos\n";
                 cout << "2. Mostrar personaje del equipo actual. \n";
                 cout << "3. Modificar mochila. \n";
-                // Eliminar personaje del equipo o en general (???)
                 cout << "4. Eliminar personaje del equipo. \n";
                 cout << "---------------------\n";
                 cout << "5. EQUIPO TERMINADO. Empezar a jugar.  \n";
@@ -2532,7 +2807,7 @@ int main()
             } while (opcion_principal != 5);
             break;
 
-        case 7:
+        case 8:
             cout << "Saliendo del programa... " << endl;
             break;
 
@@ -2541,7 +2816,7 @@ int main()
             cout << "Invalido. Ingrese una opcion valida";
             break;
         }
-    } while (opcion_principal != 6 && opcion_principal != 7); // Ambas opciones hacen que salga del menu
+    } while (opcion_principal != 7 && opcion_principal != 8); // Ambas opciones hacen que salga del menu
 
     // --------------------------------------------------------------------------------
     // ---------------------------------- GAMEPLAY ------------------------------------
