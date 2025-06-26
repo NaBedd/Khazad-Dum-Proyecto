@@ -46,7 +46,7 @@ void combate(sala* sala_actual, personaje* equipo_heroes) {
     while (!combate_terminado) {
         cout << "\n----- TURNO " << turno << " -----\n";
         
-        // Verificar proporción 3:1 para huida
+        // verifica la proporcion de 3 orocos un heroe para la huída
         bool puede_huir = (sala_actual->lista_orcos.size() >= 3 * sala_actual->lista_heroes.size());
         
         // --- TURNO DE LOS HÉROES ---
@@ -56,8 +56,8 @@ void combate(sala* sala_actual, personaje* equipo_heroes) {
             personaje* heroe_actual = *it;
             bool heroe_eliminado = false;
             
-            // Verificar si el héroe sigue vivo
-            if (!heroe_actual || heroe_actual->vitalidad <= 0) {
+            
+            if (!heroe_actual || heroe_actual->vitalidad <= 0) { //  se verifica si el héroe sigue vivo
                 ++it;
                 continue;
             }
@@ -97,14 +97,14 @@ void combate(sala* sala_actual, personaje* equipo_heroes) {
                     int contador = 1;
                     
                     cout << "\nArmas disponibles:\n";
-                    while (impl != nullptr) {
+                    while (implemento != nullptr) {
                         if (impl->tipo_implemento == "Ataque" && 
-                            heroe_actual->fortaleza >= impl->fortalezanecesaria) {
-                            cout << contador << ". " << impl->nombre_implemento;
-                            cout << " (Daño: " << impl->valor;
-                            cout << ", Coste Fortaleza: " << impl->fortalezanecesaria;
-                            cout << ", Usos: " << impl->usos << ")\n";
-                            armas.push_back(impl);
+                            heroe_actual->fortaleza >= implemento->fortalezanecesaria) {
+                            cout << contador << ". " << implemento->nombre_implemento;
+                            cout << " Daño: " << implemento->valor;
+                            cout << ", Coste Fortaleza: " << implemento->fortalezanecesaria;
+                            cout << ", Usos: " << implemento->usos << "\n";
+                            armas.push_back(implemento);
                             contador++;
                         }
                         impl = impl->siguiente;
