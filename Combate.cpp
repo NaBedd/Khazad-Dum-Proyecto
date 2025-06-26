@@ -62,7 +62,7 @@ void combate(sala* sala_actual, personaje* equipo_heroes) {
                 continue;
             }
 
-            // Recuperación de fortaleza (10% de su fortaleza máxima)
+            // Recuperación de fortaleza, 10% de la fortaleza
             int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
             heroe_actual->fortaleza = min(heroe_actual->tipo->danno_fortaleza, 
                                         heroe_actual->fortaleza + recuperacion);
