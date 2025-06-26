@@ -5,6 +5,104 @@
 
 using namespace std;
 
+// Tipos de especies: Heroes y Orcos
+struct Especie
+{
+    string nombre_especie;
+    int danno_fortaleza;
+    int salud;
+    int rapidez;
+    int identificador;
+    Especie *siguiente; // no se pone como null porque ela lista esta planteada de otra manera.
+};
+
+// Listas enlazadas de Especies
+struct Lista_especie
+{
+    Especie *primero_especie = nullptr;
+    int cantidad = 0;
+};
+
+// Implementos
+struct Implemento
+{
+    string nombre_implemento;
+    string tipo_implemento;
+    int usos;
+    int fortalezanecesaria;
+    int valor;
+    int identificador;
+    Implemento *siguiente = nullptr;
+};
+
+// Poderes Magicos
+struct Poder_magico
+{
+    string nombre_poder;
+    string funcion;
+    int identificador;
+    Poder_magico *siguiente = nullptr;
+};
+
+// Mochila
+struct mochila
+{
+    int identificador; // sera el mismo del personaje al que pernenezca.
+    Implemento *implementos = nullptr;
+    Poder_magico *poderes = nullptr;
+    // aqui va el mapa.
+};
+
+// Personajes
+struct personaje
+{
+    mochila *mimochila = nullptr;
+    string nombre;
+    Especie *tipo;
+    // Double porque puede explotar con el poder vigor enano
+    double vitalidad;
+    int fortaleza;
+    int identificador;
+    personaje *siguiente = nullptr;
+};
+
+// Mapa
+// NUEVO
+
+struct sala;
+struct arista;
+struct mapaGrafo;
+struct personaje_heroe
+{
+    int datotesteo;
+};
+struct personaje_orco
+{
+    int datotesteo;
+};
+
+struct sala // Salas
+{
+    int id;
+    string nombre;
+    vector<arista> lista_adyacentes;
+    vector<personaje_heroe*> lista_heroes; // Lista con los personajes heroes en la sala.
+    vector<personaje_orco*> lista_orcos;   // Lista con los personajes orcos  en la sala.
+    bool contiene_puerta_destino;         // Habra una lista que contenga todas las ubicaciones previas de la puerta, para evitar repeticiones
+};
+
+struct arista // Caminos entre las salas
+{
+    sala *destino;
+    int distancia;
+};
+
+struct mapaGrafo // Mapa que contiene todas las salas
+{
+    vector<sala *> mapa_salas;
+};
+
+
 // Funciones auxiliares externas
 personaje* encontrar_orco_mas_debil(sala* sala_actual) {
     personaje* orco_debil = nullptr;
