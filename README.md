@@ -1,5 +1,20 @@
 # Pendientes para la Nueva Entrega:
 
+### Pendiente:
+- [ ] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
+- [ ] Hacer movimiento de Heroes y Orcos
+- [ ] Designar spawn de Orcos
+- [ ] Implementar movimiento de Orcos Dijkstra
+- [ ] Agregar Print al combate (X Orco tiene Y vida, X Heroe tiene Y vida, etc... despues de un ataque)
+- [ ] a
+    - [ ] [Heroe] atacó a [Orco]
+      - [ ]   Si el orco No murio: [Orco] ahora tiene [vida] vida
+      - [ ]   Si el orco murio: [Orco] ha sido debilitado
+         
+      - [ ]   [Arma] de [Heroe] ahora tiene [durabilidad] durabilidad
+  - [ ]   Se permite la opcion de pasar turno en caso de que no se pueda realizar ninguna de las opciones, pero siempre va a estar en el menu
+  - [ ]   Poder curar fuera de combate (Curar fuera de combate, hace que se pase el turno)
+
 ### General:
 
 - [ ] Añadir los 4 poderes que dijo el profe
