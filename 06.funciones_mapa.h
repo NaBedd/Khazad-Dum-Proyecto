@@ -1,127 +1,27 @@
-#include <iostream>  // para operaciones de entrada y salida de datos.
-#include <string>    // para manejar string
-#include <limits.h>  // para los punteros NEW.
-#include <algorithm> // para usar .erase
-#include <vector>
-using namespace std;
+#pragma once
+#include "01.funciones_genericas.h" // Funciones generales para el programa
 
-// Funcion especifica para el menu de opciones
-// Se ve mas bonito asi
-
-// Booleano para verificar string:
-bool verificar_string(string respuesta)
-{
-
-    // Eliminar espacios en blanco al inicio y final
-    respuesta.erase(remove(respuesta.begin(), respuesta.end(), ' '), respuesta.end());
-
-    // Si la respuesta esta vacia, retorna Falso
-    if (respuesta.empty())
-    {
-        return false;
-    }
-
-    for (char caracter : respuesta) // itera por cada elemento de la cadena.
-    {
-        if (isdigit(caracter)) // Si caracter es un numero, retorna Falso
-        {
-            return false;
-        }
-    }
-    return true; // Si no hay numeros, retorna true
-}
-
-// Pide y devuelve valor del string ya verificado
-// Mas practico para implementar en codigo
-string devolver_string_verificada(const string &mensaje)
-{
-    string entrada;
-
-    // Imprime el mensaje indicado y pide respuesta
-    cout << mensaje;
-    getline(cin, entrada);
-
-    while (!(verificar_string(entrada)))
-    {
-        cout << "Formato Invalido." << endl;
-        cout << mensaje;
-        getline(cin, entrada);
-    }
-
-    return (entrada);
-}
-
-// Función para validar y leer un entero con mensaje personalizado
-int obtener_entero(const string &mensaje)
-{
-    string entrada;
-    int valor;
-    const size_t MAX_DIGITOS = 10; // Un límite seguro para la mayoría de los 'int'
-
-    while (true)
-    {
-        cout << mensaje;
-        getline(cin, entrada);
-
-        bool es_valido = true;
-
-        if (entrada == "0")
-        {
-            es_valido = false;
-        }
-
-        if (entrada.length() > MAX_DIGITOS)
-        {
-            es_valido = false;
-            cout << "Error. El número ingresado es demasiado grande.\n";
-            continue; // Volver al inicio del bucle para pedir una nueva entrada
-        }
-
-        for (char c : entrada)
-        {
-            if (!isdigit(c))
-            {
-                es_valido = false;
-                break;
-            }
-        }
-
-        if (es_valido && !entrada.empty())
-        {
-            try
-            {
-                valor = stoi(entrada);
-                return valor;
-            }
-            catch (const out_of_range &oor)
-            {
-                cout << "Error. El número ingresado está fuera del rango permitido.\n";
-                // No es estrictamente necesario aquí si ya validamos la longitud,
-                // pero es una buena práctica para cubrir otros casos.
-            }
-        }
-        else
-        {
-            cout << "Error. Ingrese solo números naturales.\n";
-        }
-    }
-}
-
+// Mapa
 struct sala;
 struct arista;
 struct mapaGrafo;
-struct personaje_heroe;
-struct personaje_orco;
-int regulador_id_salas = 0;
+struct personaje_heroe
+{
+    int datotesteo;
+};
+struct personaje_orco
+{
+    int datotesteo;
+};
 
 struct sala // Salas
 {
     int id;
     string nombre;
     vector<arista> lista_adyacentes;
-    vector<personaje_heroe> lista_heroes; // Lista con los personajes heroes en la sala.
-    vector<personaje_orco> lista_orcos;   // Lista con los personajes orcos  en la sala.
-    bool contiene_puerta_destino;         // Habra una lista que contenga todas las ubicaciones previas de la puerta, para evitar repeticiones
+    vector<personaje_heroe *> lista_heroes; // Lista con los personajes heroes en la sala.
+    vector<personaje_orco *> lista_orcos;   // Lista con los personajes orcos  en la sala.
+    bool contiene_puerta_destino;           // Habra una lista que contenga todas las ubicaciones previas de la puerta, para evitar repeticiones
 };
 
 struct arista // Caminos entre las salas
@@ -135,60 +35,22 @@ struct mapaGrafo // Mapa que contiene todas las salas
     vector<sala *> mapa_salas;
 };
 
-sala *verificar_existencia_sala(const mapaGrafo &grafo, string mensaje) // Funcion generica para verificar si la sala existe
+// Para el mapa (Salas)
+int regulador_salas = 61; // empieza en 60 por el archivo.
+int cantidad_salas = 0;
+
+//----------------------------------- FUNCIONES MAPA ---------------------------------------
+bool grafo_vacio(const mapaGrafo &grafo)
 {
-
-    sala *sala_buscar = nullptr;
-    int id_sala_verificar;
-
-    id_sala_verificar = obtener_entero(mensaje);
-    sala_buscar = encontrar_sala(grafo, id_sala_verificar);
-
-    if (sala_buscar == nullptr) // Si no existe:
+    if (grafo.mapa_salas.empty())
     {
-        cout << "La sala no existe" << endl;
-        cout << "Saliendo al menu principal..." << endl;
-        return sala_buscar;
+        cout << "El mapa esta vacio" << endl;
+        return true;
     }
-    return sala_buscar;
+    return false;
 }
 
-void crear_sala(mapaGrafo &grafo, string nombre) // Funcion primitiva para crear salas e IDs
-{
-    sala *salaNueva = new sala;
-    salaNueva->id = grafo.mapa_salas.size() + 1 + regulador_id_salas; // La id es igual al tamaño total del grafo. +1 para que no haya ID 0
-    salaNueva->nombre = nombre;
-    salaNueva->contiene_puerta_destino = false;
-    grafo.mapa_salas.push_back(salaNueva);
-}
-
-void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
-{
-    string nombreNuevaSala = devolver_string_verificada("Ingrese el nombre de la sala: ");
-    crear_sala(grafo, nombreNuevaSala);
-}
-
-void mostrar_salas_grafo(const mapaGrafo &grafo) // Mostrar el grafo completo
-{
-    for (sala *salaActual : grafo.mapa_salas)
-    {
-        cout << salaActual->id << "." << salaActual->nombre << endl;
-    }
-    cout << endl;
-}
-
-void mostrar_adyacencias(sala *salaOrigen) // Muestra las adyacencias de la sala origen
-{
-    cout << salaOrigen->nombre << " tiene como adyacentes: " << endl;
-    cout << "ID.Sala Adyacente" << "   " << "Distancia" << endl;
-    for (arista &adyacente : salaOrigen->lista_adyacentes)
-    {
-        cout << adyacente.destino->id << "." << adyacente.destino->nombre << "      " << adyacente.distancia << endl;
-    }
-    cout << endl;
-}
-
-sala *encontrar_sala(const mapaGrafo &grafo, int idSalaBuscar) // Encuentra una sala por ID
+sala *encontrar_sala(const mapaGrafo &grafo, int idSalaBuscar) // Encuentra y devuelve la sala por su ID
 {
     for (sala *sala : grafo.mapa_salas)
     {
@@ -198,6 +60,193 @@ sala *encontrar_sala(const mapaGrafo &grafo, int idSalaBuscar) // Encuentra una 
         }
     }
     return nullptr;
+}
+
+sala *encontrar_sala_nombre(const mapaGrafo &grafo, string nombre_sala) // Encuentra y devuelve la sala por su Nombre
+{
+    if (grafo_vacio(grafo))
+    {
+        return nullptr;
+    }
+
+    sala *actual = nullptr;
+    for (size_t i = 0; i < grafo.mapa_salas.size(); i++)
+    {
+        actual = grafo.mapa_salas[i];
+        if (actual->nombre == nombre_sala)
+        {
+            return actual;
+        }
+    }
+    return nullptr;
+}
+
+sala *verificar_existencia_sala(const mapaGrafo &grafo, string mensaje) // Funcion generica para verificar si la sala existe
+{
+
+    sala *sala_buscar = nullptr;
+    int id_sala_verificar;
+
+    if (grafo_vacio(grafo))
+    {
+        return nullptr;
+    }
+
+    id_sala_verificar = obtener_entero(mensaje);
+    sala_buscar = encontrar_sala(grafo, id_sala_verificar);
+
+    if (!sala_buscar) // Si la sala es igual a null (no existe):
+    {
+        cout << "La sala no existe" << endl;
+        cout << "Saliendo al menu principal..." << endl;
+        return sala_buscar;
+    }
+    return sala_buscar;
+}
+
+void mostrar_salas_grafo(const mapaGrafo &grafo) // Mostrar el grafo completo
+{
+    if (grafo_vacio(grafo))
+    {
+        return;
+    }
+
+    for (sala *salaActual : grafo.mapa_salas)
+    {
+        cout << salaActual->id << "." << salaActual->nombre << endl;
+    }
+    cout << endl;
+}
+
+void crear_adyacencia(sala *salaOrigen, sala *salaDestino, int distancia) // Crea una adyacencia
+{
+    // Comprueba que no exista:
+    for (size_t i = 0; i < salaOrigen->lista_adyacentes.size(); i++)
+    {
+        if (salaOrigen->lista_adyacentes[i].destino == salaDestino)
+        {
+            cout << "Ya existe una adyacencia entre " << salaOrigen->lista_adyacentes[i].destino->nombre << " y " << salaDestino->nombre << endl;
+            cout << "Puede editar la adyacencia en el menu principal si desea modificarla" << endl;
+            return;
+        }
+        if (salaOrigen->lista_adyacentes[i].destino == salaOrigen)
+        {
+            cout << "La sala no puede ser adyacente a si misma en este juego" << endl;
+            return;
+        }
+    }
+    // Si no existe, la crea
+    salaOrigen->lista_adyacentes.push_back({salaDestino, distancia});
+    cout << "Adyacencia creada con exito" << endl;
+}
+
+void crear_adyacencia_usuario(mapaGrafo &grafo, sala *salaModificar) // Crea adyacencia manualmente
+{
+
+    sala *nuevaAdyacencia = nullptr;
+    int idNuevaAdyacencia;
+
+    // Comprueba si las IDs ingresadas existen
+    nuevaAdyacencia = verificar_existencia_sala(grafo, "Ingrese el ID de la nueva sala adyacente: ");
+    if (!nuevaAdyacencia)
+    {
+        return;
+    }
+
+    int distanciaNuevaAdyacencia = obtener_entero("Ingrese la distancia entre salas: ");
+
+    crear_adyacencia(salaModificar, nuevaAdyacencia, distanciaNuevaAdyacencia);
+}
+
+void crear_sala(mapaGrafo &grafo, string nombre) // Funcion primitiva para crear salas e IDs
+{
+    sala *salaNueva = new sala;
+    salaNueva->id = grafo.mapa_salas.size() + regulador_salas; // para que no se
+    salaNueva->nombre = nombre;
+    salaNueva->contiene_puerta_destino = false;
+    grafo.mapa_salas.push_back(salaNueva);
+}
+
+void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
+{
+    sala *sala_modificar = nullptr;
+    int resp;
+    int resp_interna;
+
+    string nombreNuevaSala = devolver_string_verificada("Ingrese el nombre de la nueva sala: ");
+    crear_sala(grafo, nombreNuevaSala);
+    cout << "Sala " << nombreNuevaSala << " creada con exito" << endl;
+
+    cout << "¿Desea agregarle adyacencias a la sala?" << endl;
+    cout << "1. Si" << endl;
+    cout << "2. No" << endl;
+    resp = obtener_opcion();
+    switch (resp)
+    {
+    case 1: // Pregunta para mostrar las salas. Agrega Adyacencias
+    {
+        cout << "¿Desea ver todas las salas del mapa?" << endl;
+        cout << "1. Si" << endl;
+        cout << "2. No" << endl;
+        resp_interna = obtener_opcion();
+        switch (resp_interna) // Para mostrar o no las salas del mapa
+        {
+        case 1: // Muestra las salas del mapa
+        {
+            cout << "-------------- Salas Del Juego --------------" << endl;
+            mostrar_salas_grafo(grafo);
+            break;
+        }
+        case 2: // No muestra las salas
+        {
+            cout << "No se mostraran las salas del mapa" << endl;
+            break;
+        }
+        default: // Default
+        {
+            cout << "Ingrese una opcion valida" << endl;
+            break;
+        }
+        }
+
+        // Conseguir la sala por el nombre
+        sala_modificar = encontrar_sala_nombre(grafo, nombreNuevaSala);
+        crear_adyacencia_usuario(grafo, sala_modificar);
+        break;
+    }
+    case 2: // No se crean adyacencias
+    {
+        cout << "No se crearan adyacencias para la sala" << endl;
+        break;
+    }
+    default: // Default
+    {
+        cout << "Ingrese una opcion valida: " << endl;
+        break;
+    }
+    }
+}
+
+void mostrar_adyacencias(const mapaGrafo &grafo, sala *salaOrigen) // Muestra las adyacencias de la sala origen
+{
+    if (grafo_vacio(grafo))
+    {
+        return;
+    }
+
+    if (salaOrigen == nullptr)
+    {
+        cout << "La sala no existe." << endl;
+        return;
+    }
+
+    cout << salaOrigen->nombre << " tiene como adyacentes: " << endl;
+    cout << "ID.Sala Adyacente" << "   " << "Distancia" << endl;
+    for (arista &adyacente : salaOrigen->lista_adyacentes)
+    {
+        cout << adyacente.destino->id << "." << adyacente.destino->nombre << "      " << adyacente.distancia << endl;
+    }
+    cout << endl;
 }
 
 int encontrar_indice_sala(const mapaGrafo &grafo, int idSalaBuscar) // Devuelve el Indice de la sala en el grafo
@@ -214,55 +263,15 @@ int encontrar_indice_sala(const mapaGrafo &grafo, int idSalaBuscar) // Devuelve 
     return -1;
 }
 
-void crear_adyacencia(sala *salaOrigen, sala *salaDestino, int distancia) // Crea una adyacencia
-{
-    // Comprueba que no exista:
-    for (size_t i = 0; i < salaOrigen->lista_adyacentes.size(); i++)
-    {
-        if (salaOrigen->lista_adyacentes[i].destino == salaDestino)
-        {
-            cout << "Ya existe una adyacencia entre " << salaOrigen->lista_adyacentes[i].destino->nombre << " y " << salaDestino->nombre << endl;
-            cout << "Puede editar la adyacencia en el menu principal si desea modificarla" << endl;
-            return;
-        }
-    }
-    // Si no existe, la crea
-    salaOrigen->lista_adyacentes.push_back({salaDestino, distancia});
-    cout << "Adyacencia creada con exito" << endl;
-}
-
-void crear_adyacencia_usuario(mapaGrafo &grafo) // Crea adyacencia manualmente
-{
-    sala *salaModificar = nullptr;
-    sala *nuevaAdyacencia = nullptr;
-    int idSalaModificar;
-    int idNuevaAdyacencia;
-
-    cout << "Salas disponibles: " << endl;
-    mostrar_salas_grafo(grafo);
-
-    // Comprueba si las IDs ingresadas existen
-    salaModificar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala a modificar: ");
-    if (!salaModificar)
-    {
-        return;
-    }
-
-    nuevaAdyacencia = verificar_existencia_sala(grafo, "Ingrese el ID de la nueva sala adyacente: ");
-    if (!nuevaAdyacencia)
-    {
-        return;
-    }
-
-    int distanciaNuevaAdyacencia = obtener_entero("Ingrese la distancia entre salas: ");
-
-    crear_adyacencia(salaModificar, nuevaAdyacencia, distanciaNuevaAdyacencia);
-}
-
 void borrar_sala_usuario(mapaGrafo &grafo) // Borrar sala del grafo y listas de adyacencias
 {
     sala *salaBorrar = nullptr;
     int indiceBorrar;
+
+    if (grafo_vacio(grafo))
+    {
+        return;
+    }
 
     salaBorrar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala a borrar: ");
     if (!salaBorrar)
@@ -282,7 +291,7 @@ void borrar_sala_usuario(mapaGrafo &grafo) // Borrar sala del grafo y listas de 
             if (salaBorrar->id == actual->lista_adyacentes[j].destino->id)
             {
                 actual->lista_adyacentes.erase(actual->lista_adyacentes.begin() + j);
-                regulador_id_salas += 1;
+                regulador_salas += 1;
             }
         }
     }
@@ -294,7 +303,7 @@ void borrar_sala_usuario(mapaGrafo &grafo) // Borrar sala del grafo y listas de 
     delete salaBorrar;
 }
 
-void borrar_sala(mapaGrafo &grafo, int sala_borrar_id) // Borra sala. Solo usar para borrar_grafo
+void borrar_sala(mapaGrafo &grafo, int sala_borrar_id) // Borra sala. Solo usar para destruir_grafo
 {
     // Esta funcion solo se usa para eliminar el grafo completo
     // No agrega 1 al regulador de IDs
@@ -326,7 +335,7 @@ void borrar_sala(mapaGrafo &grafo, int sala_borrar_id) // Borra sala. Solo usar 
     }
 }
 
-void borrar_grafo(mapaGrafo &grafo) // Borra el grafo completo
+void destruir_grafo(mapaGrafo &grafo) // Borra el grafo completo
 {
     while (!grafo.mapa_salas.empty()) // Mientras no este vacio
     {
@@ -413,14 +422,13 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
     sala *sala_editar = nullptr;
     sala *sala_objetivo = nullptr;
     sala *sala_borrar = nullptr;
-    sala *nuevaAdyacencia;
+    sala *nuevaAdyacencia = nullptr;
     int idNuevaAdyacencia;
     int idBorrarAdyacencia;
-    int opcion;
+    int opcion = 0;
 
-    if (grafo.mapa_salas.empty()) // Si el grafo esta vacio:
+    if (grafo_vacio(grafo))
     {
-        cout << "Todavia no existe ninguna sala" << endl;
         return;
     }
 
@@ -433,20 +441,25 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
 
     do
     {
-        mostrar_adyacencias(sala_editar);
-        cout << "¿Que desea hacer con las adyacencias?" << endl;
+        mostrar_adyacencias(grafo, sala_editar);
+        cout << "Menu de Adyacencias" << endl;
+        cout << "---------------------" << endl;
         cout << "1. Crear nueva adyacencia" << endl;
-        cout << "2. Borrar adyacencia existente" << endl;
-        cout << "3. Cambiar distancia de adyacencias" << endl;
-        cout << "4. Salir" << endl;
-        opcion = obtener_entero("Ingrese la opcion: ");
+        cout << "2. Mostrar Adyacencias actuales" << endl;
+        cout << "3. Borrar adyacencia existente" << endl;
+        cout << "4. Cambiar distancia entre salas" << endl;
+        cout << "5. Cancelar edicion" << endl;
+        cout << "---------------------" << endl;
+
+        opcion = obtener_opcion();
 
         switch (opcion)
         {
-        case 1:
+        case 1: // Agregar adyacencia
+        {
             idNuevaAdyacencia = obtener_entero("Ingrese el ID de la nueva adyacencia: ");
             nuevaAdyacencia = encontrar_sala(grafo, idNuevaAdyacencia);
-            // Comprobar que la sala para agregar exista
+            // Comprobar que la sala para agregar exista en el grafo
             if (nuevaAdyacencia == nullptr) // Si no existe:
             {
                 cout << "La sala no existe" << endl;
@@ -455,10 +468,17 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             }
 
             int distanciaNuevaAdyacencia = obtener_entero("Ingrese la distancia entre salas: ");
+            // Crear adyacencia ya comprueba que no exista la adyacencia que se esta creando. Que no haya duplicados
             crear_adyacencia(sala_editar, nuevaAdyacencia, distanciaNuevaAdyacencia);
             break;
-
+        }
         case 2:
+        {
+            mostrar_adyacencias(grafo, sala_editar);
+            break;
+        }
+        case 3: // Borrar Adyacencia
+        {
             sala_borrar = verificar_existencia_sala(grafo, "Ingrese el ID de la adyacencia a borrar: ");
             if (!sala_borrar)
             {
@@ -467,8 +487,9 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             idBorrarAdyacencia = sala_borrar->id;
             borrar_adyacencia(sala_editar, idBorrarAdyacencia);
             break;
-
-        case 3:
+        }
+        case 4: // Modificar Distancias entre salas
+        {
             sala_objetivo = verificar_existencia_sala(grafo, "Ingrese el ID de la sala con la distancia a modificar: ");
             if (!sala_objetivo)
             {
@@ -476,14 +497,19 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             }
             cambiar_distancias_sala(grafo, sala_editar->id, sala_objetivo->id);
             break;
-        case 4:
+        }
+        case 5: // Salir al menu principal
+        {
             cout << "Saliendo al menu principal" << endl;
             break;
-        default:
+        }
+        default: // Default
+        {
             cout << "Opcion invalida." << endl;
             break;
         }
-    } while (opcion != 4);
+        }
+    } while (opcion != 5);
 }
 
 void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
@@ -492,9 +518,8 @@ void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
     int opcion;
     string nuevo_nombre;
 
-    if (grafo.mapa_salas.empty()) // Si el grafo esta vacio:
+    if (grafo_vacio(grafo)) // Si el grafo esta vacio:
     {
-        cout << "Todavia no existe ninguna sala" << endl;
         return;
     }
 
@@ -510,30 +535,40 @@ void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
     do
     {
         // Menu de edicion de la sala
-        cout << "¿Que desea editar de la sala " << sala_editar->id << "." << sala_editar->nombre << "?" << endl;
-        cout << "1. Nombre" << endl;
-        cout << "2. Adyacencias" << endl;
-        cout << "3. Cancelar" << endl;
-        opcion = obtener_entero("Ingrese la opcion que desea editar: ");
+        cout << "Menu de Edicion de Sala" << endl;
+        cout << "---------------------" << endl;
+        cout << "Actualmente editando Sala: " << sala_editar->id << "." << sala_editar->nombre << endl;
+        cout << "---------------------" << endl;
+        cout << "1. Editar Nombre" << endl;
+        cout << "2. Editar Adyacencias" << endl;
+        cout << "3. Cancelar Edicion" << endl;
+        cout << "---------------------" << endl;
+
+        opcion = obtener_opcion();
 
         switch (opcion)
         {
-        case 1:
-            nuevo_nombre = devolver_string_verificada(" Ingrese el nuevo nombre para la sala ");
+        case 1: // Editar nombre sala
+        {
+            nuevo_nombre = devolver_string_verificada("Ingrese el nuevo nombre para la sala: ");
             sala_editar->nombre = nuevo_nombre;
             break;
-
-        case 2:
+        }
+        case 2: // Editar Adyacencias
+        {
             editar_adyacencias(grafo, id_sala_editar);
             break;
-
-        case 3:
+        }
+        case 3: // Cancelar edicion
+        {
             cout << "Se cancelo la edicion de la sala" << endl;
             break;
+        }
         default:
+        {
             cout << "Opcion invalida." << endl;
-
             break;
+        }
         }
     } while (opcion != 3);
 }
