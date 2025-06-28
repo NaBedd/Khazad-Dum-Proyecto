@@ -72,6 +72,8 @@ void poder_vigor_enano(personaje *lista_personajes_jugar)
 
 int main()
 {
+    // Semilla aleatoria inicializada (para el num random de orcos)
+    srand(time(NULL));
 
     cout << "¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
     cout << "Se recomienda visitar todos los menus en orden descendente para una mejor experiencia de juego." << endl;

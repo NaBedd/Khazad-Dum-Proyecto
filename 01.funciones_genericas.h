@@ -9,6 +9,9 @@
 #include <fstream>   // para la lectura de archivos.
 #include <vector>    // para manejo de vectores.
 #include <string>    // Strings
+#include <climits>   // para int max
+#include <cstdlib>   // Ambas librerias para generar numeros aleatorios
+#include <ctime>
 
 using namespace std;
 

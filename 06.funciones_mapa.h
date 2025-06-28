@@ -5,23 +5,15 @@
 struct sala;
 struct arista;
 struct mapaGrafo;
-struct personaje_heroe
-{
-    int datotesteo;
-};
-struct personaje_orco
-{
-    int datotesteo;
-};
 
 struct sala // Salas
 {
     int id;
     string nombre;
     vector<arista> lista_adyacentes;
-    vector<personaje_heroe *> lista_heroes; // Lista con los personajes heroes en la sala.
-    vector<personaje_orco *> lista_orcos;   // Lista con los personajes orcos  en la sala.
-    bool contiene_puerta_destino;           // Habra una lista que contenga todas las ubicaciones previas de la puerta, para evitar repeticiones
+    vector<personaje *> lista_heroes; // Lista con los personajes heroes en la sala.
+    vector<personaje *> lista_orcos;  // Lista con los personajes orcos  en la sala.
+    bool contiene_puerta_destino;     // Habra una lista que contenga todas las ubicaciones previas de la puerta, para evitar repeticiones
 };
 
 struct arista // Caminos entre las salas

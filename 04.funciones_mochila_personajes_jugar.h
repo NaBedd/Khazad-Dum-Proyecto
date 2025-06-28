@@ -43,7 +43,7 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
 {
     if (lista_tipos.cantidad == 0)
     { // si no hay tipos creados se sale.
-        std::cout << "Todavia no hay especies disponibles. Debe crearlas antes de crear un personaje." << endl;
+        cout << "Todavia no hay especies disponibles. Debe crearlas antes de crear un personaje." << endl;
         return;
     }
     else
@@ -54,30 +54,30 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
 
         if (tipo == 1)
         {
-            std::cout << "Indique los datos para el nuevo personaje Orco." << endl;
+            cout << "Indique los datos para el nuevo personaje Orco." << endl;
 
             nuevo->nombre = devolver_string_verificada("Nombre: ");
 
-            std::cout << "Ingrese la especie al que pertenecera el Orco" << nuevo->nombre << "\n";
-            std::cout << "Especies disponibles: " << endl;
+            cout << "Ingrese la especie al que pertenecera el Orco" << nuevo->nombre << "\n";
+            cout << "Especies disponibles: " << endl;
             mostrar_lista(lista_tipos, tipo);
 
-            std::cout << "Ingrese la especie del Orco " << nuevo->nombre << ": ";
+            cout << "Ingrese la especie del Orco " << nuevo->nombre << ": ";
             num_tipo = obtener_entero("");
 
             puntero_especie = encontrar_especie_id(lista_tipos, num_tipo);
         }
         else
         { // lo mismo pero para heroes.
-            std::cout << "Indique los datos para el nuevo personaje Heroe. " << endl;
+            cout << "Indique los datos para el nuevo personaje Heroe. " << endl;
 
             nuevo->nombre = devolver_string_verificada("Nombre: ");
 
-            std::cout << "Ingrese la especie al que pertenecera el Heroe" << nuevo->nombre << "\n";
-            std::cout << "Especies disponibles: " << endl;
+            cout << "Ingrese la especie al que pertenecera el Heroe" << nuevo->nombre << "\n";
+            cout << "Especies disponibles: " << endl;
             mostrar_lista(lista_tipos, tipo);
 
-            std::cout << "Ingrese la especie del Personaje " << nuevo->nombre << ":";
+            cout << "Ingrese la especie del Personaje " << nuevo->nombre << ":";
             num_tipo = obtener_entero("");
 
             puntero_especie = encontrar_especie_id(lista_tipos, num_tipo);
@@ -86,8 +86,8 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
 
         if (puntero_especie == nullptr)
         {
-            std::cout << "La especie debe crearse primero." << endl;
-            std::cout << "Creacion del personaje: " << nuevo->nombre << " fue fallida " << endl;
+            cout << "La especie debe crearse primero." << endl;
+            cout << "Creacion del personaje: " << nuevo->nombre << " fue fallida " << endl;
             delete nuevo; // liberamos memoria dinamica
             return;
         }
@@ -103,13 +103,13 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
         {
             cantidad_personaje_orco += 1; // sumamos a la cantidad de orcos.
             nuevo->identificador = (cantidad_personaje_orco + regulador_personaje_orco);
-            std::cout << "El orco: " << nuevo->nombre << ", se agrego correctamente." << endl;
+            cout << "El orco: " << nuevo->nombre << ", se agrego correctamente." << endl;
         }
         else
         {
             cantidad_personaje_heroe += 1; // sumamos a la cantidad de heroes.
             nuevo->identificador = (cantidad_personaje_heroe + regulador_personaje_heroe);
-            std::cout << "El heroe: " << nuevo->nombre << ", se agrego correctamente." << endl;
+            cout << "El heroe: " << nuevo->nombre << ", se agrego correctamente." << endl;
         }
     }
 }
@@ -122,8 +122,8 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
     { // para orcos.
         if (cantidad_personaje_orco == 0)
         {
-            std::cout << "\nNo hay especies de orcos para mostra actualmente \n";
-            std::cout << "primero debe crearlos\n";
+            cout << "\nNo hay especies de orcos para mostra actualmente \n";
+            cout << "primero debe crearlos\n";
             return;
         }
     }
@@ -131,30 +131,30 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
     { // para heroes
         if (cantidad_personaje_heroe == 0)
         {
-            std::cout << "\nno hay personajes heroes para mostra actualmente \n";
-            std::cout << "primero debe crerlos\n";
+            cout << "\nno hay personajes heroes para mostra actualmente \n";
+            cout << "primero debe crerlos\n";
         }
     }
 
     if (tipo == 1)
     {
-        std::cout << "\nHay [" << cantidad_personaje_orco << "] personajes orcos" << endl;
+        cout << "\nHay [" << cantidad_personaje_orco << "] personajes orcos" << endl;
     }
     else
     {
-        std::cout << "\nHay [" << cantidad_personaje_heroe << "] personajes heroes" << endl;
+        cout << "\nHay [" << cantidad_personaje_heroe << "] personajes heroes" << endl;
     }
     personaje *actual = lista.siguiente; // se crea una variable auxiliar para igualarla al primer elemnto de la lista.
     while (actual != nullptr)
     { // si es igual a nullptr significa que es el ultimo elemento de la lista.
-        std::cout << actual->identificador << "-";
-        std::cout << "Nombre: " << actual->nombre << endl;
-        std::cout << "Especie: " << actual->tipo->nombre_especie << endl;
-        std::cout << endl;
+        cout << actual->identificador << "-";
+        cout << "Nombre: " << actual->nombre << endl;
+        cout << "Especie: " << actual->tipo->nombre_especie << endl;
+        cout << endl;
         actual = actual->siguiente;
     }
-    std::cout << "No hay mas personajes.\n"
-              << endl;
+    cout << "No hay mas personajes.\n"
+         << endl;
 }
 
 // Encontrar un personaje
@@ -195,8 +195,8 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
     { // para orcos.
         if (cantidad_personaje_orco == 0)
         {
-            std::cout << "\nNo hay personajes orcos para mostrar actualmente \n";
-            std::cout << "Primero debe crearlos\n";
+            cout << "\nNo hay personajes orcos para mostrar actualmente \n";
+            cout << "Primero debe crearlos\n";
             return;
         }
     }
@@ -204,8 +204,8 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
     { // para heroes
         if (cantidad_personaje_heroe == 0)
         {
-            std::cout << "\nNo hay personajes heroes para mostrar actualmente \n";
-            std::cout << "primero debe crearlos\n";
+            cout << "\nNo hay personajes heroes para mostrar actualmente \n";
+            cout << "primero debe crearlos\n";
             return;
         }
     }
@@ -214,7 +214,7 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
     int referencia;
     Especie *especie_nueva = nullptr;
 
-    std::cout << "Los personajes disponibles son: \n";
+    cout << "Los personajes disponibles son: \n";
     mostrar_personajes(lista, tipo);
 
     referencia = obtener_entero("Ingrese el numero del personaje que desea modificar: ");
@@ -227,14 +227,14 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
         if (actual->identificador == referencia)
         {
             encontrado = true;
-            std::cout << "ingrese los datos para actualizar al personaje " << actual->nombre << endl;
+            cout << "ingrese los datos para actualizar al personaje " << actual->nombre << endl;
             cin.ignore(); // Limpiar el buffer
 
             actual->nombre = devolver_string_verificada("Nombre del personaje: ");
 
-            std::cout << "\n Coloque el nuevo tipo de de especie al que pertenecera el personje \n";
-            std::cout << "\n Tipos disponibles son: " << endl;
-            std::cout << "------------------------" << endl;
+            cout << "\n Coloque el nuevo tipo de de especie al que pertenecera el personje \n";
+            cout << "\n Tipos disponibles son: " << endl;
+            cout << "------------------------" << endl;
             mostrar_lista(lista_tipo, tipo);
 
             // Identificador
@@ -244,21 +244,21 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo) 
 
             if (especie_nueva == nullptr)
             {
-                std::cout << "La que coloco no se encuentra disponible." << endl;
-                std::cout << "La actualiacion del personaje: " << actual->nombre << " fue fallida " << endl;
+                cout << "La que coloco no se encuentra disponible." << endl;
+                cout << "La actualiacion del personaje: " << actual->nombre << " fue fallida " << endl;
                 return;
             }
             else
             {
-                std::cout << "El personaje ahora de nombre: " << actual->nombre << " se actualizo correctamente";
+                cout << "El personaje ahora de nombre: " << actual->nombre << " se actualizo correctamente";
             }
         }
         actual = actual->siguiente;
     }
     if (!encontrado)
     {
-        std::cout << "No se encontró ningún personaje con el ID: " << referencia << ".\n";
-        std::cout << "Actualizacion fallida \n";
+        cout << "No se encontró ningún personaje con el ID: " << referencia << ".\n";
+        cout << "Actualizacion fallida \n";
     }
 }
 
@@ -269,8 +269,8 @@ void borrar_personaje(personaje &lista, int tipo)
     { // para orcos.
         if (cantidad_personaje_orco == 0)
         {
-            std::cout << "\nNo hay personajes orcos para eliminar actualente \n";
-            std::cout << "Primero debe crearlos\n";
+            cout << "\nNo hay personajes orcos para eliminar actualente \n";
+            cout << "Primero debe crearlos\n";
             return;
         }
     }
@@ -278,8 +278,8 @@ void borrar_personaje(personaje &lista, int tipo)
     { // para heroes
         if (cantidad_personaje_heroe == 0)
         {
-            std::cout << "\nNo hay personajes heroes para eliminar actualmente \n";
-            std::cout << "Primero debe crearlos\n";
+            cout << "\nNo hay personajes heroes para eliminar actualmente \n";
+            cout << "Primero debe crearlos\n";
             return;
         }
     }
@@ -288,14 +288,14 @@ void borrar_personaje(personaje &lista, int tipo)
     personaje *actual = lista.siguiente; // aounta al primero de la lista
     personaje *anterior = nullptr;
 
-    std::cout << "Los personajes disponibles son: \n";
+    cout << "Los personajes disponibles son: \n";
     mostrar_personajes(lista, tipo);
     identificador = obtener_entero("Coloque el numero del personaje a modificar: ");
 
     if ((actual != nullptr) && (actual->identificador == identificador))
     {
         lista.siguiente = actual->siguiente;
-        std::cout << "El personaje: " << actual->nombre << " fue borrado axitosamente." << endl;
+        cout << "El personaje: " << actual->nombre << " fue borrado axitosamente." << endl;
         delete actual;
         if (tipo == 1)
         {
@@ -320,7 +320,7 @@ void borrar_personaje(personaje &lista, int tipo)
     {
         personaje *eliminar = actual;
         anterior->siguiente = actual->siguiente;
-        std::cout << "El personaje " << eliminar->nombre << " se elimino correctapente. \n ";
+        cout << "El personaje " << eliminar->nombre << " se elimino correctapente. \n ";
         delete eliminar;
 
         if (tipo == 1)
@@ -336,8 +336,8 @@ void borrar_personaje(personaje &lista, int tipo)
     }
     else
     {
-        std::cout << "El numero de personaje: " << identificador << " no se encuentra en la lista \n ";
-        std::cout << "Eliminacion fallida \n";
+        cout << "El numero de personaje: " << identificador << " no se encuentra en la lista \n ";
+        cout << "Eliminacion fallida \n";
     }
 }
 
@@ -369,7 +369,7 @@ void borrar_personajes_de_tipo(personaje &lista_personajes, Especie *tipo_borrar
             anterior->siguiente = actual->siguiente; // Enlaza el anterior con el siguiente del nodo a eliminar
             actual = actual->siguiente;              // Avanza actual para seguir buscando
 
-            std::cout << "El personaje: " << eliminar->nombre << " fue borrado." << endl;
+            cout << "El personaje: " << eliminar->nombre << " fue borrado." << endl;
             delete eliminar; // Se libera la memoria del personaje borrado
 
             if (tipo == 1)
@@ -397,10 +397,10 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
 {
     if (lista.cantidad == 0)
     {
-        std::cout << "No hay elementos en la lista para borrar\n";
+        cout << "No hay elementos en la lista para borrar\n";
         return;
     }
-    std::cout << "Las especies disponibles son: \n";
+    cout << "Las especies disponibles son: \n";
     mostrar_lista(lista, tipo);
 
     int identificador = 0;
@@ -426,19 +426,19 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         // si si hay personajes se le dice al usuario a ver si de todas formas decea eliminar el tipo.
         if (cantida_personajes > 0)
         {
-            std::cout << " Hay: " << cantida_personajes << "personajes de esta especie, por lo tanto. \n";
-            std::cout << "Al eliminar la especie se boraran los personajes del tipo \n";
-            std::cout << "eliminar de todas formas coloque 1 \n";
-            std::cout << "no eliminar coloque 2 \n";
+            cout << " Hay: " << cantida_personajes << "personajes de esta especie, por lo tanto. \n";
+            cout << "Al eliminar la especie se boraran los personajes del tipo \n";
+            cout << "eliminar de todas formas coloque 1 \n";
+            cout << "no eliminar coloque 2 \n";
             do
             {
-                std::cout << "(1) o (2)\n";
+                cout << "(1) o (2)\n";
                 controlador_eliminar = obtener_entero("coloque el numero:");
             } while ((controlador_eliminar != 1) && (controlador_eliminar != 2));
         }
         else
         {
-            std::cout << " no hay personajes atualmente de este tipo, no hay problema al eliminarlo. \n";
+            cout << " no hay personajes atualmente de este tipo, no hay problema al eliminarlo. \n";
         }
         // para eliminar si el usuario dice que si
         if (controlador_eliminar == 1)
@@ -448,7 +448,7 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         }
         else if (controlador_eliminar == 2)
         {
-            std::cout << "eliminacion del tipo " << especie_borrar->nombre_especie << " fallida.\n";
+            cout << "eliminacion del tipo " << especie_borrar->nombre_especie << " fallida.\n";
             return;
         }
 
@@ -456,7 +456,7 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         if ((actual != nullptr) && actual->identificador == identificador)
         {
             lista.primero_especie = actual->siguiente;
-            std::cout << "El tipo " << actual->nombre_especie << " se elimino correctamente" << endl;
+            cout << "El tipo " << actual->nombre_especie << " se elimino correctamente" << endl;
             delete actual;
             lista.cantidad -= 1;
             if (tipo == 1)
@@ -481,7 +481,7 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         {
             Especie *eliminar = actual;
             anterior->siguiente = actual->siguiente;
-            std::cout << "El tipo " << eliminar->nombre_especie << " se elimino correctamente" << endl;
+            cout << "El tipo " << eliminar->nombre_especie << " se elimino correctamente" << endl;
             delete eliminar;
             lista.cantidad -= 1;
             if (tipo == 1)
@@ -495,13 +495,13 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         }
         else
         {
-            std::cout << "El numero de especie: " << identificador << " no se encuentra en la lista. \n";
-            std::cout << "Eliminacion fallida \n";
+            cout << "El numero de especie: " << identificador << " no se encuentra en la lista. \n";
+            cout << "Eliminacion fallida \n";
         }
     }
     else
     {
-        std::cout << "El numero de especie ingresado no es valido. \n";
+        cout << "El numero de especie ingresado no es valido. \n";
     }
 }
 
@@ -513,14 +513,14 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
     int cantidad_objetos = 0;
     int identificador = 0;
     int contrilador_interno = 0;
-    std::cout << "Puede escoger un maximo 5 objetos, entre poderes magicos o implementos. \n";
+    cout << "Puede escoger un maximo 5 objetos, entre poderes magicos o implementos. \n";
     do
     {
-        std::cout << "Tiene " << cantidad_objetos << " objetos en la mochila.\n";
-        std::cout << " Que tipo de objeto desea agregar.\n";
-        std::cout << "1. Implemento.\n";
-        std::cout << "2. Poderes Magicos.\n";
-        std::cout << "3. Salir.\n";
+        cout << "Tiene " << cantidad_objetos << " objetos en la mochila.\n";
+        cout << " Que tipo de objeto desea agregar.\n";
+        cout << "1. Implemento.\n";
+        cout << "2. Poderes Magicos.\n";
+        cout << "3. Salir.\n";
         opcio = obtener_entero("");
         if (opcio == 1)
         {
@@ -528,21 +528,21 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
             // para verificar si el ID es valido, lo pone bien o lo pone bien.
             do
             {
-                std::cout << "Los implementos disponibles son:\n";
+                cout << "Los implementos disponibles son:\n";
                 mostrar_implementos(Implementos);
-                std::cout << "coloque el ID del implemento que desea colocar: ";
+                cout << "coloque el ID del implemento que desea colocar: ";
                 identificador = obtener_entero("");
                 nuevo_implemento = buscar_implemento(Implementos, identificador);
 
                 if (nuevo_implemento == nullptr)
                 {
-                    std::cout << "El ID: " << identificador << " no existe.\n";
-                    std::cout << "coloque uno valido.\n";
+                    cout << "El ID: " << identificador << " no existe.\n";
+                    cout << "coloque uno valido.\n";
                 }
                 else if (nuevo_implemento->fortalezanecesaria > personaje_a_llenar->tipo->danno_fortaleza)
                 {
-                    std::cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
-                    std::cout << "Coloque uno valido.\n";
+                    cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
+                    cout << "Coloque uno valido.\n";
                 }
                 else
                 {
@@ -558,7 +558,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
             personaje_a_llenar->mimochila->implementos = colocar;
             cantidad_objetos += 1;
             contrilador_interno = 0; // poria.
-            std::cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
+            cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
         }
         else if (opcio == 2)
         {
@@ -566,15 +566,15 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
             // para verificar si el ID es valido, lo pone bien o lo pone bien.
             do
             {
-                std::cout << "Los poderes magicos disponibles son:\n";
+                cout << "Los poderes magicos disponibles son:\n";
                 mostrar_poderes(poderes);
-                std::cout << "coloque el ID del poder que desea colocar: ";
+                cout << "coloque el ID del poder que desea colocar: ";
                 identificador = obtener_entero("");
                 nuevo_poder = encontrar_poder(poderes, identificador);
                 if (nuevo_poder == nullptr)
                 {
-                    std::cout << "El ID: " << identificador << " no existe.\n";
-                    std::cout << "coloque uno valido.\n";
+                    cout << "El ID: " << identificador << " no existe.\n";
+                    cout << "coloque uno valido.\n";
                 }
                 else
                 {
@@ -590,22 +590,22 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
             personaje_a_llenar->mimochila->poderes = colocar;
             cantidad_objetos += 1;
             contrilador_interno = 0; // porcia.
-            std::cout << "El poder " << colocar->nombre_poder << " se agrego correctamente a la mochila.\n";
+            cout << "El poder " << colocar->nombre_poder << " se agrego correctamente a la mochila.\n";
         }
         else if (opcio == 3)
         {
-            std::cout << "La cantidad de objetos que coloco fue: " << cantidad_objetos << endl;
+            cout << "La cantidad de objetos que coloco fue: " << cantidad_objetos << endl;
         }
         else
         {
-            std::cout << "opcion invaida, el numero " << opcio << " no es una opcion valida.\n";
+            cout << "opcion invaida, el numero " << opcio << " no es una opcion valida.\n";
         }
 
     } while ((opcio != 3) && (cantidad_objetos != 5));
     if (cantidad_objetos == 5)
     {
-        std::cout << "Ya no pudes agregar mas objetos.\n";
-        std::cout << "La mochila del personaje " << personaje_a_llenar->nombre << " se lleno correctamente. ";
+        cout << "Ya no pudes agregar mas objetos.\n";
+        cout << "La mochila del personaje " << personaje_a_llenar->nombre << " se lleno correctamente. ";
     }
 }
 
@@ -614,36 +614,36 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
 {
     if (cantidad_personaje_heroe <= 0)
     {
-        std::cout << "No hay heroes disponibles para elegir.\n";
-        std::cout << "Eleccion de personaje fallida \n";
+        cout << "No hay heroes disponibles para elegir.\n";
+        cout << "Eleccion de personaje fallida \n";
         return;
     }
     if (cantidad_personajes_jugar == 4)
     {
-        std::cout << "Ya tienes la cantidad de personajes maxima.\n";
+        cout << "Ya tienes la cantidad de personajes maxima.\n";
         return;
     }
     if (cantidad_implementos == 0)
     {
-        std::cout << "No hay implementos disponibles para equipar a los heroes.\n";
-        std::cout << "Eleccion de personaje fallida.\n";
+        cout << "No hay implementos disponibles para equipar a los heroes.\n";
+        cout << "Eleccion de personaje fallida.\n";
         return;
     }
 
     int identificador;
     personaje *seleccionado = nullptr;
 
-    std::cout << "Los heroes disponibles son: \n";
+    cout << "Los heroes disponibles son: \n";
     mostrar_personajes(heroes, 2);
-    std::cout << "Coloque el ID del heroe que desea agregar al equipo: ";
+    cout << "Coloque el ID del heroe que desea agregar al equipo: ";
     identificador = obtener_entero("");
 
     seleccionado = encontrar_personaje(heroes, identificador);
 
     if (seleccionado == nullptr)
     {
-        std::cout << "El ID: " << identificador << " no existe.\n";
-        std::cout << "Eleccion de personaje fallida.\n";
+        cout << "El ID: " << identificador << " no existe.\n";
+        cout << "Eleccion de personaje fallida.\n";
         return;
     }
     cantidad_personajes_jugar += 1;
@@ -657,8 +657,8 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     nuevo_para_jugar->mimochila->poderes = nullptr;
     nuevo_para_jugar->siguiente = nullptr;
 
-    std::cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl
-              << endl;
+    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl
+         << endl;
     llenar_mochila(nuevo_para_jugar, implementos, poderes);
 
     // verrr la logica de incertar en un poco diferente a las demas funciones. los pone a final.
@@ -676,7 +676,7 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
         }
         ultimo->siguiente = nuevo_para_jugar;
     }
-    std::cout << "El heroe " << nuevo_para_jugar->nombre << " se agrago al equipo.\n";
+    cout << "El heroe " << nuevo_para_jugar->nombre << " se agrago al equipo.\n";
 }
 
 // para mostrar con copia para no destruir la lista al mometo de mostrar.
@@ -685,66 +685,66 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
     personaje *actual_personaje = lista_personajes_jugar;
     while (actual_personaje != nullptr)
     {
-        std::cout << "Nombre: " << actual_personaje->nombre << endl;
-        std::cout << "   ID: " << actual_personaje->identificador << endl;
-        std::cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl; // Asumiendo que 'tipo' es un puntero a Especie
-        std::cout << "   Vitalidad: " << actual_personaje->vitalidad << endl;
-        std::cout << "   Fortaleza: " << actual_personaje->fortaleza << endl;
+        cout << "Nombre: " << actual_personaje->nombre << endl;
+        cout << "   ID: " << actual_personaje->identificador << endl;
+        cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl; // Asumiendo que 'tipo' es un puntero a Especie
+        cout << "   Vitalidad: " << actual_personaje->vitalidad << endl;
+        cout << "   Fortaleza: " << actual_personaje->fortaleza << endl;
 
         // para la mochila.
-        std::cout << "Objetos de la mochila: " << endl;
+        cout << "Objetos de la mochila: " << endl;
 
         Implemento *actual_implemento = actual_personaje->mimochila->implementos;
-        std::cout << "  Implementos: ";
+        cout << "  Implementos: ";
         if (actual_implemento == nullptr)
         {
-            std::cout << "La mochila esta vacia" << endl; // Antes decia "ninguno". Verificar
+            cout << "La mochila esta vacia" << endl; // Antes decia "ninguno". Verificar
         }
         else
         {
-            std::cout << endl;
+            cout << endl;
             while (actual_implemento != nullptr)
             {
-                std::cout << "    - " << actual_implemento->nombre_implemento << endl;
+                cout << "    - " << actual_implemento->nombre_implemento << endl;
                 actual_implemento = actual_implemento->siguiente;
             }
         }
 
         // Mostrar poderes de la mochila
         Poder_magico *actual_poder = actual_personaje->mimochila->poderes;
-        std::cout << "  Poderes Magicos: ";
+        cout << "  Poderes Magicos: ";
         if (actual_poder == nullptr)
         {
-            std::cout << "Ninguno" << endl;
+            cout << "Ninguno" << endl;
         }
         else
         {
-            std::cout << endl;
+            cout << endl;
             while (actual_poder != nullptr)
             {
-                std::cout << "    - " << actual_poder->nombre_poder << endl;
+                cout << "    - " << actual_poder->nombre_poder << endl;
                 actual_poder = actual_poder->siguiente;
             }
         }
-        std::cout << endl;
+        cout << endl;
         actual_personaje = actual_personaje->siguiente; // Pasa al siguiente personaje
     }
-    std::cout << "\n No hay mas personajes en el equipo\n\n ";
+    cout << "\n No hay mas personajes en el equipo\n\n ";
 }
 
 void eliminar_personaje_jugar(personaje *&lista_jugar)
 {
     if (cantidad_personajes_jugar == 0)
     {
-        std::cout << "No hay personajes disponibles para eliminar. \n";
-        std::cout << "Eliminacion fallida.\n";
+        cout << "No hay personajes disponibles para eliminar. \n";
+        cout << "Eliminacion fallida.\n";
         return;
     }
 
     int identificador = 0;
-    std::cout << "Los personajes en el equipo son: \n";
+    cout << "Los personajes en el equipo son: \n";
     mostrar_personajes_jugar(lista_jugar);
-    std::cout << "Coloque el ID del personaje que desea eliminar: ";
+    cout << "Coloque el ID del personaje que desea eliminar: ";
     identificador = obtener_entero("");
 
     personaje *actual = lista_jugar;
@@ -787,14 +787,14 @@ void eliminar_personaje_jugar(personaje *&lista_jugar)
             anterior->siguiente = actual->siguiente;
         }
 
-        std::cout << "Eliminacion del personaje " << actual->nombre << " exitosa.\n";
+        cout << "Eliminacion del personaje " << actual->nombre << " exitosa.\n";
         delete actual;
         cantidad_personajes_jugar--;
     }
     else
     {
-        std::cout << "El ID " << identificador << " No existe en el equipo. \n";
-        std::cout << "Eliminacion fallida.\n";
+        cout << "El ID " << identificador << " No existe en el equipo. \n";
+        cout << "Eliminacion fallida.\n";
     }
 }
 
@@ -832,15 +832,15 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 {
     if (cantidad_personajes_jugar == 0)
     {
-        std::cout << "No hay personajes en el equipo para modificar\n";
-        std::cout << "Modificacion fallida\n";
+        cout << "No hay personajes en el equipo para modificar\n";
+        cout << "Modificacion fallida\n";
         return;
     }
 
     int identificador;
-    std::cout << "Los personajes que forman parte del equipo son: \n";
+    cout << "Los personajes que forman parte del equipo son: \n";
     mostrar_personajes_jugar(personajes_jugar);
-    std::cout << "Coloque el ID del personaje cuya mochila desea modificar: ";
+    cout << "Coloque el ID del personaje cuya mochila desea modificar: ";
     identificador = obtener_entero("");
 
     personaje *actual = personajes_jugar;
@@ -851,7 +851,7 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 
     if (actual != nullptr)
     {
-        std::cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
+        cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
 
         // Liberamos la memoria de los poderes actuales.
         Implemento *actual_implemento = actual->mimochila->implementos;
@@ -875,11 +875,11 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 
         // se llama a la funcion llenar mochila.
         llenar_mochila(actual, Implementos, poderes);
-        std::cout << "Actualización de la mochila completa para el personaje: " << actual->nombre << endl;
+        cout << "Actualización de la mochila completa para el personaje: " << actual->nombre << endl;
     }
     else
     {
-        std::cout << "El ID " << identificador << " no existe en el equipo.\n";
-        std::cout << "Modificación fallida.\n";
+        cout << "El ID " << identificador << " no existe en el equipo.\n";
+        cout << "Modificación fallida.\n";
     }
 }
