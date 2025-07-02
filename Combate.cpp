@@ -304,15 +304,7 @@ void combate(sala* sala_actual) {
                     Implemento* cura_seleccionada = curas[opcion];
                     heroe_actual->vitalidad += cura_seleccionada->valor;
                 
-                    Implemento** pp = &(heroe_actual->mimochila->implementos);//Eliminar después de usarlo
-                    while (*pp != nullptr) {
-                        if (*pp == cura_seleccionada) {
-                            *pp = cura_seleccionada->siguiente;
-                            delete cura_seleccionada;
-                            break;
-                        }
-                        pp = &((*pp)->siguiente);
-                    }
+                    //AQUI DEBE DE IR LA ELIMINACION DE LA CURA UTILIZADA
 
                     cout << "\nHas usado " << cura_seleccionada->nombre_implemento << "!\n";
                     cout << "Has recuperado " << cura_seleccionada->valor << " puntos de vida.\n";
