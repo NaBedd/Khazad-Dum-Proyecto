@@ -177,7 +177,7 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
 
             cout << "\nEs el turno de " << heroe_actual->nombre << ":\n";
             cout << "1. Atacar\n";
-            cout << "2. Defender\n";
+            cout << "2. Huir\n";
             cout << "3. Usar poder mágico\n";
             cout << "4. Curar\n";
             if (puede_huir)
@@ -195,8 +195,9 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
 
                 if (!orco_objetivo)
                 {
-                    cout << "No hay orcos vivos para atacar.\n";
+                    cout << "Se acabó el combate, has ganado!!!.\n";
                     accion_realizada = false;
+                    combate_terminado=true;
                     break;
                 }
 
@@ -206,7 +207,7 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
                 Implemento *impl = heroe_actual->mimochila->implementos;
                 int contador = 1;
 
-                cout << "\nArmas disponibles:\n";
+                cout<<heroe_actual->nombre<< "tiene las siguientes armas para atacar: \n";
                 while (implemento != nullptr)
                 {
                     if (impl->tipo_implemento == "Ataque" &&
@@ -214,8 +215,8 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
                     {
                         cout << contador << ". " << implemento->nombre_implemento;
                         cout << " Daño: " << implemento->valor;
-                        cout << ", Coste Fortaleza: " << implemento->fortalezanecesaria;
-                        cout << ", Usos: " << implemento->usos << "\n";
+                        cout << ", Fortaleza necesaria para usarla: " << implemento->fortalezanecesaria;
+                        cout << ", Usos disponbiles: " << implemento->usos << "\n";
                         armas.push_back(implemento);
                         contador++;
                     }
@@ -230,11 +231,14 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
                 }
 
                 int opcion_arma;
-                int num_armas = armas.size();
+                int numero_armas = armas.size();
                 do
                 {
                     opcion_arma = obtener_entero("\nSelecciona un arma: ") - 1;
-                } while (opcion_arma < 0 || opcion_arma >= num_armas);
+                    if(armas[opcion_arma]->usos==0){
+                        cout<<"No puedes utilizar esta arma, ya no le quedan más usos!";
+                    }
+                } while (opcion_arma < 0 || opcion_arma >= numero_armas && armas[opcion_arma]->usos==0);
 
                 Implemento *arma = armas[opcion_arma];
 
@@ -243,13 +247,13 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
                 heroe_actual->fortaleza -= arma->fortalezanecesaria;
                 arma->usos--;
 
-                cout << "Usa " << arma->nombre_implemento << " e inflige " << dano << " puntos de daño.\n";
-                cout << "Gasta " << arma->fortalezanecesaria << " puntos de fortaleza.\n";
+                cout << "Usaste " << arma->nombre_implemento << " e inflige " << dano << " puntos de daño.\n";
+                cout << "Gastaste " << arma->fortalezanecesaria << " puntos de fortaleza.\n";
 
                 // se elimina orco derrotado
                 if (orco_objetivo->vitalidad <= 0)
                 {
-                    cout << orco_objetivo->nombre << " ha sido derrotado!\n";
+                    cout << heroe_actual->nombre <<"Ha matado al orco "<<orco_objetivo->nombre<<"!\n";
                     auto orco_it = find(sala_actual->lista_orcos.begin(), sala_actual->lista_orcos.end(), orco_objetivo);
                     if (orco_it != sala_actual->lista_orcos.end())
                     {
@@ -258,3 +262,61 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
                 }
                 break;
             }
+        }
+    }
+}
+            case 2: //Huir
+            {
+                if(puede_huir!=true){
+                    cout<<"NO ESTÁ PERMITIDO HUIR\n";
+                }
+                break;
+
+
+            }
+            case 3: //Usar poder mágico
+            {
+              //Aquí se debe iterar en los poderes del héroe actual y aplicar la funcion correspondiente
+            }
+            case 4: //Curarse
+            {
+                vector<Implemento *> curas;
+                Implemento *impl = heroe_actual->mimochila->implementos;
+                int contador = 1;
+
+                cout<<heroe_actual->nombre<< "tiene los siguientes elementos para curarse para atacar: \n";
+                while (implemento != nullptr)
+                {
+                    if (impl->tipo_implemento == "Cura")
+                    {
+                        cout << contador << ". " << implemento->nombre_implemento;
+                        cout << " Cura de : " << implemento->valor <<"\n";
+                        armas.push_back(implemento);
+                        contador++;
+                    }
+                    impl = impl->siguiente;
+                }
+
+                if (curas.empty())
+                {
+                    cout << "No tiene nada que lo pueda curar.\n";
+                    accion_realizada = false;
+                    break;
+                }
+
+                int opcion_cura;
+                int numero_curas = curas.size();
+                do
+                {
+                    opcion_cura = obtener_entero("\nSelecciona una cura: ") - 1;
+                } while (opcion_cura < 0 || opcion_cura >= numero_cura );
+
+                Implemento *cura = curas[opcion_cura];
+
+                int curacion ;//AQUÍ VA CURA->ELDATOQUECONTIENELACURACION 
+                heroe_actual->vitalidad += curacion;
+
+                cout << "Usaste " << //CURA->NOMBRE << " para curarte \n";
+                cout << "Ahora " << heroe_actual->nombre<< "tiene " << heroe_actual->vitalidad << " puntos de vida.\n";
+            }
+}
