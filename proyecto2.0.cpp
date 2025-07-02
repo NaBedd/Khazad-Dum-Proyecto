@@ -108,6 +108,5 @@ int main()
     destruir_grafo(grafo);
 
     cout << "Gracias por usar el programa. \n";
-    return;
 }
 // fin del programa.

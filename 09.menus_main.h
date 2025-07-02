@@ -227,7 +227,7 @@ void menu_poderes_magicos() // Case 4 del main
             cout << "\nSaliendo al Menu Principal... \n";
             break;
         case 6:
-            Poder1(lista_implementos);
+            Poder1(&lista_implementos);
             break;
         default:
             cout << "Invalido. Ingrese una opcion valida \n";
