@@ -260,7 +260,7 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
                         sala_actual->lista_orcos.erase(orco_it);
                     }
                 }
-                break;
+            break;
             }
         }
     }
@@ -276,7 +276,68 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
             }
             case 3: //Usar poder mágico
             {
-              //Aquí se debe iterar en los poderes del héroe actual y aplicar la funcion correspondiente
+              // Listar los poderes disponibles del héroe
+                cout << "\nPoderes mágicos disponibles para " << heroe_actual->nombre << ":\n";
+                Poder_magico *poder = heroe_actual->mimochila->poderes;
+                int contador_poder = 1;
+                
+                while (poder != nullptr)
+                {
+                    cout << contador_poder << ". " << poder->nombre_poder << " - " << poder->funcion << "\n";
+                    poder = poder->siguiente;
+                    contador_poder++;
+                }
+                
+                if (contador_poder == 1)
+                {
+                    cout << "No tienes poderes mágicos disponibles.\n";
+                    accion_realizada = false;
+                    break;
+                }
+                
+                int opcion_poder = obtener_entero("\nSelecciona un poder mágico: ") - 1;
+                
+                // Obtener el poder seleccionado
+                poder = heroe_actual->mimochila->poderes;
+                for (int i = 0; i < opcion_poder && poder != nullptr; i++)
+                {
+                    poder = poder->siguiente;
+                }
+                
+                if (poder == nullptr)
+                {
+                    cout << "Poder no válido.\n";
+                    accion_realizada = false;
+                    break;
+                }
+                
+                if (poder->nombre_poder == "Poder1") // Nombre del primer poder
+                {
+                    Poder1(*heroe_actual->mimochila->implementos);
+                }
+                else if (poder->nombre_poder == "Poder2") // Espacio para el segundo poder
+                {
+                    // Poder2...;
+                    cout << "Poder 2 ejecutado (implementar función)\n";
+                }
+                else if (poder->nombre_poder == "Poder3") // Espacio para el tercer poder
+                {
+                    // Poder3...;
+                    cout << "Poder 3 ejecutado (implementar función)\n";
+                }
+                else if (poder->nombre_poder == "Poder4") // Espacio para el cuarto poder
+                {
+                    // Poder4...;
+                    cout << "Poder 4 ejecutado (implementar función)\n";
+                }
+                else
+                {
+                    cout << "Poder desconocido.\n";
+                    accion_realizada = false;
+                }
+                
+                break;
+}
             }
             case 4: //Curarse
             {
@@ -291,7 +352,7 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
                     {
                         cout << contador << ". " << implemento->nombre_implemento;
                         cout << " Cura de : " << implemento->valor <<"\n";
-                        armas.push_back(implemento);
+                        curas.push_back(implemento);
                         contador++;
                     }
                     impl = impl->siguiente;
@@ -313,10 +374,19 @@ void combate(sala *sala_actual, personaje *equipo_heroes)
 
                 Implemento *cura = curas[opcion_cura];
 
-                int curacion ;//AQUÍ VA CURA->ELDATOQUECONTIENELACURACION 
+                int curacion =cura->valor;
                 heroe_actual->vitalidad += curacion;
 
-                cout << "Usaste " << //CURA->NOMBRE << " para curarte \n";
+                cout << "Usaste " << cura->nombre_implemento<< " para curarte \n";
                 cout << "Ahora " << heroe_actual->nombre<< "tiene " << heroe_actual->vitalidad << " puntos de vida.\n";
+                if (cura)//Se elimina ese implemento cura de la lista de implementos
+                {
+                    auto cura_it = find(sala_actual->heroe_actual->mimochila->implementos.begin(), sala_actual->heroe_actual->mimochila->implementos.end(), cura);
+                    if (cura_it != sala_actual->heroe_actual->mimochila->implementos.end())
+                    {
+                        sala_actual->heroe_actual->mimochila->implementos.erase(orco_it);
+                    }
+                }
+                break;
             }
-}
+    
