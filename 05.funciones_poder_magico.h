@@ -168,20 +168,24 @@ void eliminar_poder(Poder_magico &lista_poder)
     regulador_poderes += 1;
 }
 
-void Poder1(Implemento &lista_implemento)
+void Poder1(Implemento *lista_implementos)
 {
-    if (cantidad_implementos == 0)
+    if (lista_implementos == nullptr)
     {
         cout << "No hay implementos para aplicarles el poder" << endl;
         return;
     }
-    cout << "Modificando todos los implementos..." << endl;
-    Implemento *actual = lista_implemento.siguiente;
+    Implemento *actual = lista_implementos;
+    int modificados = 0;
+    
     while (actual != nullptr)
     {
         actual->valor *= 2;
         actual->fortalezanecesaria = 0;
+        modificados++;
         actual = actual->siguiente;
     }
-    cout << "Se han modificado los implementos exitosamente." << endl;
+    
+    cout << "Se han modificado " << modificados << " implementos exitosamente." << endl;
+    cout << "Todos los implementos ahora tienen el doble de valor y no requieren fortaleza.\n";
 }
