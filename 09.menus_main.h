@@ -1,3 +1,4 @@
+#pragma once
 #include "01.funciones_genericas.h"     // Funciones generales para el programa
 #include "02.funciones_tipos_especie.h" //
 #include "03.funciones_implementos.h"
@@ -7,12 +8,6 @@
 #include "07.funciones_cargar_archivo.h"
 
 // Este archivo tendra todos los menus del main del archivo principal
-
-int opcion_principal = 0; // Opcion para el menu principal
-int opcion_interna = 0;   // Opcion de cada menu interno
-
-int res = 0; // para menu pre-juego
-bool iniciar_juego = false;
 
 // Menu Orcos
 Lista_especie tipoEspecieOrco; // lista enlazada que contiene todos los tipos de orcos.
@@ -34,6 +29,12 @@ personaje *personajes_jugar = nullptr; // aqui estan los 4 personajes que el usu
 // Menu Mapa
 mapaGrafo grafo;
 sala *sala_modificar;
+
+int opcion_principal = 0; // Opcion para el menu principal
+int opcion_interna = 0;   // Opcion de cada menu interno
+
+int res = 0; // para menu pre-juego
+bool iniciar_juego = false;
 
 void menu_orcos() // Case 1 del main
 {
@@ -202,10 +203,6 @@ void menu_poderes_magicos() // Case 4 del main
         cout << "4. Eliminar un poder magico. \n";
         cout << "---------------------\n";
         cout << "5. Salir al menu principal  \n";
-        cout << "6. Usar poder 1 \n";
-        cout << "7. Usar poder 2 \n";
-        cout << "8. Usar poder 3 \n";
-        cout << "9. Usar poder 4 \n";
         cout << "---------------------\n";
         opcion_interna = obtener_opcion();
 
@@ -225,9 +222,6 @@ void menu_poderes_magicos() // Case 4 del main
             break;
         case 5:
             cout << "\nSaliendo al Menu Principal... \n";
-            break;
-        case 6:
-            Poder1(&lista_implementos);
             break;
         default:
             cout << "Invalido. Ingrese una opcion valida \n";

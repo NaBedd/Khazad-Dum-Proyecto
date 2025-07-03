@@ -12,6 +12,7 @@
 #include <climits>   // para int max
 #include <cstdlib>   // Ambas librerias para generar numeros aleatorios
 #include <ctime>
+#include <map>
 
 using namespace std;
 

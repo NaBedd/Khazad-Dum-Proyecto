@@ -170,6 +170,7 @@ void potenciar_implemento(personaje *&aplicar){
 
 int main()
 {
+
     // Semilla aleatoria inicializada (para el num random de orcos)
     srand(time(NULL));
 

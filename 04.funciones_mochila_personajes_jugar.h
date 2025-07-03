@@ -19,8 +19,7 @@ struct personaje
     mochila *mimochila = nullptr;
     string nombre;
     Especie *tipo;
-    // Double porque puede explotar con el poder vigor enano
-    double vitalidad;
+    double vitalidad; // Double para que no explote con vigor enano
     int fortaleza;
     int identificador;
     personaje *siguiente = nullptr;

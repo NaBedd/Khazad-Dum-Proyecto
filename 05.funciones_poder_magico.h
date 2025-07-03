@@ -168,7 +168,10 @@ void eliminar_poder(Poder_magico &lista_poder)
     regulador_poderes += 1;
 }
 
-void Poder1(Implemento *lista_implementos)
+// Poderes del Juego:
+// Vigor Enano esta en el main
+
+void poder_reforzar_implementos(Implemento *lista_implementos)
 {
     if (lista_implementos == nullptr)
     {
@@ -177,7 +180,7 @@ void Poder1(Implemento *lista_implementos)
     }
     Implemento *actual = lista_implementos;
     int modificados = 0;
-    
+
     while (actual != nullptr)
     {
         actual->valor *= 2;
@@ -185,7 +188,7 @@ void Poder1(Implemento *lista_implementos)
         modificados++;
         actual = actual->siguiente;
     }
-    
+
     cout << "Se han modificado " << modificados << " implementos exitosamente." << endl;
     cout << "Todos los implementos ahora tienen el doble de valor y no requieren fortaleza.\n";
 }

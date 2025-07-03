@@ -282,7 +282,7 @@ void carga_salas(mapaGrafo &grafo)
             } while (controlador_colocar != 2);
             fin++;
             controlador_colocar = 0;
-            cout << "la sala " << nueva->nombre << " se agrgo correctamente." << endl;
+            cout << "la sala " << nueva->nombre << " se agrego correctamente." << endl;
             cout << "ID: " << nueva->id << endl;
         }
     }
