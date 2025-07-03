@@ -178,8 +178,8 @@ void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
     case 1: // Pregunta para mostrar las salas. Agrega Adyacencias
     {
         cout << "¿Desea ver todas las salas del mapa?" << endl;
-        cout << "1. Si" << endl;
-        cout << "2. No" << endl;
+        cout << "   1. Si" << endl;
+        cout << "   2. No" << endl;
         resp_interna = obtener_opcion();
         switch (resp_interna) // Para mostrar o no las salas del mapa
         {
@@ -232,8 +232,9 @@ void mostrar_adyacencias(const mapaGrafo &grafo, sala *salaOrigen) // Muestra la
         return;
     }
 
-    cout << salaOrigen->nombre << " tiene como adyacentes: " << endl;
+    cout << "La sala \"" << salaOrigen->nombre << "\" tiene como adyacentes: " << endl;
     cout << "ID.Sala Adyacente" << "   " << "Distancia" << endl;
+    cout << "---------------------" << endl;
     for (arista &adyacente : salaOrigen->lista_adyacentes)
     {
         cout << adyacente.destino->id << "." << adyacente.destino->nombre << "      " << adyacente.distancia << endl;

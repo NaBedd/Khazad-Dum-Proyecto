@@ -53,6 +53,21 @@ string obtener_str_limitado(string &linea)
     return nuevo;
 }
 
+// para encontrar una especie(tipo) por su nombre.
+Especie *encontrar_especie_nombre(Lista_especie lista, string nombre)
+{
+    Especie *actual = lista.primero_especie;
+    while (actual != nullptr)
+    {
+        if (actual->nombre_especie == nombre)
+        {
+            return actual;
+        }
+        actual = actual->siguiente;
+    }
+    return actual = nullptr;
+}
+
 // para cargar el archivo de especies
 void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos)
 {
@@ -61,7 +76,7 @@ void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos)
 
     // Para abrir archivos siempre en escritorio:
     string desktop_path = getenv("USERPROFILE");
-    desktop_path += "\\Desktop\\Personajes.txt";
+    desktop_path += "\\Desktop\\especie.txt";
 
     archivo.open(desktop_path, ios::in);
     // en caso de que no se habra el archivo.
@@ -153,19 +168,200 @@ void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos)
     archivo.close();
 }
 
-// para encontrar una especie(tipo) por su nombre.
-Especie *encontrar_especie_nombre(Lista_especie lista, string nombre)
+// para cargar el archivo de implementos.
+void cargar_implementos(Implemento &lista_implemento)
 {
-    Especie *actual = lista.primero_especie;
-    while (actual != nullptr)
+
+    ifstream archivo;
+    string linea; // guardara una linea de archivo.
+
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\implemento.txt";
+
+    archivo.open(desktop_path, ios::in);
+    if (archivo.fail())
     {
-        if (actual->nombre_especie == nombre)
-        {
-            return actual;
-        }
-        actual = actual->siguiente;
+        cout << "no se pudo habrir el archivo." << endl;
+        return;
     }
-    return actual = nullptr;
+
+    getline(archivo, linea);
+    int controlador = convertir_entero(linea);
+    int fin = 0;
+    int controlador_colocar = 0;
+    while (fin != controlador)
+    {
+        getline(archivo, linea);
+        if (obtener_str_limitado(linea) == "---")
+        {
+            Implemento *nuevo = new Implemento;
+            cantidad_implementos++;
+            do
+            {
+                controlador_colocar++;
+                getline(archivo, linea);
+                if (controlador_colocar == 1)
+                {
+                    nuevo->identificador = convertir_entero(linea);
+                }
+                else if (controlador_colocar == 2)
+                {
+                    nuevo->nombre_implemento = linea;
+                }
+                else if (controlador_colocar == 3)
+                {
+                    nuevo->tipo_implemento = obtener_str_limitado(linea);
+                }
+                else if (controlador_colocar == 4)
+                {
+                    nuevo->fortalezanecesaria = convertir_entero(linea);
+                }
+                else if (controlador_colocar == 5)
+                {
+                    nuevo->valor = convertir_entero(linea);
+                }
+                else if (controlador_colocar == 6)
+                {
+                    nuevo->usos = convertir_entero(linea);
+                    // lo agregamos a la lista enlaada.
+                    nuevo->siguiente = lista_implemento.siguiente;
+                    lista_implemento.siguiente = nuevo;
+                }
+            } while (controlador_colocar != 6);
+
+            fin++;
+            controlador_colocar = 0;
+            cout << "el implemento " << nuevo->nombre_implemento << " se agrego correctamente." << endl;
+        }
+    }
+    cout << "fin " << endl;
+    archivo.close();
+}
+
+void carga_salas(mapaGrafo &grafo)
+{
+    ifstream archivo;
+    string linea; // guardara una linea de archivo.
+
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\salas.txt";
+
+    archivo.open(desktop_path, ios::in);
+    if (archivo.fail())
+    {
+        cout << "no se pudo habrir el archivo." << endl;
+        return;
+    }
+
+    getline(archivo, linea);
+    int controlador = convertir_entero(linea);
+    int fin = 0;
+    int controlador_colocar = 0;
+    while (fin != controlador)
+    {
+        getline(archivo, linea);
+        if (obtener_str_limitado(linea) == "---")
+        {
+            sala *nueva = new sala;
+            do
+            {
+                getline(archivo, linea);
+                controlador_colocar++;
+                if (controlador_colocar == 1)
+                {
+                    nueva->id = convertir_entero(linea);
+                }
+                else if (controlador_colocar == 2)
+                {
+                    nueva->nombre = linea;
+                    grafo.mapa_salas.push_back(nueva);
+                }
+
+            } while (controlador_colocar != 2);
+            fin++;
+            controlador_colocar = 0;
+            cout << "la sala " << nueva->nombre << " se agrgo correctamente." << endl;
+            cout << "ID: " << nueva->id << endl;
+        }
+    }
+    cout << "fin " << endl;
+    archivo.close();
+}
+
+void cargar_adyacencias(mapaGrafo &grafo)
+{
+    ifstream archivo;
+    string linea; // guardara una linea de archivo.
+
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\salas.txt";
+
+    archivo.open(desktop_path, ios::in);
+    if (archivo.fail())
+    {
+        cout << "no se pudo habrir el archivo." << endl;
+        return;
+    }
+
+    getline(archivo, linea);
+    int controlador = convertir_entero(linea);
+    int fin = 0;
+    int id_sala = 0;
+    int id_sala_destino = 0;
+    int peso = 0;
+    string colocar = "";
+
+    string ir_colocando = "";
+    while (fin != controlador)
+    {
+        getline(archivo, linea);
+        if (obtener_str_limitado(linea) == "---")
+        {
+            getline(archivo, linea);
+            id_sala = convertir_entero(linea);
+            sala *nueva = encontrar_sala(grafo, id_sala);
+            sala *destino = nullptr;
+            // ara llegra al la linea donde estan las adyacencias.
+            getline(archivo, linea);
+            getline(archivo, linea);
+            getline(archivo, linea);
+            for (char caracter : linea)
+            {
+                if (caracter == ':')
+                {
+                    id_sala_destino = convertir_entero(colocar);
+                    // buscamos la sala destino.
+                    destino = encontrar_sala(grafo, id_sala_destino);
+                    colocar = "";
+                    continue;
+                }
+                else if (caracter == '|')
+                { // agregamos la adyacencia.
+                    peso = convertir_entero(colocar);
+                    // creamos la adyacencia.
+                    crear_adyacencia(nueva, destino, peso);
+                    colocar = "";
+                    continue;
+                }
+                colocar = colocar + caracter;
+            }
+            // la ultima no se agrega ya que no tine |.
+            if (!colocar.empty() && nueva != nullptr && destino != nullptr)
+            {
+                peso = convertir_entero(colocar);
+                crear_adyacencia(nueva, destino, peso);
+            }
+            fin++;
+            cout << "la sala " << nueva->nombre << " se le colocaron sus adyacencias." << endl;
+            cout << "ID: " << nueva->id << endl;
+            mostrar_adyacencias(grafo, nueva);
+        }
+    }
+    cout << "fin " << endl;
+    archivo.close();
 }
 
 // para acargar el archivo de personajes.
@@ -255,202 +451,6 @@ void cargar_personajes(personaje &lis_heroes, personaje &lis_orco, Lista_especie
                 cout << "el personaje " << nuevo->nombre << " se agrego correctamente." << endl
                      << endl;
             }
-        }
-    }
-    cout << "fin " << endl;
-    archivo.close();
-}
-
-// para cargar el archivo de implementos.
-void cargar_implementos(Implemento &lista_implemento)
-{
-
-    ifstream archivo;
-    string linea; // guardara una linea de archivo.
-
-    // Para abrir archivos siempre en escritorio:
-    string desktop_path = getenv("USERPROFILE");
-    desktop_path += "\\Desktop\\Personajes.txt";
-
-    archivo.open(desktop_path, ios::in);
-    if (archivo.fail())
-    {
-        cout << "no se pudo habrir el archivo." << endl;
-        return;
-    }
-
-    getline(archivo, linea);
-    int controlador = convertir_entero(linea);
-    int fin = 0;
-    int controlador_colocar = 0;
-    while (fin != controlador)
-    {
-        getline(archivo, linea);
-        if (obtener_str_limitado(linea) == "---")
-        {
-            Implemento *nuevo = new Implemento;
-            cantidad_implementos++;
-            do
-            {
-                controlador_colocar++;
-                getline(archivo, linea);
-                if (controlador_colocar == 1)
-                {
-                    nuevo->identificador = convertir_entero(linea);
-                }
-                else if (controlador_colocar == 2)
-                {
-                    nuevo->nombre_implemento = linea;
-                }
-                else if (controlador_colocar == 3)
-                {
-                    nuevo->tipo_implemento = obtener_str_limitado(linea);
-                }
-                else if (controlador_colocar == 4)
-                {
-                    nuevo->fortalezanecesaria = convertir_entero(linea);
-                }
-                else if (controlador_colocar == 5)
-                {
-                    nuevo->valor = convertir_entero(linea);
-                }
-                else if (controlador_colocar == 6)
-                {
-                    nuevo->usos = convertir_entero(linea);
-                    // lo agregamos a la lista enlaada.
-                    nuevo->siguiente = lista_implemento.siguiente;
-                    lista_implemento.siguiente = nuevo;
-                }
-            } while (controlador_colocar != 6);
-
-            fin++;
-            controlador_colocar = 0;
-            cout << "el implemento " << nuevo->nombre_implemento << " se agrego correctamente." << endl;
-        }
-    }
-    cout << "fin " << endl;
-    archivo.close();
-}
-
-void carga_salas(mapaGrafo &grafo)
-{
-    ifstream archivo;
-    string linea; // guardara una linea de archivo.
-
-    // Para abrir archivos siempre en escritorio:
-    string desktop_path = getenv("USERPROFILE");
-    desktop_path += "\\Desktop\\Personajes.txt";
-
-    archivo.open(desktop_path, ios::in);
-    if (archivo.fail())
-    {
-        cout << "no se pudo habrir el archivo." << endl;
-        return;
-    }
-
-    getline(archivo, linea);
-    int controlador = convertir_entero(linea);
-    int fin = 0;
-    int controlador_colocar = 0;
-    while (fin != controlador)
-    {
-        getline(archivo, linea);
-        if (obtener_str_limitado(linea) == "---")
-        {
-            sala *nueva = new sala;
-            do
-            {
-                getline(archivo, linea);
-                controlador_colocar++;
-                if (controlador_colocar == 1)
-                {
-                    nueva->id = convertir_entero(linea);
-                }
-                else if (controlador_colocar == 2)
-                {
-                    nueva->nombre = linea;
-                    grafo.mapa_salas.push_back(nueva);
-                }
-
-            } while (controlador_colocar != 2);
-            fin++;
-            controlador_colocar = 0;
-            cout << "la sala " << nueva->nombre << " se agrgo correctamente." << endl;
-            cout << "ID: " << nueva->id << endl;
-        }
-    }
-    cout << "fin " << endl;
-    archivo.close();
-}
-
-void cargar_adyacencias(mapaGrafo &grafo)
-{
-    ifstream archivo;
-    string linea; // guardara una linea de archivo.
-
-    // Para abrir archivos siempre en escritorio:
-    string desktop_path = getenv("USERPROFILE");
-    desktop_path += "\\Desktop\\Personajes.txt";
-
-    archivo.open(desktop_path, ios::in);
-    if (archivo.fail())
-    {
-        cout << "no se pudo habrir el archivo." << endl;
-        return;
-    }
-
-    getline(archivo, linea);
-    int controlador = convertir_entero(linea);
-    int fin = 0;
-    int id_sala = 0;
-    int id_sala_destino = 0;
-    int peso = 0;
-    string colocar = "";
-
-    string ir_colocando = "";
-    while (fin != controlador)
-    {
-        getline(archivo, linea);
-        if (obtener_str_limitado(linea) == "---")
-        {
-            getline(archivo, linea);
-            id_sala = convertir_entero(linea);
-            sala *nueva = encontrar_sala(grafo, id_sala);
-            sala *destino = nullptr;
-            // ara llegra al la linea donde estan las adyacencias.
-            getline(archivo, linea);
-            getline(archivo, linea);
-            getline(archivo, linea);
-            for (char caracter : linea)
-            {
-                if (caracter == ':')
-                {
-                    id_sala_destino = convertir_entero(colocar);
-                    // buscamos la sala destino.
-                    destino = encontrar_sala(grafo, id_sala_destino);
-                    colocar = "";
-                    continue;
-                }
-                else if (caracter == '|')
-                { // agregamos la adyacencia.
-                    peso = convertir_entero(colocar);
-                    // creamos la adyacencia.
-                    crear_adyacencia(nueva, destino, peso);
-                    colocar = "";
-                    continue;
-                }
-                colocar = colocar + caracter;
-            }
-            // la ultima no se agrega ya que no tine |.
-            if (!colocar.empty() && nueva != nullptr && destino != nullptr)
-            {
-                peso = convertir_entero(colocar);
-                crear_adyacencia(nueva, destino, peso);
-            }
-            fin++;
-            cout << "la sala " << nueva->nombre << " se le colocaron sus adyacencias." << endl;
-            cout << "ID: " << nueva->id << endl;
-            mostrar_adyacencias(grafo, nueva);
         }
     }
     cout << "fin " << endl;
