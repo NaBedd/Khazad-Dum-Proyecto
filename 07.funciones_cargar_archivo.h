@@ -59,8 +59,11 @@ void cargar_especies(Lista_especie &tipos_herores, Lista_especie &tipos_orcos)
     ifstream archivo;
     string linea; // guardara una linea de archivo.
 
-    // aqui se coloca la direccion del archivo.
-    archivo.open("C:/estructura de datos/proyecto/especie.txt", ios::in);
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\Personajes.txt";
+
+    archivo.open(desktop_path, ios::in);
     // en caso de que no se habra el archivo.
     if (archivo.fail())
     {
@@ -173,7 +176,11 @@ void cargar_personajes(personaje &lis_heroes, personaje &lis_orco, Lista_especie
     ifstream archivo;
     string linea; // guardara una linea de archivo.
 
-    archivo.open("C:/estructura de datos/proyecto/Personajes.txt", ios::in);
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\Personajes.txt";
+
+    archivo.open(desktop_path, ios::in);
     if (archivo.fail())
     {
         cout << "no se pudo habrir el archivo." << endl;
@@ -261,7 +268,11 @@ void cargar_implementos(Implemento &lista_implemento)
     ifstream archivo;
     string linea; // guardara una linea de archivo.
 
-    archivo.open("C:/estructura de datos/proyecto/implemento.txt", ios::in);
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\Personajes.txt";
+
+    archivo.open(desktop_path, ios::in);
     if (archivo.fail())
     {
         cout << "no se pudo habrir el archivo." << endl;
@@ -326,7 +337,11 @@ void carga_salas(mapaGrafo &grafo)
     ifstream archivo;
     string linea; // guardara una linea de archivo.
 
-    archivo.open("C:/estructura de datos/proyecto/salas.txt", ios::in);
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\Personajes.txt";
+
+    archivo.open(desktop_path, ios::in);
     if (archivo.fail())
     {
         cout << "no se pudo habrir el archivo." << endl;
@@ -373,7 +388,11 @@ void cargar_adyacencias(mapaGrafo &grafo)
     ifstream archivo;
     string linea; // guardara una linea de archivo.
 
-    archivo.open("C:/estructura de datos/proyecto/salas.txt", ios::in);
+    // Para abrir archivos siempre en escritorio:
+    string desktop_path = getenv("USERPROFILE");
+    desktop_path += "\\Desktop\\Personajes.txt";
+
+    archivo.open(desktop_path, ios::in);
     if (archivo.fail())
     {
         cout << "no se pudo habrir el archivo." << endl;
