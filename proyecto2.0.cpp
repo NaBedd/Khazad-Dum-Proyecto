@@ -17,6 +17,8 @@
 
 // Funcion declarada aqui porque sino daba error
 // Sepa Dios por que
+//1) Poder MÃ¡gico que permite a todos los enanos recuperar su salud y 
+//hacer que aumente su salud en 100 y su fortaleza en 1000
 void poder_vigor_enano(personaje *lista_personajes_jugar)
 {
     // Creacion del poder magico:
@@ -60,6 +62,102 @@ void poder_vigor_enano(personaje *lista_personajes_jugar)
     {
         std::cout << "No hay personajes Enanos en el equipo" << endl;
     }
+}
+
+//2)Poder MÃ¡gico que dado dos salas traslada los orcos de la primera sala a la segunda
+//vaciandolos de orcos
+void cambiar_pos_orco_sala(){
+    sala *sala_1=nullptr;
+    sala *sala_2=nullptr;
+    int id;
+    cout <<"has utilozado el poder numero: 2"<<endl;
+    cout<<"las salas disponibles son: ";
+    mostrar_salas_grafo(grafo);
+    cout<<"Coloque el ID de la sala inicio: ";
+    id=obtener_entero("");
+    sala_1 = encontrar_sala(grafo,id);
+    if (sala_1 == nullptr){
+        cout << "la sala con ID:"<<id<<" no existe"<<endl;
+        cout <<"mal uso del poder."<<endl;
+        return;
+    }
+    cout<<"Coloque el ID de la sala destino: ";
+    id=obtener_entero("");
+    sala_2 = encontrar_sala(grafo,id);
+    cout<<"aplicando poder.."<<endl;
+    for (int i=0; i < sala_1->lista_orcos.size(); i++){
+        // le pasamos todos los orcos a la sala.
+        cout<<"Transfiriendo: "<<sala_1->lista_orcos[i]->nombre<<endl;
+        sala_2->lista_orcos.push_back(sala_1->lista_orcos[i]);
+    }
+    //vaciando la sala origen.
+    sala_1->lista_orcos.clear(); // Esto vacía el vector
+    cout <<"Poder aplicado exitosamente."<<endl;    
+    return;
+}
+//3) Poder MÃ¡gigo que hace que todos los orcos de una sala tengan 1 de salud
+void salud_0_sala(){
+    int id;
+    cout <<"las salas actuales son: "<<endl;
+    mostrar_salas_grafo(grafo);
+    cout <<"cololque el ID de la sala para aplicaar el poder: "; 
+    id=obtener_entero("") ;
+    sala *aplicar=encontrar_sala(grafo,id);
+    if (aplicar == nullptr){
+        cout << "la sala con ID:"<<id<<" no existe"<<endl;
+        cout <<"mal uso del poder."<<endl;
+        return;
+    }
+    cout <<"aplicando.."<<endl;
+    for (size_t i=0; i < aplicar->lista_orcos.size(); i++)
+    {
+        aplicar->lista_orcos[i]->vitalidad = 1;
+        cout<<"NOMBRE: "<<aplicar->lista_orcos[i]->nombre<<" - Vitalidad: "<<aplicar->lista_orcos[i]->vitalidad<<endl;
+    }
+    cout <<"Poder aplicado exitosamente."<<endl;    
+    return;
+}
+
+//4) Poder MÃ¡gico que hace que todo ataque de un implemento se duplique y 
+//la fortaleza para usarlo se reduzca a 0
+void potenciar_implemento(personaje *&aplicar){
+    int id;
+    cout << "Los implementos disponibles son: "<<endl;
+    Implemento *actual_implemento = aplicar->mimochila->implementos;
+    cout << "  Implementos: ";
+    if (actual_implemento == nullptr)
+    {
+        cout << "La mochila esta vacia" << endl; // Antes decia "ninguno". Verificar
+        cout <<"mal uso del poder."<<endl;
+        return;
+    
+    }
+    else
+    {
+        cout << endl;
+        while (actual_implemento != nullptr)
+        {
+            cout <<"ID:"<<actual_implemento->identificador<< " - " << actual_implemento->nombre_implemento << endl;
+            actual_implemento = actual_implemento->siguiente;
+        }
+    }
+    cout <<"coloque el ID del implemeto a aplicar el poder: ";
+    id=obtener_entero("");
+    actual_implemento = aplicar->mimochila->implementos;
+    while (actual_implemento != nullptr){
+        if (actual_implemento->identificador == id){
+            actual_implemento->fortalezanecesaria=0;
+            actual_implemento->valor = (actual_implemento->valor * 2);
+            cout<<"aplicando.."<<endl;
+            cout<<"fortaleza necesaria: "<<actual_implemento->fortalezanecesaria<<endl;
+            cout<<"valor: "<<actual_implemento->valor<<endl;
+            cout <<"Poder aplicado exitosamente."<<endl;    
+            return;
+        }        
+    }
+    cout << "El implemento con ID:"<<id<<" no existe"<<endl;
+    cout <<"mal uso del poder."<<endl;
+    return;    
 }
 
 //-----------------------------------------------------------------------------------------------------
