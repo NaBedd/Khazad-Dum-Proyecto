@@ -2,7 +2,7 @@
 
 ### Pendiente:
 
-- [x ] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
+- [x] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
 - [ ] Hacer movimiento de Heroes y Orcos
 - [ ] Designar spawn de Orcos
 - [ ] Implementar movimiento de Orcos Dijkstra
