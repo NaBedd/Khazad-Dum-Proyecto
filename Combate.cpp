@@ -381,8 +381,16 @@ void combateheroes(sala *sala_actual)
                 break;
             }
         }
-        if (combate_terminado)
+        if (sala_actual->lista_orcos.empty()) {
+            cout << "Todos los orcos han sido derrotados!, ganaron los heroes\n";
+            combate_terminado = true;
+            break;  
+        } 
+        else if (sala_actual->lista_heroes.empty()) {
+            cout << "Todos los heroes han sido derrotados!, ganaron los orcos\n";
+            combate_terminado = true;
             break;
+        }
 
         // TURNO DE LOS ORCOS
         cout << "\n=== TURNO " << turno << " ORCOS ===\n";
@@ -472,6 +480,17 @@ void combateheroes(sala *sala_actual)
                 cout << "Todos los heroes han sido derrotados!\n";
                 combate_terminado = true;
             }
+        }
+
+        if (sala_actual->lista_orcos.empty()) {
+            cout << "Todos los orcos han sido derrotados!, ganaron los heroes\n";
+            combate_terminado = true;
+            break;  
+        } 
+        else if (sala_actual->lista_heroes.empty()) {
+            cout << "Todos los heroes han sido derrotados!, ganaron los orcos\n";
+            combate_terminado = true;
+            break;
         }
 
         turno++;
@@ -579,8 +598,16 @@ void combateorcos(sala *sala_actual){
             }
         }
 
-        if (combate_terminado)
+        if (sala_actual->lista_orcos.empty()) {
+            cout << "Todos los orcos han sido derrotados!, ganaron los heroes\n";
+            combate_terminado = true;
+            break;  
+        } 
+        else if (sala_actual->lista_heroes.empty()) {
+            cout << "Todos los heroes han sido derrotados!, ganaron los orcos\n";
+            combate_terminado = true;
             break;
+        }
 
         cout << "=== TURNO " << turno << " HEROES ===\n";
 
@@ -808,6 +835,16 @@ void combateorcos(sala *sala_actual){
                 cout << "Opcion invalida\n";
                 break;
             }
+        }
+        if (sala_actual->lista_orcos.empty()) {
+            cout << "Todos los orcos han sido derrotados!, ganaron los heroes\n";
+            combate_terminado = true;
+            break;  
+        } 
+        else if (sala_actual->lista_heroes.empty()) {
+            cout << "Todos los heroes han sido derrotados!, ganaron los orcos\n";
+            combate_terminado = true;
+            break;
         }
 
         turno++;
