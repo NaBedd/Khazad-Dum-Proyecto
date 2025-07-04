@@ -171,7 +171,7 @@ void eliminar_poder(Poder_magico &lista_poder)
 // Poderes del Juego:
 // Vigor Enano esta en el main
 
-void poder_reforzar_implementos(Implemento *lista_implementos)
+void Poder1(Implemento *lista_implementos)
 {
     if (lista_implementos == nullptr)
     {
