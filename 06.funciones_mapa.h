@@ -1,6 +1,8 @@
 #pragma once
 #include "01.funciones_genericas.h" // Funciones generales para el programa
 
+// ACOMODAR EL "Retornando..." PENSAR EN ALGO MAS BONITO Y GENERICO
+
 // Mapa
 struct sala;
 struct arista;
@@ -90,7 +92,7 @@ sala *verificar_existencia_sala(const mapaGrafo &grafo, string mensaje) // Funci
     if (!sala_buscar) // Si la sala es igual a null (no existe):
     {
         cout << "La sala no existe" << endl;
-        cout << "Saliendo al menu principal..." << endl;
+        cout << "Retornando..." << endl;
         return sala_buscar;
     }
     return sala_buscar;
@@ -108,6 +110,40 @@ void mostrar_salas_grafo(const mapaGrafo &grafo) // Mostrar el grafo completo
         cout << salaActual->id << "." << salaActual->nombre << endl;
     }
     cout << endl;
+}
+
+void preguntar_mostrar_salas(const mapaGrafo &grafo) // Pregunta al usuario si desea ver todas las salas del mapa
+{
+    int resp_interna;
+
+    if (grafo_vacio(grafo))
+    {
+        return;
+    }
+
+    cout << "¿Desea ver todas las salas del mapa?" << endl;
+    cout << "1. Si" << endl;
+    cout << "2. No" << endl;
+    resp_interna = obtener_opcion();
+    switch (resp_interna) // Para mostrar o no las salas del mapa
+    {
+    case 1: // Muestra las salas del mapa
+    {
+        cout << "-------------- Salas Del Juego --------------" << endl;
+        mostrar_salas_grafo(grafo);
+        break;
+    }
+    case 2: // No muestra las salas
+    {
+        cout << "No se mostraran las salas del mapa" << endl;
+        break;
+    }
+    default: // Default
+    {
+        cout << "Ingrese una opcion valida" << endl;
+        break;
+    }
+    }
 }
 
 void crear_adyacencia(sala *salaOrigen, sala *salaDestino, int distancia) // Crea una adyacencia
@@ -219,7 +255,7 @@ void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
     }
 }
 
-void mostrar_adyacencias(const mapaGrafo &grafo, sala *salaOrigen) // Muestra las adyacencias de la sala origen
+void mostrar_adyacencias(sala *salaOrigen) // Muestra las adyacencias de la sala origen
 {
     if (grafo_vacio(grafo))
     {
@@ -434,7 +470,7 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
 
     do
     {
-        mostrar_adyacencias(grafo, sala_editar);
+        mostrar_adyacencias(sala_editar);
         cout << "Menu de Adyacencias" << endl;
         cout << "---------------------" << endl;
         cout << "1. Crear nueva adyacencia" << endl;
@@ -465,9 +501,9 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             crear_adyacencia(sala_editar, nuevaAdyacencia, distanciaNuevaAdyacencia);
             break;
         }
-        case 2:
+        case 2: // Mostrar adyacencias
         {
-            mostrar_adyacencias(grafo, sala_editar);
+            mostrar_adyacencias(sala_editar);
             break;
         }
         case 3: // Borrar Adyacencia

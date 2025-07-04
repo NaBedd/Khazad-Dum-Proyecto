@@ -11,13 +11,13 @@
 #include "09.menus_main.h" // Todos los menus del main
 
 /*Falta:
-    -Logica para designar sala spawn orcos
     -Movimiento Heroes
-    -Movimiento Orcos
     -Turnos de movimiento(turnos fuera de combate)
     -Aparicion de la puerta magica
         -Que la puerta se mueva
-*/
+    Debo de programar TurnoFueraCombate, para controlar el movimiento de la puerta magica y la aparicion de orcos
+    La energia se les va a recuperar por cada TURNO no por sala movida
+    */
 
 // Dijkstra. Encuentra los caminos mas cortos desde el nodo X a todos los demas
 
@@ -54,7 +54,7 @@ void eliminarNodoPendiente(mapaGrafo &pendientes, sala *nodoEliminar)
     }
 }
 
-vector<int> dijkstra(sala *nodoInicial, const mapaGrafo &grafo)
+vector<int> dijkstra(sala *nodoInicial, const mapaGrafo &grafo) // Dijkstra. Devuelve la lista de pesos
 {
     // Inicializacion de variables
     mapaGrafo pendientesVisitar;
@@ -97,6 +97,23 @@ vector<int> dijkstra(sala *nodoInicial, const mapaGrafo &grafo)
         visitados[actual->id] = true;
     }
     return lista_pesos;
+}
+
+personaje *encontrar_heroe_lento(sala *sala_actual) // Devuelve el heroe mas lento
+{
+
+    personaje *heroe_lento = nullptr;
+    int velocidad_minima = INT_MAX;
+
+    for (personaje *heroe_actual : sala_actual->lista_heroes)
+    {
+        if (heroe_actual && heroe_actual->velocidad < velocidad_minima)
+        {
+            velocidad_minima = heroe_actual->velocidad;
+            heroe_lento = heroe_actual;
+        }
+    }
+    return heroe_lento;
 }
 
 sala *designar_sala_spawn_heroes(const mapaGrafo &grafo) // Spawnean en sala random
@@ -267,5 +284,156 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
 
         // Se agrega a la sala
         sala_spawn_orcos->lista_orcos.push_back(nuevo_orco);
+    }
+}
+
+void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Turno de movimiento de orcos
+{
+    // Se moveran un maximo de 5 orcos, los mas cercanos a los heroes
+    //    Se moveran entre 1 y 5 orcos pq son tontos
+
+    vector<sala *> salas_con_orcos; // Vector que almacena todas las salas donde hay orcos
+    sala *sala_mas_cercana;
+    vector<int> lista_adyacencias;
+    sala *sala_moverse;
+    int distancia_minima = INT_MAX;            // Se declara como infinito
+    int cant_orcos_moverse = (rand() % 5) + 1; // Cantidad de orcos a mover (entre 1 y 5)
+
+    for (sala *actual : grafo.mapa_salas) // Agrega todas las salas con orcos a la lista
+    {
+        if (!actual->lista_orcos.empty())
+        {
+            salas_con_orcos.push_back(actual);
+        }
+    }
+    /* Una vez que ya tengo todas las salas donde hay orcos,
+    Decido cual de ellos se movera*/
+
+    for (sala *actual : salas_con_orcos) // Elegir que sala de Orcos se movera
+    {
+        lista_adyacencias = dijkstra(actual, grafo);
+        if (lista_adyacencias[sala_heroes->id] < distancia_minima && actual != sala_heroes) // No movera a los orcos en sala heroes
+        {
+            distancia_minima = lista_adyacencias[sala_heroes->id];
+            sala_mas_cercana = encontrar_sala(grafo, actual->id);
+        }
+    }
+
+    // Decidir hacia donde se moveran los orcos de la sala elegida
+    if (sala_mas_cercana && sala_mas_cercana != sala_heroes) // Comprueba que exista y no esten ya en donde los heroes
+    {
+        lista_adyacencias = dijkstra(sala_mas_cercana, grafo);
+        distancia_minima = INT_MAX;
+
+        // Busca el adyacente que esté más cerca de los héroes
+        for (const arista &vecino : sala_mas_cercana->lista_adyacentes)
+        {
+            if (lista_adyacencias[vecino.destino->id] < distancia_minima)
+            {
+                distancia_minima = lista_adyacencias[vecino.destino->id];
+                sala_moverse = vecino.destino;
+            }
+        }
+
+        // Mover a los orcos a las salas seleccionadas
+        for (int i = 0; i < cant_orcos_moverse; i++) // En funcion de la cantidad de orcos a mover
+        {
+            if (!sala_mas_cercana->lista_orcos.empty()) // Mientras la lista no este vacia:
+            {
+                sala_moverse->lista_orcos.push_back(sala_mas_cercana->lista_orcos[0]);
+                sala_mas_cercana->lista_orcos.erase(sala_mas_cercana->lista_orcos.begin());
+            }
+        }
+    }
+}
+
+void movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimiento de heroes
+{
+    // OJO, la funcion NO comprueba que haya o no heroes en la sala
+    // Eso se deberia comprobar en la funcion de Turno General (heroes y orcos)
+
+    personaje *heroe_lento;
+    sala *sala_destino;
+    heroe_lento = encontrar_heroe_lento(sala_origen);
+    int energia_restante = heroe_lento->velocidad;
+
+    cout << "Los heroes se encuentran en: " << sala_origen->nombre << endl;
+    cout << "Pueden recorrer " << energia_restante << "km de distancia" << endl;
+
+    mostrar_adyacencias(sala_origen);
+    cout << "\n";
+
+    while (energia_restante > 0) // Ejecutar mientras los heroes no se hayan movido
+    {
+        bool pueden_moverse = false;
+
+        // 1. Verifica si hay salas a donde moverse:
+        for (arista actual : sala_origen->lista_adyacentes)
+        {
+            if (energia_restante >= actual.distancia)
+            {
+                pueden_moverse = true;
+                break;
+            }
+        }
+        if (!pueden_moverse) // Basicamente, el caso base
+        {
+            cout << "Los heroes estan muy cansados como para ir a otra sala" << endl;
+            cout << "Los heroes se quedaron dormidos en el camino... " << endl;
+            break;
+        }
+
+        // 2. Como SI hay a donde moverse, le pregunta al usuario
+        cout << "Indique a que sala se desea mover " << endl;
+        cout << "Ingrese 0 para cancelar el turno de movimiento" << endl;
+        int entrada_usuario = obtener_entero("Sala: ");
+        if (entrada_usuario == 0)
+        {
+            cout << "El jugador ha decidido no moverse." << endl;
+            cout << "Turno cancelado" << endl;
+            return;
+        }
+
+        sala_destino = encontrar_sala(grafo, entrada_usuario);
+        if (!sala_destino) // Comprueba que la sala exista
+        {
+            cout << "La sala no existe. Indique una opcion valida" << endl;
+            continue;
+        }
+
+        // 3. Buscar distancia de Origen a Destino
+        int distancia = -1;
+        for (arista actual : sala_origen->lista_adyacentes) // Obtiene la distancia de origen a destino
+        {
+            if (actual.destino == sala_destino)
+            {
+                distancia = actual.distancia;
+                break;
+            }
+        }
+        if (distancia == -1) // Si las salas no estan conectadas:
+        {                    // Si el jugador indica el ID de la sala_origen, si esta conectada consigo misma se podra mover, sino no
+            cout << "La sala indicada no es adyacente" << endl;
+            cout << "Ingrese una sala valida." << endl;
+            continue;
+        }
+        if (distancia > energia_restante) // Si la sala esta muy lejos:
+        {
+            cout << "Los heroes estan muy cansados para ir a " << sala_destino->nombre << endl;
+            cout << "Indique una sala mas cercana." << endl;
+            continue;
+        }
+
+        while (!sala_origen->lista_heroes.empty()) // Traslado de heroes entre salas
+        {
+            personaje *personaje_actual = sala_origen->lista_heroes.front();    // .front() es igual a hacer [0]
+            sala_destino->lista_heroes.push_back(personaje_actual);             // Agrega el personaje[0] a sala_destino
+            sala_origen->lista_heroes.erase(sala_origen->lista_heroes.begin()); // Borra personaje[0] de sala_origen
+        }
+        cout << "Los heroes se han movido de " << sala_origen->nombre << " hacia " << sala_destino->nombre << endl;
+        energia_restante -= distancia;
+        cout << "Energia restante: " << energia_restante << endl;
+
+        sala_origen = sala_destino; // Los heroes ya se movieron, se cambia el origen
     }
 }

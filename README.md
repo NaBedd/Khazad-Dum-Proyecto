@@ -3,9 +3,9 @@
 ### Pendiente:
 
 - [x] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
-- [ ] Hacer movimiento de Heroes y Orcos
-- [ ] Designar spawn de Orcos
-- [ ] Implementar movimiento de Orcos Dijkstra
+- [x] Hacer movimiento de Heroes y Orcos
+- [x] Designar spawn de Orcos
+- [x] Implementar movimiento de Orcos Dijkstra
 - [x] Agregar Print al combate (X Orco tiene Y vida, X Heroe tiene Y vida, etc... despues de un ataque)
 - [ ] a
   - [x] [Heroe] atacó a [Orco]
@@ -20,22 +20,20 @@
 - [ ] Preguntarle al usuario si desea ver TODAS las salas antes de editar, eliminar, etc en el CRUD del Mapa!!!
 - [ ] Añadir los 4 poderes que dijo el profe
 - [ ] Agregar atributo defensa a las especies (orcos y heroes)
-- [ ] Asegurarnos de que NADA explote (numeros grandes)
-- [ ] Arreglar la edicion de Armas y Personajes
+- [x] Asegurarnos de que NADA explote (numeros grandes)
+- [x] Arreglar la edicion de Armas y Personajes
 - [ ] La funcion mostrar listas, las muestra de la ultima a la primera (3→2→1) en vez de (1→2→3)
 - [ ] Funcion para borrar toda la mochila
 
 ### Mapa:
 
-- [ ] Crear movimiento de orcos y heroes (los orcos nacen todos en 1 sola sala)
-  - [ ] Siempre que los orcos se muevan, debe de quedar un minimo remanente en cada sala
-  - [ ] Cantidad minima de orcos debe de moverse (No se podran mover menos de X orcos por turno)
-  - [ ] Si el remanente de orcos en una sala sera menor al minimo permitido cuando se muevan, no se podran mover
-- [ ] Hacer mapa con grafos
-- [ ] Acomodar sistema de mapas: Adyacencias, numero de orcos en sala (lista de orcos)
+- [x] Crear movimiento de orcos y heroes (los orcos nacen todos en 1 sola sala)
+  - [x] Cantidad minima de orcos debe de moverse (No se podran mover menos de X orcos por turno)
+- [x] Hacer mapa con grafos
+- [x] Acomodar sistema de mapas: Adyacencias, numero de orcos en sala (lista de orcos)
 - [ ] El turno se acaba cuando se acaba la energia para moverse entre salas
 - [ ] Asignacion de Puerta Magica
-- [ ] Crear sitio de aparicion aleatorio en el mapa
+- [x] Crear sitio de aparicion aleatorio en el mapa
 
 ### Sistemas y Jugabilidad
 

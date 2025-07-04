@@ -21,6 +21,7 @@ struct personaje
     Especie *tipo;
     double vitalidad; // Double para que no explote con vigor enano
     int fortaleza;
+    int velocidad;
     int identificador;
     personaje *siguiente = nullptr;
 };

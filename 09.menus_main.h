@@ -291,35 +291,7 @@ void menu_mapas() // Case 6 del main
         }
         case 3: // Muestra adyacencias
         {
-            int resp_interna;
-            if (grafo_vacio(grafo))
-            {
-                break;
-            }
-
-            cout << "¿Desea ver todas las salas del mapa?" << endl;
-            cout << "1. Si" << endl;
-            cout << "2. No" << endl;
-            resp_interna = obtener_opcion();
-            switch (resp_interna) // Para mostrar o no las salas del mapa
-            {
-            case 1: // Muestra las salas del mapa
-            {
-                cout << "-------------- Salas Del Juego --------------" << endl;
-                mostrar_salas_grafo(grafo);
-                break;
-            }
-            case 2: // No muestra las salas
-            {
-                cout << "No se mostraran las salas del mapa" << endl;
-                break;
-            }
-            default: // Default
-            {
-                cout << "Ingrese una opcion valida" << endl;
-                break;
-            }
-            }
+            preguntar_mostrar_salas(grafo);
 
             // Verifica que exista y muestra adyacencias:
             sala_modificar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala a mostrar adyacencias: ");
@@ -328,6 +300,7 @@ void menu_mapas() // Case 6 del main
         }
         case 4: // Borrar sala
         {
+            preguntar_mostrar_salas(grafo);
             borrar_sala_usuario(grafo);
             break;
         }
@@ -341,29 +314,7 @@ void menu_mapas() // Case 6 del main
                 break;
             }
             cout << "Antes de ingresar el ID de la sala para modificar. " << endl;
-            cout << "¿Desea ver todas las salas del mapa?" << endl;
-            cout << "1. Si" << endl;
-            cout << "2. No" << endl;
-            resp = obtener_opcion();
-            switch (resp)
-            {
-            case 1: // Se muestra todo el mapa
-            {
-                cout << "Salas del mapa: " << endl;
-                mostrar_salas_grafo(grafo);
-                break;
-            }
-            case 2: // No se muestra el mapa
-            {
-                cout << "No se mostraran las salas del mapa" << endl;
-                break;
-            }
-            default: // Si elige una opcion distinta
-            {
-                cout << "Ingrese una opcion valida" << endl;
-                break;
-            }
-            }
+            preguntar_mostrar_salas(grafo);
 
             sala_modificar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala que desea modificar: ");
             editar_sala(grafo, sala_modificar->id);
