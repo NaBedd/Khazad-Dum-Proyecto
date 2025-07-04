@@ -144,13 +144,13 @@ void Poder4(personaje *heroe, sala *sala_actual)
 {
 }
 
-//CREA UN BOOL QUE SE LLAME PRIMEROORCOS Y PRIMEROHEROES, NO SE LO VAS A PASAR POR PARAMETRO, 
-// ESE CONDICIONAL VA A ESTAR DENTRO DE CADA VEZ QUE SE MUEVAN LOS ORCOS Y CADA VEZ QUE SE MUEVAN LOS HEROES
-//EJEMPLO: IF(PRIMEROORCOS==TRUE&&PRIMEROHEROES==FALSE){
-//combateheroes(sala*sala_actual);}
-//else if(PRIMEROORCOS==FALSE&&PRIMEROHEROES==TRUE){
-//combateorcos(sala*sala_actual;}
-//else continue;
+// CREA UN BOOL QUE SE LLAME PRIMEROORCOS Y PRIMEROHEROES, NO SE LO VAS A PASAR POR PARAMETRO,
+//  ESE CONDICIONAL VA A ESTAR DENTRO DE CADA VEZ QUE SE MUEVAN LOS ORCOS Y CADA VEZ QUE SE MUEVAN LOS HEROES
+// EJEMPLO: IF(PRIMEROORCOS==TRUE&&PRIMEROHEROES==FALSE){
+// combateheroes(sala*sala_actual);}
+// else if(PRIMEROORCOS==FALSE&&PRIMEROHEROES==TRUE){
+// combateorcos(sala*sala_actual;}
+// else continue;
 void combateheroes(sala *sala_actual)
 {
     if (sala_actual->lista_heroes.empty() || sala_actual->lista_orcos.empty())
@@ -196,7 +196,7 @@ void combateheroes(sala *sala_actual)
                 personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
                 if (!orco_objetivo)
                 {
-                    cout << "Todos los orcos han sido derrotados!, los heroes han ganado\n";
+                    cout << "Todos los orcos han sido derrotados!! Los heroes han ganado\n";
                     combate_terminado = true;
                     break;
                 }
@@ -373,15 +373,17 @@ void combateheroes(sala *sala_actual)
                 Implemento *cura_seleccionada = curas[opcion];
                 heroe_actual->vitalidad += cura_seleccionada->valor;
 
-                Implemento** pp = &(heroe_actual->mimochila->implementos);//Eliminar despues de usarlo
-                    while (*pp != nullptr) {
-                        if (*pp == cura_seleccionada) {
-                            *pp = cura_seleccionada->siguiente;
-                            delete cura_seleccionada;
-                            break;
-                        }
-                        pp = &((*pp)->siguiente);
+                Implemento **pp = &(heroe_actual->mimochila->implementos); // Eliminar despues de usarlo
+                while (*pp != nullptr)
+                {
+                    if (*pp == cura_seleccionada)
+                    {
+                        *pp = cura_seleccionada->siguiente;
+                        delete cura_seleccionada;
+                        break;
                     }
+                    pp = &((*pp)->siguiente);
+                }
 
                 cout << "\nHas usado " << cura_seleccionada->nombre_implemento << "!\n";
                 cout << "Has recuperado " << cura_seleccionada->valor << " puntos de vida.\n";
@@ -419,30 +421,43 @@ void combateheroes(sala *sala_actual)
         int dano_acumulado = 0;
         cout << "La horda de orcos ataca al heroe " << heroe_objetivo->nombre << "!\n";
 
-        for (auto orco:sala_actual->lista_orcos)//se acumula el danno de la horda de orcos
-        { 
-            if (orco && orco->vitalidad>0)
+        for (auto orco : sala_actual->lista_orcos) // se acumula el danno de la horda de orcos
+        {
+            if (orco && orco->vitalidad > 0)
             {
-                dano_acumulado+=orco->tipo->danno_fortaleza;
+                dano_acumulado += orco->tipo->danno_fortaleza;
             }
         }
-            vector<Implemento*> implementos_proteccion;
-            Implemento* implemento_actual = heroe_objetivo->mimochila->implementos;
+        vector<Implemento *> implementos_proteccion;
+        Implemento *implemento_actual = heroe_objetivo->mimochila->implementos;
 
-            while (implemento_actual != nullptr) //Se buscan si el heroe tiene implementos que lo protegen
-                                                //  y se meten los implementos que protegen al heroe en un vector
+        while (implemento_actual != nullptr) // Se buscan si el heroe tiene implementos que lo protegen
+                                             //   y se meten los implementos que protegen al heroe en un vector
+        {
+            if (implemento_actual->tipo_implemento == "Proteccion")
             {
-                if (implemento_actual->tipo_implemento == "Proteccion")
-                {
-                    implementos_proteccion.push_back(implemento_actual);
-                }
-                implemento_actual = implemento_actual->siguiente;
+                implementos_proteccion.push_back(implemento_actual);
             }
+            implemento_actual = implemento_actual->siguiente;
+        }
 
-            if (!implementos_proteccion.empty()) //Si hay implementos que lo protegen entonces...
+        if (!implementos_proteccion.empty()) // Si hay implementos que lo protegen entonces...
+        {
+            for (auto &proteccion_actual : implementos_proteccion) // Itera por referencia para poder cambiarlos
             {
-                for (auto&proteccion_actual: implementos_proteccion) //Itera por referencia para poder cambiarlos
+                if (dano_acumulado <= 0)
+                    break; // Si el danno acumulado es cero es porque ni hay orcos y para el ataque de los orocos o
+                           //  porque ya terminaron de atacar a sus implementos y no los desgastaron a todos
+
+                cout << "El implemento " << proteccion->nombre_implemento << "ha recibido danno de los orcos!\n";
+
+                int dano_absorbido = min(dano_acumulado, proteccion_actual->valor);
+                proteccion_actual->valor -= dano_absorbido;
+                dano_acumulado -= dano_absorbido;
+
+                if (proteccion_actual->valor <= 0)
                 {
+<<<<<<< Updated upstream
                     if (dano_acumulado <= 0)break;//Si el danno acumulado es cero es porque ni hay orcos y para el ataque de los orocos o 
                                                     // porque ya terminaron de atacar a sus implementos y no los desgastaron a todos
                     
@@ -453,32 +468,41 @@ void combateheroes(sala *sala_actual)
                     dano_acumulado -= dano_absorbido;
                     
                     if (proteccion_actual->valor <= 0)
+=======
+                    cout << "El implemento " << proteccion_actual->nombre_implemento << " se ha desgastado completamente!\n";
+
+                    Implemento **pp = &(heroe_objetivo->mimochila->implementos); // se elimina tal cual como la cura despuesde usarse
+                    while (*pp != nullptr)
+>>>>>>> Stashed changes
                     {
-                        cout <<"El implemento " << proteccion_actual->nombre_implemento << " se ha desgastado completamente!\n";
-                        
-                        Implemento** pp = &(heroe_objetivo->mimochila->implementos); //se elimina tal cual como la cura despuesde usarse
-                        while (*pp != nullptr)
+                        if (*pp == proteccion_actual)
                         {
-                            if (*pp == proteccion_actual)
-                            {
-                                *pp = proteccion_actual->siguiente;
-                                delete proteccion_actual;
-                                break;
-                            }
-                            pp = &((*pp)->siguiente);
+                            *pp = proteccion_actual->siguiente;
+                            delete proteccion_actual;
+                            break;
                         }
-                    }
-                    else
-                    {
-                        cout << "El implemento " << proteccion_actual->nombre_implemento << " ahora tiene " << proteccion->valor << " puntos restantes de dureza\n";
+                        pp = &((*pp)->siguiente);
                     }
                 }
+                else
+                {
+                    cout << "El implemento " << proteccion_actual->nombre_implemento << " ahora tiene " << proteccion->valor << " puntos restantes de dureza\n";
+                }
             }
+<<<<<<< Updated upstream
             if (dano_acumulado > 0 && implementos_proteccion.empty()) {
                 heroe_objetivo->vitalidad -= dano_acumulado;
                 cout << "El heroe " << heroe_objetivo->nombre<<" recibe danno!," << "\n";
                 cout << "La vida restante de " << heroe_objetivo->nombre << " ahora es de "<< heroe_objetivo->vitalidad << "\n";
             }
+=======
+        }
+
+        heroe_objetivo->vitalidad -= dano_acumulado;
+        cout << "El heroe" << heroe_objetivo->nombre << " recibe danno!," << "\n";
+        cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de " << heroe_objetivo->vitalidad << "\n";
+
+>>>>>>> Stashed changes
         if (heroe_objetivo->vitalidad <= 0)
         {
             cout << heroe_objetivo->nombre << " ha muerto...\n";
@@ -510,7 +534,8 @@ void combateheroes(sala *sala_actual)
     }
 }
 
-void combateorcos(sala *sala_actual){
+void combateorcos(sala *sala_actual)
+{
     if (sala_actual->lista_heroes.empty() || sala_actual->lista_orcos.empty())
     {
         return;
@@ -535,29 +560,41 @@ void combateorcos(sala *sala_actual){
         int dano_acumulado = 0;
         cout << "La horda de orcos ataca al heroe " << heroe_objetivo->nombre << "!\n";
 
-        for (auto orco:sala_actual->lista_orcos)
-        { 
-            if (orco && orco->vitalidad>0)
+        for (auto orco : sala_actual->lista_orcos)
+        {
+            if (orco && orco->vitalidad > 0)
             {
-                dano_acumulado+=orco->tipo->danno_fortaleza;
+                dano_acumulado += orco->tipo->danno_fortaleza;
             }
         }
-            vector<Implemento*> implementos_proteccion;
-            Implemento* implemento_actual = heroe_objetivo->mimochila->implementos;
+        vector<Implemento *> implementos_proteccion;
+        Implemento *implemento_actual = heroe_objetivo->mimochila->implementos;
 
-            while (implemento_actual != nullptr)
+        while (implemento_actual != nullptr)
+        {
+            if (implemento_actual->tipo_implemento == "Proteccion")
             {
-                if (implemento_actual->tipo_implemento == "Proteccion")
-                {
-                    implementos_proteccion.push_back(implemento_actual);
-                }
-                implemento_actual = implemento_actual->siguiente;
+                implementos_proteccion.push_back(implemento_actual);
             }
+            implemento_actual = implemento_actual->siguiente;
+        }
 
-            if (!implementos_proteccion.empty())
+        if (!implementos_proteccion.empty())
+        {
+            for (auto &proteccion_actual : implementos_proteccion)
             {
-                for (auto&proteccion_actual: implementos_proteccion)
+                if (dano_acumulado <= 0)
+                    break;
+
+                cout << "El implemento " << proteccion_actual->nombre_implemento << "ha recibido danno de los orcos!\n";
+
+                int dano_absorbido = min(dano_acumulado, proteccion_actual->valor);
+                proteccion_actual->valor -= dano_absorbido;
+                dano_acumulado -= dano_absorbido;
+
+                if (proteccion_actual->valor <= 0)
                 {
+<<<<<<< Updated upstream
                     if (dano_acumulado <= 0)break;
                     
                     cout<<"El implemento "<<proteccion_actual->nombre_implemento<< " ha recibido danno de los orcos!\n";
@@ -567,33 +604,40 @@ void combateorcos(sala *sala_actual){
                     dano_acumulado -= dano_absorbido;
                     
                     if (proteccion_actual->valor <= 0)
+=======
+                    cout << "El implemento " << proteccion_actual->nombre_implemento << " se ha desgastado completamente!\n";
+
+                    Implemento **pp = &(heroe_objetivo->mimochila->implementos);
+                    while (*pp != nullptr)
+>>>>>>> Stashed changes
                     {
-                        cout <<"El implemento " << proteccion_actual->nombre_implemento << " se ha desgastado completamente!\n";
-                        
-                        Implemento** pp = &(heroe_objetivo->mimochila->implementos);
-                        while (*pp != nullptr)
+                        if (*pp == proteccion_actual)
                         {
-                            if (*pp == proteccion_actual)
-                            {
-                                *pp = proteccion_actual->siguiente;
-                                delete proteccion_actual;
-                                break;
-                            }
-                            pp = &((*pp)->siguiente);
+                            *pp = proteccion_actual->siguiente;
+                            delete proteccion_actual;
+                            break;
                         }
-                    }
-                    else
-                    {
-                        cout << "El implemento " << proteccion_actual->nombre_implemento << " ahora tiene " << proteccion_actual->valor << " puntos restantes de dureza\n";
+                        pp = &((*pp)->siguiente);
                     }
                 }
+                else
+                {
+                    cout << "El implemento " << proteccion_actual->nombre_implemento << " ahora tiene " << proteccion_actual->valor << " puntos restantes de dureza\n";
+                }
             }
+        }
 
+<<<<<<< Updated upstream
         if (dano_acumulado > 0 && implementos_proteccion.empty()) {
                 heroe_objetivo->vitalidad -= dano_acumulado;
                 cout << "El heroe" << heroe_objetivo->nombre<<" recibe danno!," << "\n";
                 cout << "La vida restante de " << heroe_objetivo->nombre << " ahora es de "<< heroe_objetivo->vitalidad << "\n";
             }
+=======
+        heroe_objetivo->vitalidad -= dano_acumulado;
+        cout << "El heroe" << heroe_objetivo->nombre << " recibe danno!," << "\n";
+        cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de " << heroe_objetivo->vitalidad << "\n";
+>>>>>>> Stashed changes
 
         if (heroe_objetivo->vitalidad <= 0)
         {
@@ -828,15 +872,17 @@ void combateorcos(sala *sala_actual){
                 Implemento *cura_seleccionada = curas[opcion];
                 heroe_actual->vitalidad += cura_seleccionada->valor;
 
-                Implemento** pp = &(heroe_actual->mimochila->implementos);
-                    while (*pp != nullptr) {
-                        if (*pp == cura_seleccionada) {
-                            *pp = cura_seleccionada->siguiente;
-                            delete cura_seleccionada;
-                            break;
-                        }
-                        pp = &((*pp)->siguiente);
+                Implemento **pp = &(heroe_actual->mimochila->implementos);
+                while (*pp != nullptr)
+                {
+                    if (*pp == cura_seleccionada)
+                    {
+                        *pp = cura_seleccionada->siguiente;
+                        delete cura_seleccionada;
+                        break;
                     }
+                    pp = &((*pp)->siguiente);
+                }
 
                 cout << "\nHas usado " << cura_seleccionada->nombre_implemento << "!\n";
                 cout << "Has recuperado " << cura_seleccionada->valor << " puntos de vida.\n";
