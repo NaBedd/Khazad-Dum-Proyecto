@@ -95,8 +95,21 @@ personaje *encontrar_heroe_mas_debil(sala *sala_actual)
     {
         if (heroe && heroe->vitalidad > 0 && heroe->vitalidad < min_salud)
         {
-            min_salud = heroe->vitalidad;
-            heroe_debil = heroe;
+            int vitalidad_efectiva = heroe->vitalidad;
+            Implemento* implemento_actual = heroe->mimochila->implementos;
+
+            while (implemento_actual != nullptr) 
+            {
+                if (implemento_actual->tipo_implemento == "Proteccion")
+                {
+                    vitalidad_efectiva+=implemento_actual->valor;
+                }
+                implemento_actual = implemento_actual->siguiente;
+            }
+            if (vitalidad_efectiva < min_salud) {
+                min_salud = vitalidad_efectiva;
+                heroe_debil = heroe;
+            }
         }
     }
     return heroe_debil;
@@ -198,7 +211,7 @@ void combateheroes(sala *sala_actual)
                     if (arma_actual->tipo_implemento == "Ataque" && heroe_actual->fortaleza >= arma_actual->fortalezanecesaria)
                     {
                         cout << contador << ". " << arma_actual->nombre_implemento
-                             << " Danno: " << arma_actual->valor
+                             << "- Danno: " << arma_actual->valor
                              << ", Usos: " << arma_actual->usos << "\n";
                         armas.push_back(arma_actual);
                         contador++;
@@ -227,13 +240,13 @@ void combateheroes(sala *sala_actual)
                 arma_seleccionada->usos--;
 
                 cout << "\n"
-                     << heroe_actual->nombre << "ha atacado al orco " << orco_objetivo->nombre << "!\n";
+                     << heroe_actual->nombre << " ha atacado al orco " << orco_objetivo->nombre << "!\n";
                 cout << "Danno causado: " << dano << "\n";
                 cout << "Usos que quedan del arma: " << arma_seleccionada->usos << "\n";
 
                 if (orco_objetivo->vitalidad <= 0)
                 {
-                    cout << heroe_actual->nombre << "ha matado al orco " << orco_objetivo->nombre << "!\n";
+                    cout << heroe_actual->nombre << " ha matado al orco " << orco_objetivo->nombre << "!\n";
                     auto orco_it = find(sala_actual->lista_orcos.begin(), // itera dentro de la lista de orocos de principio a fin buscsndo el orco para eliminarlo
                                         sala_actual->lista_orcos.end(),
                                         orco_objetivo);
@@ -433,7 +446,7 @@ void combateheroes(sala *sala_actual)
                     if (dano_acumulado <= 0)break;//Si el danno acumulado es cero es porque ni hay orcos y para el ataque de los orocos o 
                                                     // porque ya terminaron de atacar a sus implementos y no los desgastaron a todos
                     
-                    cout<<"El implemento "<<proteccion->nombre_implemento<< "ha recibido danno de los orcos!\n";
+                    cout<<"El implemento "<<proteccion->nombre_implemento<< " ha recibido danno de los orcos!\n";
                     
                     int dano_absorbido = min(dano_acumulado, proteccion_actual->valor);
                     proteccion_actual->valor -= dano_absorbido;
@@ -463,8 +476,8 @@ void combateheroes(sala *sala_actual)
             }
             if (dano_acumulado > 0 && implementos_proteccion.empty()) {
                 heroe_objetivo->vitalidad -= dano_acumulado;
-                cout << "El heroe" << heroe_objetivo->nombre<<" recibe danno!," << "\n";
-                cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de "<< heroe_objetivo->vitalidad << "\n";
+                cout << "El heroe " << heroe_objetivo->nombre<<" recibe danno!," << "\n";
+                cout << "La vida restante de " << heroe_objetivo->nombre << " ahora es de "<< heroe_objetivo->vitalidad << "\n";
             }
         if (heroe_objetivo->vitalidad <= 0)
         {
@@ -547,7 +560,7 @@ void combateorcos(sala *sala_actual){
                 {
                     if (dano_acumulado <= 0)break;
                     
-                    cout<<"El implemento "<<proteccion_actual->nombre_implemento<< "ha recibido danno de los orcos!\n";
+                    cout<<"El implemento "<<proteccion_actual->nombre_implemento<< " ha recibido danno de los orcos!\n";
                     
                     int dano_absorbido = min(dano_acumulado, proteccion_actual->valor);
                     proteccion_actual->valor -= dano_absorbido;
@@ -579,7 +592,7 @@ void combateorcos(sala *sala_actual){
         if (dano_acumulado > 0 && implementos_proteccion.empty()) {
                 heroe_objetivo->vitalidad -= dano_acumulado;
                 cout << "El heroe" << heroe_objetivo->nombre<<" recibe danno!," << "\n";
-                cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de "<< heroe_objetivo->vitalidad << "\n";
+                cout << "La vida restante de " << heroe_objetivo->nombre << " ahora es de "<< heroe_objetivo->vitalidad << "\n";
             }
 
         if (heroe_objetivo->vitalidad <= 0)
@@ -656,7 +669,7 @@ void combateorcos(sala *sala_actual){
                     if (arma_actual->tipo_implemento == "Ataque" && heroe_actual->fortaleza >= arma_actual->fortalezanecesaria)
                     {
                         cout << contador << ". " << arma_actual->nombre_implemento
-                             << " Danno: " << arma_actual->valor
+                             << "- Danno: " << arma_actual->valor
                              << ", Usos: " << arma_actual->usos << "\n";
                         armas.push_back(arma_actual);
                         contador++;
@@ -685,13 +698,13 @@ void combateorcos(sala *sala_actual){
                 arma_seleccionada->usos--;
 
                 cout << "\n"
-                     << heroe_actual->nombre << "ha atacado al orco " << orco_objetivo->nombre << "!\n";
+                     << heroe_actual->nombre << " ha atacado al orco " << orco_objetivo->nombre << "!\n";
                 cout << "Danno causado: " << dano << "\n";
                 cout << "Usos que quedan del arma: " << arma_seleccionada->usos << "\n";
 
                 if (orco_objetivo->vitalidad <= 0)
                 {
-                    cout << heroe_actual->nombre << "ha matado al orco " << orco_objetivo->nombre << "!\n";
+                    cout << heroe_actual->nombre << " ha matado al orco " << orco_objetivo->nombre << "!\n";
                     auto orco_it = find(sala_actual->lista_orcos.begin(),
                                         sala_actual->lista_orcos.end(),
                                         orco_objetivo);
