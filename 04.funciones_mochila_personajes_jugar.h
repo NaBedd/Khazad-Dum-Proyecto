@@ -883,3 +883,14 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
         cout << "Modificación fallida.\n";
     }
 }
+
+// para crear el vetor de personaje para usarlo al momemto de jugar.
+vector<personaje*> crear_vector_personajes(personaje *&lista){ // se le psa lista_personajes_jugar.
+    personaje *actual =   lista->siguiente;
+    vector<personaje*> nueva_lista;
+    while (actual!=nullptr){
+        nueva_lista.push_back(actual);
+        actual=actual->siguiente;
+    }
+    return nueva_lista;
+}
