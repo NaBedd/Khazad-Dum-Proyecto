@@ -453,11 +453,11 @@ void combateheroes(sala *sala_actual)
                     }
                 }
             }
-
-        heroe_objetivo->vitalidad -= dano_acumulado;
-        cout << "El heroe" << heroe_objetivo->nombre<<" recibe danno!," << "\n";
-        cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de "<< heroe_objetivo->vitalidad << "\n";
-
+            if (dano_acumulado > 0 && implementos_proteccion.empty()) {
+                heroe_objetivo->vitalidad -= dano_acumulado;
+                cout << "El heroe" << heroe_objetivo->nombre<<" recibe danno!," << "\n";
+                cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de "<< heroe_objetivo->vitalidad << "\n";
+            }
         if (heroe_objetivo->vitalidad <= 0)
         {
             cout << heroe_objetivo->nombre << " ha muerto...\n";
@@ -557,9 +557,11 @@ void combateorcos(sala *sala_actual){
                 }
             }
 
-        heroe_objetivo->vitalidad -= dano_acumulado;
-        cout << "El heroe" << heroe_objetivo->nombre<<" recibe danno!," << "\n";
-        cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de "<< heroe_objetivo->vitalidad << "\n";
+        if (dano_acumulado > 0 && implementos_proteccion.empty()) {
+                heroe_objetivo->vitalidad -= dano_acumulado;
+                cout << "El heroe" << heroe_objetivo->nombre<<" recibe danno!," << "\n";
+                cout << "La vida restante de " << heroe_objetivo->nombre << "ahora es de "<< heroe_objetivo->vitalidad << "\n";
+            }
 
         if (heroe_objetivo->vitalidad <= 0)
         {
