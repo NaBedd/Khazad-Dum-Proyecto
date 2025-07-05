@@ -4,6 +4,7 @@
 
 - [x] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
 - [x] Hacer movimiento de Heroes y Orcos
+- [x] Opcion saltar turno en el combate
 - [x] Designar spawn de Orcos
 - [x] Implementar movimiento de Orcos Dijkstra
 - [x] Agregar Print al combate (X Orco tiene Y vida, X Heroe tiene Y vida, etc... despues de un ataque)
@@ -18,6 +19,7 @@
 ### General:
 
 - [ ] Preguntarle al usuario si desea ver TODAS las salas antes de editar, eliminar, etc en el CRUD del Mapa!!!
+- [ ] Mejorar los prints al momento de Cargar Archivos
 - [ ] Añadir los 4 poderes que dijo el profe
 - [ ] Agregar atributo defensa a las especies (orcos y heroes)
 - [x] Asegurarnos de que NADA explote (numeros grandes)

@@ -94,6 +94,7 @@ void combateheroes(sala *sala_actual)
             cout << "2. Huir\n";
             cout << "3. Usar poder magico\n";
             cout << "4. Curar\n";
+            cout << "5. Pasar turno\n";
 
             int accion = obtener_entero("Opcion: ");
 
@@ -172,7 +173,6 @@ void combateheroes(sala *sala_actual)
                 }
                 break;
             }
-
             case 2: // Huida
             {
                 if (accion == 5 || puede_huir)
@@ -191,7 +191,6 @@ void combateheroes(sala *sala_actual)
                 }
                 break;
             }
-
             case 3: // Poderes magicos
             {
                 int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
@@ -258,7 +257,6 @@ void combateheroes(sala *sala_actual)
                 }
                 break;
             }
-
             case 4: // Curar
             {
                 int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
@@ -312,6 +310,14 @@ void combateheroes(sala *sala_actual)
                 cout << "\nHas usado " << cura_seleccionada->nombre_implemento << "!\n";
                 cout << "Has recuperado " << cura_seleccionada->valor << " puntos de vida.\n";
                 cout << "La vida actual de " << heroe_actual->nombre << "es " << heroe_actual->vitalidad << "\n";
+                break;
+            }
+            case 5: // Pasar turno
+            {
+                cout << heroe_actual->nombre << "salto su turno\n";
+                int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
+                heroe_actual->fortaleza = min(heroe_actual->tipo->danno_fortaleza, heroe_actual->fortaleza + recuperacion);
+                cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 break;
             }
 
@@ -404,7 +410,7 @@ void combateheroes(sala *sala_actual)
             }
         }
 
-        if (dano_acumulado > 0) // le quite el && implementos_proteccion.empty()
+        if (dano_acumulado > 0 && implementos_proteccion.empty())
         {
             heroe_objetivo->vitalidad -= dano_acumulado;
             cout << "El heroe " << heroe_objetivo->nombre << " recibe danno!," << "\n";
@@ -588,7 +594,7 @@ void combateorcos(sala *sala_actual)
 
             switch (accion)
             {
-            case 1:
+            case 1: // Atacar
             {
                 personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
                 if (!orco_objetivo)
@@ -661,8 +667,7 @@ void combateorcos(sala *sala_actual)
                 }
                 break;
             }
-
-            case 2:
+            case 2: // Huir
             {
                 if (puede_huir)
                 {
@@ -679,8 +684,7 @@ void combateorcos(sala *sala_actual)
                 }
                 break;
             }
-
-            case 3:
+            case 3: // Usar poder Magico
             {
                 int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
                 heroe_actual->fortaleza = min(heroe_actual->tipo->danno_fortaleza, heroe_actual->fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
@@ -746,7 +750,7 @@ void combateorcos(sala *sala_actual)
                 }
                 break;
             }
-            case 4:
+            case 4: // Curar
             {
                 int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
                 heroe_actual->fortaleza = min(heroe_actual->tipo->danno_fortaleza, heroe_actual->fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
@@ -799,6 +803,14 @@ void combateorcos(sala *sala_actual)
                 cout << "\nHas usado " << cura_seleccionada->nombre_implemento << "!\n";
                 cout << "Has recuperado " << cura_seleccionada->valor << " puntos de vida.\n";
                 cout << "La vida actual de " << heroe_actual->nombre << "es " << heroe_actual->vitalidad << "\n";
+                break;
+            }
+            case 5: // Saltar turno
+            {
+                cout << heroe_actual->nombre << "salto su turno\n";
+                int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
+                heroe_actual->fortaleza = min(heroe_actual->tipo->danno_fortaleza, heroe_actual->fortaleza + recuperacion);
+                cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 break;
             }
 

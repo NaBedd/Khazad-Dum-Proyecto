@@ -36,6 +36,13 @@ int opcion_interna = 0;   // Opcion de cada menu interno
 int res = 0; // para menu pre-juego
 bool iniciar_juego = false;
 
+// Controladores para evitar cargar archivos varias veces
+bool especies_cargadas = false;
+bool implementos_cargados = false;
+bool salas_cargadas = false;
+bool adyacencias_cargadas = false;
+bool personajes_cargados = false;
+
 void menu_orcos() // Case 1 del main
 {
     do
@@ -233,30 +240,30 @@ void menu_poderes_magicos() // Case 4 del main
 void carga_archivos() // Case 5 del main
 {
     cout << "Cargando archivos..." << endl;
-    cargar_especies(tipoEspecieHeroe, tipoEspecieOrco);
+    cargar_especies(tipoEspecieHeroe, tipoEspecieOrco, especies_cargadas);
     cout << endl
          << endl
-         << "listo.tipos" << endl
+         << "Las especies ya han sido cargadas." << endl
          << endl;
-    cargar_personajes(personajes_hero, personajes_orco, tipoEspecieHeroe, tipoEspecieOrco);
+    cargar_personajes(personajes_hero, personajes_orco, tipoEspecieHeroe, tipoEspecieOrco, personajes_cargados);
     cout << endl
          << endl
-         << "listo.personajes" << endl
+         << "Los personajes ya han sido cargados." << endl
          << endl;
-    cargar_implementos(lista_implementos);
+    cargar_implementos(lista_implementos, implementos_cargados);
     cout << endl
          << endl
-         << "listo.implementos" << endl
+         << "Los implementos ya han sido cargados." << endl
          << endl;
-    carga_salas(grafo);
+    carga_salas(grafo, salas_cargadas);
     cout << endl
          << endl
-         << "listo.salas" << endl
+         << "Las salas ya han sido cargadas." << endl
          << endl;
-    cargar_adyacencias(grafo);
+    cargar_adyacencias(grafo, adyacencias_cargadas);
     cout << endl
          << endl
-         << "listo.adyacencias" << endl
+         << "Las adyacencias ya han sido cargadas." << endl
          << endl;
 }
 
@@ -295,7 +302,7 @@ void menu_mapas() // Case 6 del main
 
             // Verifica que exista y muestra adyacencias:
             sala_modificar = verificar_existencia_sala(grafo, "Ingrese el ID de la sala a mostrar adyacencias: ");
-            mostrar_adyacencias(grafo, sala_modificar);
+            mostrar_adyacencias(sala_modificar);
             break;
         }
         case 4: // Borrar sala

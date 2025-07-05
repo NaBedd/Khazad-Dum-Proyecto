@@ -13,6 +13,7 @@
 #include <cstdlib>   // Ambas librerias para generar numeros aleatorios
 #include <ctime>
 #include <map>
+#include <queue> // Para la cola de ids
 
 using namespace std;
 

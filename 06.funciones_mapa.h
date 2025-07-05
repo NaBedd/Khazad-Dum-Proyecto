@@ -8,6 +8,12 @@ struct sala;
 struct arista;
 struct mapaGrafo;
 
+// Para el mapa (Salas)
+int regulador_salas = 61; // empieza en 60 por el archivo.
+
+queue<int> ids_libres;
+int siguiente_id_sala = 61; // Por el archivo
+
 struct sala // Salas
 {
     int id;
@@ -28,10 +34,6 @@ struct mapaGrafo // Mapa que contiene todas las salas
 {
     vector<sala *> mapa_salas;
 };
-
-// Para el mapa (Salas)
-int regulador_salas = 61; // empieza en 60 por el archivo.
-int cantidad_salas = 0;
 
 //----------------------------------- FUNCIONES MAPA ---------------------------------------
 bool grafo_vacio(const mapaGrafo &grafo)
@@ -92,7 +94,6 @@ sala *verificar_existencia_sala(const mapaGrafo &grafo, string mensaje) // Funci
     if (!sala_buscar) // Si la sala es igual a null (no existe):
     {
         cout << "La sala no existe" << endl;
-        cout << "Retornando..." << endl;
         return sala_buscar;
     }
     return sala_buscar;
@@ -122,8 +123,8 @@ void preguntar_mostrar_salas(const mapaGrafo &grafo) // Pregunta al usuario si d
     }
 
     cout << "¿Desea ver todas las salas del mapa?" << endl;
-    cout << "1. Si" << endl;
-    cout << "2. No" << endl;
+    cout << "   1. Si" << endl;
+    cout << "   2. No" << endl;
     resp_interna = obtener_opcion();
     switch (resp_interna) // Para mostrar o no las salas del mapa
     {
@@ -157,11 +158,6 @@ void crear_adyacencia(sala *salaOrigen, sala *salaDestino, int distancia) // Cre
             cout << "Puede editar la adyacencia en el menu principal si desea modificarla" << endl;
             return;
         }
-        if (salaOrigen->lista_adyacentes[i].destino == salaOrigen)
-        {
-            cout << "La sala no puede ser adyacente a si misma en este juego" << endl;
-            return;
-        }
     }
     // Si no existe, la crea
     salaOrigen->lista_adyacentes.push_back({salaDestino, distancia});
@@ -189,7 +185,16 @@ void crear_adyacencia_usuario(mapaGrafo &grafo, sala *salaModificar) // Crea ady
 void crear_sala(mapaGrafo &grafo, string nombre) // Funcion primitiva para crear salas e IDs
 {
     sala *salaNueva = new sala;
-    salaNueva->id = grafo.mapa_salas.size() + regulador_salas; // para que no se
+    // Al eliminar, se agrega el ID libre a la cola para evitar saltar o repetir numeros
+    if (!ids_libres.empty())
+    {
+        salaNueva->id = ids_libres.front();
+        ids_libres.pop();
+    }
+    else
+    {
+        salaNueva->id = siguiente_id_sala++;
+    }
     salaNueva->nombre = nombre;
     salaNueva->contiene_puerta_destino = false;
     grafo.mapa_salas.push_back(salaNueva);
@@ -206,8 +211,8 @@ void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
     cout << "Sala " << nombreNuevaSala << " creada con exito" << endl;
 
     cout << "¿Desea agregarle adyacencias a la sala?" << endl;
-    cout << "1. Si" << endl;
-    cout << "2. No" << endl;
+    cout << "   1. Si" << endl;
+    cout << "   2. No" << endl;
     resp = obtener_opcion();
     switch (resp)
     {
@@ -244,7 +249,7 @@ void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
     }
     case 2: // No se crean adyacencias
     {
-        cout << "No se crearan adyacencias para la sala" << endl;
+        cout << "No se crearon adyacencias para la sala" << endl;
         break;
     }
     default: // Default
@@ -257,14 +262,14 @@ void crear_sala_usuario(mapaGrafo &grafo) // Funcion manual para crear salas
 
 void mostrar_adyacencias(sala *salaOrigen) // Muestra las adyacencias de la sala origen
 {
-    if (grafo_vacio(grafo))
-    {
-        return;
-    }
-
     if (salaOrigen == nullptr)
     {
         cout << "La sala no existe." << endl;
+        return;
+    }
+    if (salaOrigen->lista_adyacentes.empty())
+    {
+        cout << "La sala no tiene adyacencias" << endl;
         return;
     }
 
@@ -325,11 +330,12 @@ void borrar_sala_usuario(mapaGrafo &grafo) // Borrar sala del grafo y listas de 
         }
     }
 
-    // Se borra del grafo (vector)
-    grafo.mapa_salas.erase(grafo.mapa_salas.begin() + indiceBorrar);
+    // Se guarda el ID como libre
+    ids_libres.push(salaBorrar->id);
 
-    // Se borra el auxiliar usado
-    delete salaBorrar;
+    // Se borra del grafo y libera la memoria
+    grafo.mapa_salas.erase(grafo.mapa_salas.begin() + indiceBorrar);
+    delete salaBorrar; // se borra el auxiliar usado
 }
 
 void borrar_sala(mapaGrafo &grafo, int sala_borrar_id) // Borra sala. Solo usar para destruir_grafo
@@ -492,7 +498,6 @@ void editar_adyacencias(mapaGrafo &grafo, int id_sala_editar) // Crud de adyacen
             if (nuevaAdyacencia == nullptr) // Si no existe:
             {
                 cout << "La sala no existe" << endl;
-                cout << "Saliendo al menu principal..." << endl;
                 return;
             }
 
@@ -557,7 +562,6 @@ void editar_sala(mapaGrafo &grafo, int id_sala_editar) // Editar sala
     if (sala_editar == nullptr) // Si sala no existe:
     {
         cout << "La sala no existe" << endl;
-        cout << "Saliendo al menu principal..." << endl;
         return;
     }
 
