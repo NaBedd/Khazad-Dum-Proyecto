@@ -14,6 +14,7 @@
 #include <ctime>
 #include <map>
 #include <queue> // Para la cola de ids
+#include <stack> // Pilas
 
 using namespace std;
 
@@ -122,4 +123,14 @@ string devolver_string_verificada(const string &mensaje)
     }
 
     return (entrada);
+}
+
+void limpiar_pantalla()
+{
+    cout << "\033[2J\033[1;1H";
+    /*
+    \033 es el carácter de escape (ESC, código ASCII 27).
+    [2J Borra la pantalla
+    [1;1H Mueve el cursor a la fila 1, columna 1 (esquina superior izquierda).
+    */
 }

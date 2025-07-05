@@ -190,10 +190,10 @@ int main()
     do
     {
         menu_principal();
-    } while (opcion_principal != 8 && !iniciar_juego); // Ambas opciones hacen que salga del menu
+    } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
 
     // ---------------------------------- GAMEPLAY ------------------------------------
-    if (opcion_principal != 8)
+    if (opcion_principal != 7)
     {
         // Aqui va el juego: combate, etc
     }

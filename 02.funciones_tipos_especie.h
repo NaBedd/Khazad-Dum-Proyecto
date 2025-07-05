@@ -85,37 +85,37 @@ void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
 }
 
 // Para mostrar listas de especies
-void mostrar_lista(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
-{                                                  // toma la direccion de memoria.
+void mostrar_lista(const Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
+{                                                        // toma la direccion de memoria.
     if (lista.cantidad == 0)
     { // si no hay elementos no hace nada.
-        cout << "No hay tipos de Orcos disponibles. \n\n";
+        cout << "No hay especies disponibles. \n\n";
         return;
     }
 
     if (tipo == 1)
     {
-        cout << "\nHay [" << lista.cantidad << "] tipos de orcos disponibles" << endl;
+        cout << "\nHay [" << lista.cantidad << "] especies de orcos disponibles" << endl;
     }
     else
     {
-        cout << "\nHay [" << lista.cantidad << "] tipos de heroes disponibles" << endl;
+        cout << "\nHay [" << lista.cantidad << "] especies de heroes disponibles" << endl;
     }
     Especie *actual = lista.primero_especie; // se crea una variable auxiliar para igualarla al primer elemnto de la lista.
     while (actual != nullptr)
     { // si es igual a nullptr significa que es el ultimo elemento de la lista.
-        cout << actual->identificador << "-";
-        cout << "Nombre= " << actual->nombre_especie << endl;
+        cout << actual->identificador << ".";
+        cout << "Nombre: " << actual->nombre_especie << endl;
         if (tipo == 1)
         {
-            cout << "Danno = " << actual->danno_fortaleza << endl;
+            cout << "Danno: " << actual->danno_fortaleza << endl;
         }
         else
         {
-            cout << "fortaleza = " << actual->danno_fortaleza << endl;
+            cout << "fortaleza: " << actual->danno_fortaleza << endl;
         }
-        cout << "Salud = " << actual->salud << endl;
-        cout << "Rapidez = " << actual->rapidez << "\n"
+        cout << "Salud: " << actual->salud << endl;
+        cout << "Rapidez: " << actual->rapidez << "\n"
              << endl;
         actual = actual->siguiente; // pasa a siguiente elemento de la lista.
     }
@@ -133,16 +133,16 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
     }
 
     int referencia;
-    cout << "\nLos tipos de especie disponible son: ";
+    cout << "\nLas especies disponibles son: ";
     cout << "------------------------" << endl;
     mostrar_lista(lista, tipo);
     if (tipo == 1)
     {
-        referencia = obtener_entero("Ingrese el numero del tipo de orco que desea modificar: ");
+        referencia = obtener_entero("Ingrese el numero de especie orco a modificar: ");
     }
     else if (tipo == 2)
     {
-        referencia = obtener_entero("ingrese el numero del tipo de heroe que desea modificar: ");
+        referencia = obtener_entero("ingrese el numero de especie heroe a modificar: ");
     }
     else
     {
@@ -157,13 +157,13 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
         {
             if (tipo == 1)
             {
-                cout << "\nIngrese los datos a actualizar para el orco con identificador " << referencia << ":\n";
+                cout << "\nIngrese los datos a actualizar para la especie orco con identificador " << referencia << ":\n";
             }
             else
             {
-                cout << "\nIngrese los datos a actualizar para el heroe con identificador " << referencia << ":\n";
+                cout << "\nIngrese los datos a actualizar para la especie heroe con identificador " << referencia << ":\n";
             }
-            cin.ignore(); // Limpiar el buffer
+            // cin.ignore(); // Limpiar el buffer
 
             actual->nombre_especie = devolver_string_verificada("Nombre de la especie: ");
 
@@ -181,11 +181,11 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
 
             if (tipo == 1)
             {
-                cout << "Datos del orco con ID " << referencia << " actualizados exitosamente.\n";
+                cout << "Datos de la especie orco con ID " << referencia << " actualizados exitosamente.\n";
             }
             else
             {
-                cout << "Datos del heroe con ID " << referencia << " actualizados exitosamente.\n";
+                cout << "Datos de la especie heroe con ID " << referencia << " actualizados exitosamente.\n";
             }
             encontrado = true;
             break; // Importante salir del bucle una vez encontrado
@@ -195,7 +195,7 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
 
     if (!encontrado)
     {
-        cout << "No se encontró ningún tipo de orco con el ID: " << referencia << ".\n";
+        cout << "No se encontró ninguna especie con ID: " << referencia << ".\n";
     }
 }
 

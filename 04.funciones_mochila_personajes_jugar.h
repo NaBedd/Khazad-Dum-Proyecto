@@ -117,6 +117,8 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
 // Funcion para mostrar los personajes
 void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 heroe
 {                                                   // toma la direccion de memoria.
+    stack<personaje *> pendientes_imprimir;
+
     // para validar que si hay personajes para mostrar.
     if (tipo == 1)
     { // para orcos.
@@ -145,18 +147,24 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
         cout << "\nHay [" << cantidad_personaje_heroe << "] personajes heroes" << endl;
     }
     personaje *actual = lista.siguiente; // se crea una variable auxiliar para igualarla al primer elemnto de la lista.
+    // Se agregan los personajes a una pila y luego se imprimen
     while (actual != nullptr)
-    { // si es igual a nullptr significa que es el ultimo elemento de la lista.
-        cout << actual->identificador << "-";
-        cout << "Nombre: " << actual->nombre << endl;
-        cout << "Especie: " << actual->tipo->nombre_especie << endl;
-        cout << endl;
+    {
+        pendientes_imprimir.push(actual);
         actual = actual->siguiente;
+    }
+
+    while (!pendientes_imprimir.empty())
+    {
+        cout << pendientes_imprimir.top()->identificador << "-";
+        cout << "Nombre: " << pendientes_imprimir.top()->nombre << endl;
+        cout << "Especie: " << pendientes_imprimir.top()->tipo->nombre_especie << endl;
+        cout << endl;
+        pendientes_imprimir.pop();
     }
     cout << "No hay mas personajes.\n"
          << endl;
 }
-
 // Encontrar un personaje
 personaje *encontrar_personaje(personaje &lista_personajes, int identificador)
 {
@@ -885,12 +893,14 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 }
 
 // para crear el vetor de personaje para usarlo al momemto de jugar.
-vector<personaje*> crear_vector_personajes(personaje *&lista){ // se le psa lista_personajes_jugar.
-    personaje *actual =   lista->siguiente;
-    vector<personaje*> nueva_lista;
-    while (actual!=nullptr){
+vector<personaje *> crear_vector_personajes(personaje *&lista)
+{ // se le psa lista_personajes_jugar.
+    personaje *actual = lista->siguiente;
+    vector<personaje *> nueva_lista;
+    while (actual != nullptr)
+    {
         nueva_lista.push_back(actual);
-        actual=actual->siguiente;
+        actual = actual->siguiente;
     }
     return nueva_lista;
 }

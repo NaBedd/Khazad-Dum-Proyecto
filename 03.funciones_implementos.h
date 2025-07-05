@@ -59,8 +59,8 @@ string tipo_implemento(Implemento *Implemento)
 void crear_implemento(Implemento &lista_implemento)
 {
     Implemento *nuevo = new Implemento;
-    cout << "Proceda a llenar las espicificaciones del imlemento. \n\n";
-    nuevo->nombre_implemento = devolver_string_verificada("Nobre:");
+    cout << "Ingrese los datos del nuevo implemento. \n\n";
+    nuevo->nombre_implemento = devolver_string_verificada("Nombre: ");
     nuevo->tipo_implemento = tipo_implemento(nuevo); // funcion para obteren el tipo de implemento.
     nuevo->usos = obtener_entero("Usos: ");
     nuevo->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usar el implemento: ");
@@ -82,7 +82,7 @@ void mostrar_implementos(Implemento &lista_implemento)
     }
     else
     {
-        cout << "la candtad de implementos es: [" << cantidad_implementos << "]. \n";
+        cout << "la cantidad de implementos es: [" << cantidad_implementos << "]. \n";
     }
 
     Implemento *actual = lista_implemento.siguiente;
@@ -97,7 +97,7 @@ void mostrar_implementos(Implemento &lista_implemento)
              << endl;
         actual = actual->siguiente;
     }
-    cout << "no hay mas implementos disponibles\n";
+    cout << "No hay mas implementos disponibles\n";
 }
 
 // buscar implemento.
@@ -139,7 +139,7 @@ void modificar_implemento(Implemento &lista_implemento)
 
     //                          VERRRRRRRRRRRRRRRRRRRR
     // coloco este mensaje porque no se porque el progra no corre normal.
-    cout << "precione enter para modificar el implemto: " << actualizar->nombre_implemento;
+    cout << "Presione enter para modificar el implemento: " << actualizar->nombre_implemento;
     // hay que darle enter para que corra.
 
     cin.ignore();

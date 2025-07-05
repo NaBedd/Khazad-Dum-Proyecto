@@ -47,57 +47,76 @@ void menu_orcos() // Case 1 del main
 {
     do
     {
-        cout << "\n MENU ORCOS\n";
-        cout << "---------------------\n";
-        cout << "1. Agregar una especie de Orco. \n";
-        cout << "2. Actualizar los datos de un tipo de Orco. \n";
-        cout << "3. Mostrar los tipos de Orcos disponibles. \n";
-        cout << "4. Eliminar un tipo de especie. \n";
-        cout << "------------------------\n";
+        cout << "\n               MENU ORCOS              \n";
+        cout << "------------------------------------------\n";
+        cout << "           --ESPECIES ORCOS-- \n";
+        cout << "1. Crear especie de Orco. \n";
+        cout << "2. Actualizar datos de una especie de Orco. \n";
+        cout << "3. Mostrar los especies de Orcos disponibles. \n";
+        cout << "4. Eliminar especie de Orco. \n";
+        cout << "------------------------------------------\n";
+        cout << "            --PERSONAJES ORCOS-- \n";
         cout << "5. Crear personajes Orco. \n";
         cout << "6. Mostrar personajes Orco. \n";
         cout << "7. Modificar personajes Orco. \n";
         cout << "8. Eliminar personajes Orco.  \n";
-        cout << "------------------------\n";
-        cout << "9.Salir al menu principal.\n";
-        cout << "---------------------\n";
+        cout << "------------------------------------------\n";
+        cout << "9. Salir al menu principal.\n";
+        cout << "------------------------------------------\n";
         opcion_interna = obtener_opcion();
 
         switch (opcion_interna)
         {
-        case 1:
+        case 1: // Crear especie Orco
+        {
             Crear_tipo(tipoEspecieOrco, 1);
             break;
-        case 2:
-
+        }
+        case 2: // Actualizar Especie orco
+        {
             actualizar_tipo(tipoEspecieOrco, 1);
             break;
-        case 3:
+        }
+        case 3: // Mostrar especies orco
+        {
             mostrar_lista(tipoEspecieOrco, 1);
             break;
-        case 4:
-
+        }
+        case 4: // Eliminar especie orco
+        {
             eliminar_elemento_lista(tipoEspecieOrco, personajes_orco, 1);
             break;
-        case 5:
+        }
+        case 5: // Crear personaje Orco
+        {
             crear_personaje(personajes_orco, tipoEspecieOrco, 1);
             break;
-
-        case 6:
+        }
+        case 6: // Mostrar Personajes Orco
+        {
             mostrar_personajes(personajes_orco, 1);
             break;
-        case 7:
+        }
+        case 7: // Modificar Personajes Orco
+        {
             actualizar_personaje(personajes_orco, tipoEspecieOrco, 1);
             break;
-        case 8:
+        }
+        case 8: // Eliminar Personajes ORco
+        {
             borrar_personaje(personajes_orco, 1);
             break;
-        case 9:
+        }
+        case 9: // Salir
+        {
             cout << "\nSaliendo al Menu Principal... \n";
             break;
+        }
         default:
+        {
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
+        }
         }
     } while (opcion_interna != 9); // Mientras no se salga del menu interno de orcos.
 }
@@ -106,55 +125,85 @@ void menu_especies_heroes_personajes() // Case 2 del main
 {
     do
     {
-        cout << "\n MENU DE HEROES Y PERSONAJES\n";
-        cout << "---------------------\n";
-        cout << "1. Agregar una especie de Heroe \n";
-        cout << "2. Actualizar los datos de un tipo de Heroe \n";
-        cout << "3. Mostrar los tipos de Heroes disponibles \n";
-        cout << "4. Eliminar un tipo de especie \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
-        cout << "---------------------\n";
-        cout << "5. Crear personaje.\n";
-        cout << "6. Mostrar personajes. \n";
-        cout << "7. Modificar personaje \n";
-        cout << "8. Eliminar personaje  \n";
-        cout << "---------------------\n";
+        cout << "\n            MENU DE HEROES\n";
+        cout << "------------------------------------------\n";
+        cout << "           --ESPECIES HEROES-- \n";
+        cout << "1. Crear especie de Heroe. \n";
+        cout << "2. Actualizar datos de una especie Heroe. \n";
+        cout << "3. Mostrar especies de Heroes disponibles. \n";
+        cout << "4. Eliminar especie de Heroe. \n"; // Ya no sale del programa sino del menu de creacion, pq luego vendra el juego como tal.
+        cout << "------------------------------------------\n";
+        cout << "            --PERSONAJES HEROES-- \n";
+        cout << "5. Crear personaje Heroe.\n";
+        cout << "6. Mostrar personajes Heroe. \n";
+        cout << "7. Modificar personaje Heroe. \n";
+        cout << "8. Eliminar personaje Heroe.  \n";
+        cout << "------------------------------------------\n";
         cout << "9. Salir al menu principal  \n";
-        cout << "---------------------\n";
+        cout << "------------------------------------------\n";
         opcion_interna = obtener_opcion();
 
         switch (opcion_interna)
         {
-        case 1:
+        case 1: // Crear especie heroe
+        {
+            limpiar_pantalla();
             Crear_tipo(tipoEspecieHeroe, 2);
             break;
-        case 2:
-
+        }
+        case 2: // Actualizar especie heroe
+        {
+            limpiar_pantalla();
             actualizar_tipo(tipoEspecieHeroe, 2);
             break;
-        case 3:
+        }
+        case 3: // Mostrar especies heroe
+        {
+            limpiar_pantalla();
             mostrar_lista(tipoEspecieHeroe, 2);
             break;
-        case 4:
+        }
+        case 4: // Eliminar especies heroe
+        {
+            limpiar_pantalla();
             eliminar_elemento_lista(tipoEspecieHeroe, personajes_hero, 2);
             break;
-        case 5:
+        }
+        case 5: // Crear personaje heroe
+        {
+            limpiar_pantalla();
             crear_personaje(personajes_hero, tipoEspecieHeroe, 2);
             break;
-        case 6:
+        }
+        case 6: // Mostrar personajes heroe
+        {
+            limpiar_pantalla();
             mostrar_personajes(personajes_hero, 2);
             break;
-        case 7:
+        }
+        case 7: // Modificar personaje heroe
+        {
+            limpiar_pantalla();
             actualizar_personaje(personajes_hero, tipoEspecieHeroe, 2);
             break;
-        case 8:
+        }
+        case 8: // Eliminar personaje heroe
+        {
+            limpiar_pantalla();
             borrar_personaje(personajes_hero, 2);
             break;
-        case 9:
+        }
+        case 9: // Salir
+        {
+            limpiar_pantalla();
             cout << "\nSaliendo al Menu Principal... \n";
             break;
+        }
         default:
+        {
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
+        }
         }
     } while (opcion_interna != 9); // Mientras no se salga del menu interno de heroes.
 }
@@ -177,21 +226,27 @@ void menu_implementos() // Case 3 del main
         switch (opcion_interna)
         {
         case 1:
+            limpiar_pantalla();
             crear_implemento(lista_implementos);
             break;
         case 2:
+            limpiar_pantalla();
             modificar_implemento(lista_implementos);
             break;
         case 3:
+            limpiar_pantalla();
             mostrar_implementos(lista_implementos);
             break;
         case 4:
+            limpiar_pantalla();
             borrar_implementos(lista_implementos);
             break;
         case 5:
+            limpiar_pantalla();
             cout << "\nSaliendo al Menu Principal... \n";
             break;
         default:
+            limpiar_pantalla();
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
         }
@@ -216,29 +271,37 @@ void menu_poderes_magicos() // Case 4 del main
         switch (opcion_interna)
         {
         case 1:
+            limpiar_pantalla();
             crear_poder(lista_podere_magicos);
             break;
         case 2:
+            limpiar_pantalla();
             modificar_poder(lista_podere_magicos);
             break;
         case 3:
+            limpiar_pantalla();
             mostrar_poderes(lista_podere_magicos);
             break;
         case 4:
+            limpiar_pantalla();
             eliminar_poder(lista_podere_magicos);
             break;
         case 5:
+            limpiar_pantalla();
             cout << "\nSaliendo al Menu Principal... \n";
             break;
         default:
+            limpiar_pantalla();
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
         }
     } while (opcion_interna != 5);
 }
 
-void carga_archivos() // Case 5 del main
+void carga_archivos(bool especies_cargadas, bool personajes_cargados,
+                    bool implementos_cargados, bool salas_cargadas, bool adyacencias_cargadas) // Case 5 del main
 {
+    limpiar_pantalla();
     cout << "Cargando archivos..." << endl;
     cargar_especies(tipoEspecieHeroe, tipoEspecieOrco, especies_cargadas);
     cout << endl
@@ -265,6 +328,13 @@ void carga_archivos() // Case 5 del main
          << endl
          << "Las adyacencias ya han sido cargadas." << endl
          << endl;
+
+    if (especies_cargadas && implementos_cargados && salas_cargadas &&
+        adyacencias_cargadas && personajes_cargados)
+    {
+        limpiar_pantalla();
+        cout << "Todos los datos han sido cargados exitosamente" << endl;
+    }
 }
 
 void menu_mapas() // Case 6 del main
@@ -287,17 +357,20 @@ void menu_mapas() // Case 6 del main
         {
         case 1: // Crear sala
         {
+            limpiar_pantalla();
             crear_sala_usuario(grafo);
             break;
         }
         case 2: // Mostrar mapa
         {
+            limpiar_pantalla();
             cout << "-------------- Salas Del Juego -------------- " << endl; // Cambiar por un nombre mas epico
             mostrar_salas_grafo(grafo);
             break;
         }
         case 3: // Muestra adyacencias
         {
+            limpiar_pantalla();
             preguntar_mostrar_salas(grafo);
 
             // Verifica que exista y muestra adyacencias:
@@ -307,12 +380,14 @@ void menu_mapas() // Case 6 del main
         }
         case 4: // Borrar sala
         {
+            limpiar_pantalla();
             preguntar_mostrar_salas(grafo);
             borrar_sala_usuario(grafo);
             break;
         }
         case 5: // Editar sala
         {
+            limpiar_pantalla();
             int resp = 0;
 
             if (grafo_vacio(grafo)) // Verifica que el grafo no este vacio
@@ -329,11 +404,13 @@ void menu_mapas() // Case 6 del main
         }
         case 6: // Salir al menu
         {
+            limpiar_pantalla();
             cout << "Saliendo al menu principal..." << endl;
             break;
         }
         default: // Default
         {
+            limpiar_pantalla();
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
         }
@@ -343,6 +420,7 @@ void menu_mapas() // Case 6 del main
 
 void menu_pre_juego() // Caso 7 del main
 {
+    limpiar_pantalla();
     do
     {
         // VERIFICACIONES
@@ -406,16 +484,18 @@ void menu_pre_juego() // Caso 7 del main
 
         // Si el usuario ingresa que desea seguir jugando:
         // Empieza el pre-juego (seleccion de personajes, equipamiento, etc)
-        cout << "Seleccion de Personajes" << endl;
+        limpiar_pantalla();
 
-        cout << "\n MENU DE PERSONAJES PARA JUGAR:\n";
-        cout << "---------------------\n";
+        cout << "\n     MENU DE PERSONAJES PARA JUGAR:\n";
+        cout << "------------------------------------------\n";
+        cout << "       Seleccion de Personajes  " << endl;
+        cout << "------------------------------------------\n";
         cout << "1. Elegir personaje y sus objetos\n";
         cout << "2. Mostrar personaje del equipo actual. \n";
         cout << "3. Modificar mochila. \n";
         cout << "4. Eliminar personaje del equipo. \n";
-        cout << "---------------------\n";
-        cout << "5. EQUIPO TERMINADO. Empezar a jugar.  \n";
+        cout << "------------------------------------------\n";
+        cout << "5. Empezar a jugar.  \n";
         cout << "---------------------\n";
         opcion_interna = obtener_opcion();
 
@@ -453,65 +533,80 @@ void menu_principal() // MENU PRINCIPAL !!!
 
     cout << "\n MENU PRINCIPAL \n";
     cout << "---------------------\n";
-    cout << "1. Menu de Especies de Orcos" << "\n";
-    cout << "2. Menu de Especies de Heroes y Personajes" << "\n";
+    cout << "0. Cargar Datos Predeterminados.\n";
+    cout << "---------------------\n";
+    cout << "1. Menu de Orcos" << "\n";
+    cout << "2. Menu de Heroes" << "\n";
     cout << "---------------------\n";
     cout << "3. Menu de Implementos" << "\n";
     cout << "4. Menu de Poderes Magicos \n";
-    cout << "5. cargar archivos predeterminados del juego.\n";
     cout << "---------------------\n";
-    cout << "6. Menu del Mapa.\n";
+    cout << "5. Menu del Mapa.\n";
     cout << "---------------------\n";
-    cout << "7. EMPEZAR EL JUEGO. \n ";
+    cout << "6. EMPEZAR EL JUEGO. \n ";
     cout << "---------------------\n";
-    cout << "8. Salir del programa completo." << "\n";
+    cout << "7. Salir del programa completo." << "\n";
     opcion_principal = obtener_opcion();
 
     // Switch para Menu Principal
     switch (opcion_principal)
     {
-    // Menu Orcos
-    case 1:
+    case 0: // Carga de archivos.
+    {
+        limpiar_pantalla();
+        carga_archivos(especies_cargadas, implementos_cargados, salas_cargadas,
+                       adyacencias_cargadas, personajes_cargados);
+        break;
+    }
+    case 1: // Menu Orcos
+    {
+        limpiar_pantalla();
         menu_orcos();
         break;
+    }
 
-    // Menu Heroes
-    case 2:
+    case 2: // Menu Heroes
+    {
+        limpiar_pantalla();
         menu_especies_heroes_personajes();
         break;
-
-    // Menu Implementos
-    case 3:
+    }
+    case 3: // Menu Implementos
+    {
+        limpiar_pantalla();
         menu_implementos();
         break;
-
-    // Menu de poderes magicos
-    case 4:
+    }
+    case 4: // Menu de poderes magicos
+    {
+        limpiar_pantalla();
         menu_poderes_magicos();
         break;
+    }
 
-    // carga de archivos.
-    case 5:
-        carga_archivos();
-        break;
-
-    // Menu de Mapa
-    case 6:
+    case 5: // Menu de Mapa
+    {
+        limpiar_pantalla();
         menu_mapas();
         break;
-
-    // Menu para antes de Jugar
-    case 7:
+    }
+    case 6: // Menu para antes de Jugar
+    {
+        limpiar_pantalla();
         menu_pre_juego();
         break;
-
-    case 8:
+    }
+    case 7: // Salir del programa
+    {
+        limpiar_pantalla();
         cout << "Saliendo del programa... " << endl;
         break;
-
-    // Default del Menu Principal:
-    default:
+    }
+    default: // Default del Menu Principal
+    {
+        limpiar_pantalla();
         cout << "Invalido. Ingrese una opcion valida";
         break;
+    }
     }
 }

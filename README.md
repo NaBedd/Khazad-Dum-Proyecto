@@ -18,14 +18,15 @@
 
 ### General:
 
-- [ ] Preguntarle al usuario si desea ver TODAS las salas antes de editar, eliminar, etc en el CRUD del Mapa!!!
+- [x] Preguntarle al usuario si desea ver TODAS las salas antes de editar, eliminar, etc en el CRUD del Mapa!!!
 - [ ] Mejorar los prints al momento de Cargar Archivos
 - [ ] Añadir los 4 poderes que dijo el profe
-- [ ] Agregar atributo defensa a las especies (orcos y heroes)
+- [x] Agregar atributo defensa a las especies (orcos y heroes)
 - [x] Asegurarnos de que NADA explote (numeros grandes)
 - [x] Arreglar la edicion de Armas y Personajes
 - [ ] La funcion mostrar listas, las muestra de la ultima a la primera (3→2→1) en vez de (1→2→3)
 - [ ] Funcion para borrar toda la mochila
+- [ ] Ordenar Main(orden de opciones)
 
 ### Mapa:
 
@@ -33,14 +34,14 @@
   - [x] Cantidad minima de orcos debe de moverse (No se podran mover menos de X orcos por turno)
 - [x] Hacer mapa con grafos
 - [x] Acomodar sistema de mapas: Adyacencias, numero de orcos en sala (lista de orcos)
-- [ ] El turno se acaba cuando se acaba la energia para moverse entre salas
+- [x] El turno se acaba cuando se acaba la energia para moverse entre salas
 - [ ] Asignacion de Puerta Magica
 - [x] Crear sitio de aparicion aleatorio en el mapa
 
 ### Sistemas y Jugabilidad
 
 - [x] Hacer sistema de combate (pelear, curar, magia, huir)
-- [ ] Implementar todos los poderes
+- [x] Implementar todos los poderes
 - [x] Los poderes magicos se usan SOLO en batalla
 - [x] En el menu de batalla, se deben de poder elegir entre varias armas para atacar
 

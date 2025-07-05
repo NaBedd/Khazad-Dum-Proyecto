@@ -11,7 +11,6 @@
 #include "09.menus_main.h" // Todos los menus del main
 
 /*Falta:
-    -Movimiento Heroes
     -Turnos de movimiento(turnos fuera de combate)
     -Aparicion de la puerta magica
         -Que la puerta se mueva
