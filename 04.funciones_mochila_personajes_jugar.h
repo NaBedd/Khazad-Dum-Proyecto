@@ -117,8 +117,6 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
 // Funcion para mostrar los personajes
 void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 heroe
 {                                                   // toma la direccion de memoria.
-    stack<personaje *> pendientes_imprimir;
-
     // para validar que si hay personajes para mostrar.
     if (tipo == 1)
     { // para orcos.
@@ -147,24 +145,18 @@ void mostrar_personajes(personaje &lista, int tipo) // tipo=1 orco / tipo=2 hero
         cout << "\nHay [" << cantidad_personaje_heroe << "] personajes heroes" << endl;
     }
     personaje *actual = lista.siguiente; // se crea una variable auxiliar para igualarla al primer elemnto de la lista.
-    // Se agregan los personajes a una pila y luego se imprimen
     while (actual != nullptr)
-    {
-        pendientes_imprimir.push(actual);
-        actual = actual->siguiente;
-    }
-
-    while (!pendientes_imprimir.empty())
-    {
-        cout << pendientes_imprimir.top()->identificador << "-";
-        cout << "Nombre: " << pendientes_imprimir.top()->nombre << endl;
-        cout << "Especie: " << pendientes_imprimir.top()->tipo->nombre_especie << endl;
+    { // si es igual a nullptr significa que es el ultimo elemento de la lista.
+        cout << actual->identificador << "-";
+        cout << "Nombre: " << actual->nombre << endl;
+        cout << "Especie: " << actual->tipo->nombre_especie << endl;
         cout << endl;
-        pendientes_imprimir.pop();
+        actual = actual->siguiente;
     }
     cout << "No hay mas personajes.\n"
          << endl;
 }
+
 // Encontrar un personaje
 personaje *encontrar_personaje(personaje &lista_personajes, int identificador)
 {
@@ -515,7 +507,7 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
 
 //----------------------------------- FUNCIONES PERSONAJES JUGAR --------------------------------------
 
-void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Poder_magico &poderes)
+void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Poder_magico &poderes, personaje *lista_personajes_jugar)
 {
     int opcio = 0;
     int cantidad_objetos = 0;
@@ -558,20 +550,17 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
                 }
             } while (contrilador_interno != 1);
             // procedemos a colocar el implemento en la mochila.
-            // cramos nuva memoria dinamica.
             Implemento *colocar = new Implemento;
             *colocar = *nuevo_implemento;
-            // ahora la asignamos a la mochila.
             colocar->siguiente = personaje_a_llenar->mimochila->implementos;
             personaje_a_llenar->mimochila->implementos = colocar;
             cantidad_objetos += 1;
-            contrilador_interno = 0; // poria.
+            contrilador_interno = 0;
             cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
         }
         else if (opcio == 2)
         {
             Poder_magico *nuevo_poder = nullptr;
-            // para verificar si el ID es valido, lo pone bien o lo pone bien.
             do
             {
                 cout << "Los poderes magicos disponibles son:\n";
@@ -586,18 +575,39 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
                 }
                 else
                 {
-                    contrilador_interno = 1;
+                    //verifica si el poder ya está asignado a cualquier personaje
+                    bool poder_en_uso = false;
+                    personaje *temp = lista_personajes_jugar;//comienza desde el primer personaje y va por todos
+                    while (temp != nullptr) {
+                        if (temp->mimochila != nullptr) {
+                            Poder_magico *poder_mochila = temp->mimochila->poderes;
+                            while (poder_mochila != nullptr) {
+                                if (poder_mochila->identificador == nuevo_poder->identificador) {
+                                    poder_en_uso = true;
+                                    break;
+                                }
+                                poder_mochila = poder_mochila->siguiente;
+                            }
+                        }
+                        if (poder_en_uso) break;
+                        temp = temp->siguiente;
+                    }
+
+                    if (poder_en_uso) {
+                        cout << "El poder: " << nuevo_poder->nombre_poder << " ya está asignado a otro personaje.\n";
+                        cout << "Coloque uno valido.\n";
+                    } else {
+                        contrilador_interno = 1;
+                    }
                 }
             } while (contrilador_interno != 1);
-            // procedemos a colocar el poder en la mochila.
-            // cramos nuva memoria dinamica.
+            
             Poder_magico *colocar = new Poder_magico;
             *colocar = *nuevo_poder;
-            // ajhora la asignamos a la mochila.
             colocar->siguiente = personaje_a_llenar->mimochila->poderes;
             personaje_a_llenar->mimochila->poderes = colocar;
             cantidad_objetos += 1;
-            contrilador_interno = 0; // porcia.
+            contrilador_interno = 0;
             cout << "El poder " << colocar->nombre_poder << " se agrego correctamente a la mochila.\n";
         }
         else if (opcio == 3)
@@ -893,14 +903,12 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 }
 
 // para crear el vetor de personaje para usarlo al momemto de jugar.
-vector<personaje *> crear_vector_personajes(personaje *&lista)
-{ // se le psa lista_personajes_jugar.
-    personaje *actual = lista->siguiente;
-    vector<personaje *> nueva_lista;
-    while (actual != nullptr)
-    {
+vector<personaje*> crear_vector_personajes(personaje *&lista){ // se le psa lista_personajes_jugar.
+    personaje *actual =   lista->siguiente;
+    vector<personaje*> nueva_lista;
+    while (actual!=nullptr){
         nueva_lista.push_back(actual);
-        actual = actual->siguiente;
+        actual=actual->siguiente;
     }
     return nueva_lista;
 }
