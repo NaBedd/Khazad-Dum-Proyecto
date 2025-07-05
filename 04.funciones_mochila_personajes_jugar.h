@@ -675,9 +675,8 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     nuevo_para_jugar->mimochila->poderes = nullptr;
     nuevo_para_jugar->siguiente = nullptr;
 
-    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl
-         << endl;
-    llenar_mochila(nuevo_para_jugar, implementos, poderes);
+    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl<< endl;
+    llenar_mochila(nuevo_para_jugar, implementos, poderes,lista_jugar);
 
     // verrr la logica de incertar en un poco diferente a las demas funciones. los pone a final.
     // Insertar el nuevo personaje en la lista de personajes para jugar
@@ -892,7 +891,7 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
         actual->mimochila->poderes = nullptr; // la ponemso vacia.
 
         // se llama a la funcion llenar mochila.
-        llenar_mochila(actual, Implementos, poderes);
+        llenar_mochila(actual, Implementos, poderes,personajes_jugar);
         cout << "Actualización de la mochila completa para el personaje: " << actual->nombre << endl;
     }
     else
