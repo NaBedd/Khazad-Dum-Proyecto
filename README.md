@@ -1,5 +1,10 @@
 # Pendientes para la Nueva Entrega:
 
+Acomodar logica de asignacion de ids para
+Especies Heroe y Orco
+Personajes Heroe y Orco
+Implementos
+
 ### Pendiente:
 
 - [ ] El juego NO termina si todos los heroes mueren. Cambiar !!!!
@@ -15,6 +20,9 @@
 - [ ] Cambiar el main para que se ejecute todo el combate
 - [ ] Comprobar que la recuperacion al moverse y NO pelear este bien. Archivo 08.
 - [ ] Acomodar opcion huir
+
+- [ ] Arreglar asignacion de ID por la carga de archivos
+- [ ] Acomodar prints 3→2→1, 1→2→3
 
 - [x] Hacer que solo se puedan cargar archivos 1 vez
 - [x] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
