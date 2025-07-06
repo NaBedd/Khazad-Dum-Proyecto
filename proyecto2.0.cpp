@@ -13,10 +13,14 @@
 #include "05.funciones_poder_magico.h"             // Funciones para los Poderes Magicos
 #include "06.funciones_mapa.h"                     // Funciones para el mapa (grafo)
 #include "07.funciones_cargar_archivo.h"           // Funciones para la carga de archivos
-#include "08.movimiento.h"                         // Movimiento Ingame (Orcos y heroes)
+
+//#include "08.movimiento.h"                         // Movimiento Ingame (Orcos y heroes)
+
 #include "09.menus_main.h"                         // Todos los menus del main
-#include "10.combate.h"                            // Sistema de combate
-#include "11.turnos_jugabilidad.h"                 // Implementacion de todos los sistemas de mov y pelea
+
+
+//#include "10.combate.h"                            // Sistema de combate
+//#include "11.turnos_jugabilidad.h"                 // Implementacion de todos los sistemas de mov y pelea
 
 // Funcion declarada aqui porque sino daba error
 // Sepa Dios por que
@@ -193,13 +197,17 @@ int main()
     } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
 
     // ---------------------------------- GAMEPLAY ------------------------------------
-
+    
+    
+    
     // da error
-    // if (opcion_principal != 7)
+    //if (opcion_principal != 7)
     //{
-    // juego(turno);
+        //juego(turno);
     //}
 
+    
+    
     // --------------------------------------------------------------------------------
     // --------------- FIN DEL PROGRAMA. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
@@ -215,7 +223,7 @@ int main()
     destruir_implementos(lista_implementos);
     destruir_poder_magico(lista_podere_magicos);
     destruir_personaje_jugar(personajes_jugar);
-    destruir_grafo(grafo); // Destruye el grafo y todos los personajes en sala
+    destruir_grafo(grafo);
 
     cout << "Gracias por usar el programa. \n";
 }
