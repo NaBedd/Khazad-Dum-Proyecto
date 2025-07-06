@@ -57,10 +57,14 @@ personaje *encontrar_heroe_mas_debil(sala *sala_actual) // Encontrar heroe mas d
 
 // CREA UN BOOL QUE SE LLAME PRIMEROORCOS Y PRIMEROHEROES, NO SE LO VAS A PASAR POR PARAMETRO,
 //  ESE CONDICIONAL VA A ESTAR DENTRO DE CADA VEZ QUE SE MUEVAN LOS ORCOS Y CADA VEZ QUE SE MUEVAN LOS HEROES
-// EJEMPLO: IF(PRIMEROORCOS==TRUE&&PRIMEROHEROES==FALSE){
-// combateheroes(sala*sala_actual);}
-// else if(PRIMEROORCOS==FALSE&&PRIMEROHEROES==TRUE){
-// combateorcos(sala*sala_actual;}
+// EJEMPLO: IF(PRIMEROORCOS == TRUE && PRIMEROHEROES == FALSE)
+// {
+// combateheroes(sala*sala_actual);
+// }
+// else if(PRIMEROORCOS==FALSE&&PRIMEROHEROES==TRUE)
+//{
+// combateorcos(sala*sala_actual;
+// }
 // else continue;
 
 // Empiezan los heroes, se ejecuta hasta que TODO el combate haya terminado

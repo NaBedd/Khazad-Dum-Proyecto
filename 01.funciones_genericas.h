@@ -33,10 +33,10 @@ int obtener_entero(const string &mensaje)
 
         bool es_valido = true;
 
-        if (entrada == "0")
-        {
-            es_valido = false;
-        }
+        // if (entrada == "0")
+        // {
+        //     es_valido = false;
+        // }
 
         if (entrada.length() > MAX_DIGITOS)
         {

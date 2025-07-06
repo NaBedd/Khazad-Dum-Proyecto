@@ -5,6 +5,7 @@
 // - Nabil Bedros
 
 // Librerias Locales:
+
 #include "01.funciones_genericas.h"                // Funciones generales y librerias para el programa
 #include "02.funciones_tipos_especie.h"            // Funciones para las Especies de Heroes y Orcos
 #include "03.funciones_implementos.h"              // Funciones para Implementos
@@ -14,8 +15,8 @@
 #include "07.funciones_cargar_archivo.h"           // Funciones para la carga de archivos
 #include "08.movimiento.h"                         // Movimiento Ingame (Orcos y heroes)
 #include "09.menus_main.h"                         // Todos los menus del main
-// #include "10.combate.h"
-// #include "11.turnos_jugabilidad.h"
+#include "10.combate.h"                            // Sistema de combate
+#include "11.turnos_jugabilidad.h"                 // Implementacion de todos los sistemas de mov y pelea
 
 // Funcion declarada aqui porque sino daba error
 // Sepa Dios por que
@@ -186,8 +187,7 @@ int main()
     cout << "¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
     cout << "Se recomienda visitar todos los menus en orden descendente para una mejor experiencia de juego." << endl;
 
-    // Menu mientras.
-    do
+    do // Menu mientras.
     {
         menu_principal();
     } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
@@ -195,7 +195,6 @@ int main()
     // ---------------------------------- GAMEPLAY ------------------------------------
     if (opcion_principal != 7)
     {
-        // Aqui va el juego: combate, etc
     }
 
     // --------------------------------------------------------------------------------

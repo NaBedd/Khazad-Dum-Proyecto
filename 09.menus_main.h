@@ -43,6 +43,12 @@ bool salas_cargadas = false;
 bool adyacencias_cargadas = false;
 bool personajes_cargados = false;
 
+// Para puerta destino
+vector<int> salas_puerta_pasadas;
+
+// Turno
+int turno = 0;
+
 void menu_orcos() // Case 1 del main
 {
     do
@@ -564,7 +570,6 @@ void menu_principal() // MENU PRINCIPAL !!!
         menu_orcos();
         break;
     }
-
     case 2: // Menu Heroes
     {
         limpiar_pantalla();
@@ -583,7 +588,6 @@ void menu_principal() // MENU PRINCIPAL !!!
         menu_poderes_magicos();
         break;
     }
-
     case 5: // Menu de Mapa
     {
         limpiar_pantalla();

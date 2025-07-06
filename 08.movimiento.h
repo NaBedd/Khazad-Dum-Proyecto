@@ -7,8 +7,8 @@
 #include "05.funciones_poder_magico.h"             // Funciones para los Poderes Magicos
 #include "06.funciones_mapa.h"                     // Funciones para el mapa (grafo)
 #include "07.funciones_cargar_archivo.h"           // Funciones para la carga de archivos
-
-#include "09.menus_main.h" // Todos los menus del main
+#include "09.menus_main.h"                         // Todos los menus del main
+#include "10.combate.h"
 
 /*Falta:
     -Turnos de movimiento(turnos fuera de combate)
@@ -123,15 +123,15 @@ sala *designar_sala_spawn_heroes(const mapaGrafo &grafo) // Spawnean en sala ran
     return sala_spawn_heroes;
 }
 
-void spawn_heroes(sala *sala_spawn_heroes, const personaje &personajes_jugar) // Carga toda la lista de heroes en 1 sala
+void spawn_heroes(sala *sala_spawn_heroes, const personaje *personajes_jugar) // Carga toda la lista de heroes en 1 sala
 {
     // Carga la lista de heroes de la sala de spawn
     // NO valida que solo sean 4 heroes. Ya se valido antes de empezar el juego
-    personaje *actual = personajes_jugar.siguiente;
+    personaje *actual = personajes_jugar->siguiente;
     while (actual != nullptr)
     {
         sala_spawn_heroes->lista_heroes.push_back(actual);
-        actual = personajes_jugar.siguiente;
+        actual = personajes_jugar->siguiente;
     }
 }
 
@@ -286,6 +286,33 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
     }
 }
 
+bool verificar_pelea(sala *sala_siguiente, int movimiento_heroes_orcos) // Empieza la pelea si es el caso
+{
+    // movimiento_heroes_orcos = 1 si mueven los heroes
+    // movimiento_heroes_orcos = 2 si mueven los orcos
+    if (movimiento_heroes_orcos == 1) // Si los heroes hacen una emboscada:
+    {
+        if (!sala_siguiente->lista_orcos.empty())
+        {
+            return true;
+        }
+    }
+    else if (movimiento_heroes_orcos == 2) // Si los Orcos hacen una emboscada:
+
+    {
+        if (!sala_siguiente->lista_heroes.empty())
+        {
+
+            return true;
+        }
+    }
+    else // Else por si acaaso
+    {
+        cout << "Error en Verificar Pelea. Nunca deberia de ejecutarse esto" << endl;
+    }
+    return false;
+}
+
 void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Turno de movimiento de orcos
 {
     // Se moveran un maximo de 5 orcos, los mas cercanos a los heroes
@@ -343,10 +370,18 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Turno de movimient
                 sala_mas_cercana->lista_orcos.erase(sala_mas_cercana->lista_orcos.begin());
             }
         }
+        bool pelea = verificar_pelea(sala_moverse, 2);
+        if (pelea)
+        {
+            cout << "Los Heroes han caido en una emboscada de los Orcos." << endl;
+            cout << "!!! A pelear !!!" << endl;
+            combateorcos(sala_moverse);
+            return;
+        }
     }
 }
 
-void movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimiento de heroes
+sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimiento de heroes
 {
     // OJO, la funcion NO comprueba que haya o no heroes en la sala
     // Eso se deberia comprobar en la funcion de Turno General (heroes y orcos)
@@ -355,6 +390,7 @@ void movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimien
     sala *sala_destino;
     heroe_lento = encontrar_heroe_lento(sala_origen);
     int energia_restante = heroe_lento->velocidad;
+    bool pelea = false;
 
     cout << "Los heroes se encuentran en: " << sala_origen->nombre << endl;
     cout << "Pueden recorrer " << energia_restante << "km de distancia" << endl;
@@ -384,13 +420,13 @@ void movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimien
 
         // 2. Como SI hay a donde moverse, le pregunta al usuario
         cout << "Indique a que sala se desea mover " << endl;
-        cout << "Ingrese 0 para cancelar el turno de movimiento" << endl;
+        cout << "Ingrese 0 para cancelar su turno" << endl;
         int entrada_usuario = obtener_entero("Sala: ");
         if (entrada_usuario == 0)
         {
             cout << "El jugador ha decidido no moverse." << endl;
             cout << "Turno cancelado" << endl;
-            return;
+            return sala_origen;
         }
 
         sala_destino = encontrar_sala(grafo, entrada_usuario);
@@ -434,5 +470,32 @@ void movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimien
         cout << "Energia restante: " << energia_restante << endl;
 
         sala_origen = sala_destino; // Los heroes ya se movieron, se cambia el origen
+
+        // Se verifica si hay que empezar pelea:
+        pelea = verificar_pelea(sala_origen, 1);
+        if (pelea)
+        {
+            cout << "Los Heroes han emboscado a los orcos." << endl;
+            cout << "!!! A pelear !!!" << endl;
+            combateheroes(sala_origen);
+            // Si hay pelea, el movimiento se detiene
+            return sala_origen;
+        }
     }
+    // Una vez que ya hizo todos los movimientos:
+
+    if (!pelea)
+    {
+        personaje *heroe_actual = personajes_jugar->siguiente;
+        while (heroe_actual != nullptr)
+        {
+            int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
+            heroe_actual->fortaleza = min(heroe_actual->tipo->danno_fortaleza, heroe_actual->fortaleza + recuperacion);
+            cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
+
+            heroe_actual = heroe_actual->siguiente;
+        }
+    }
+
+    return sala_origen;
 }

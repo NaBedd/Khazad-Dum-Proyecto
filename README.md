@@ -2,6 +2,20 @@
 
 ### Pendiente:
 
+- [ ] El juego NO termina si todos los heroes mueren. Cambiar !!!!
+- [ ] Terminar juego si las condiciones de victoria o derrota se cumplen
+
+  - Condiciones para perder:
+    - [ ] Todos los heroes han muerto
+    - [ ] Ya la puerta se movio 5 veces y se acabo el tiempo
+  - Condiciones para ganar:
+    - [ ] Los heroes han llegado a la puerta del destino y mataron a los orcos de esa sala (si es que los hay)
+      - Ya hice la condicion para ganar pero hay que probar que funcione OJO!!!!
+
+- [ ] Cambiar el main para que se ejecute todo el combate
+- [ ] Comprobar que la recuperacion al moverse y NO pelear este bien. Archivo 08.
+
+- [x] Hacer que solo se puedan cargar archivos 1 vez
 - [x] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
 - [x] Hacer movimiento de Heroes y Orcos
 - [x] Opcion saltar turno en el combate
