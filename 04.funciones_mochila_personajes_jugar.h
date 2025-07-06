@@ -157,17 +157,24 @@ void mostrar_personajes(personaje &lista, int tipo)
     }
     printf("\033[0;37m"); // Gris claro
 
+    stack<personaje*> pila;
     personaje *actual = lista.siguiente;
     while (actual != nullptr)
     {
-        cout << actual->identificador << " - ";
-        printf("\033[0;35m"); // Magenta para el nombre
-        cout << "Nombre: " << actual->nombre << endl;
-        printf("\033[0;36m"); // Cyan para la especie
-        cout << "Especie: " << actual->tipo->nombre_especie << endl;
-        printf("\033[0;37m"); // Gris claro (resetear a color normal después)
-        cout << endl;
+        pila.push(actual);
         actual = actual->siguiente;
+    }
+    while (!pila.empty())
+    {
+        personaje* temporal = pila.top();
+        pila.pop();
+        cout << temporal->identificador << " - ";
+        printf("\033[0;35m");
+        cout << "Nombre: " << tempora;->nombre << endl;
+        printf("\033[0;36m");
+        cout << "Especie: " << temporal->tipo->nombre_especie << endl;
+        printf("\033[0;37m");
+        cout << endl;
     }
     cout << "No hay mas personajes.\n";
     cout << endl
