@@ -16,6 +16,8 @@
 #include <queue> // Para la cola de ids
 #include <stack> // Pilas
 
+#include <windows.h> // para poder ponerle color.
+
 using namespace std;
 
 // Funciones para verificar formato de respuesta
