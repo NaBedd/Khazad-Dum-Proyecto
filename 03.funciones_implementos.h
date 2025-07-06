@@ -92,24 +92,34 @@ void mostrar_implementos(Implemento &lista_implemento)
 {
     if (cantidad_implementos == 0)
     {
-        printf("\033[0;31m"); // Rojo
+        printf("\033[0;31m");
         cout << "No hay implementos disponibles en este momento.\n";
-        printf("\033[0;37m"); // Gris claro
+        printf("\033[0;37m");
         return;
     }
     else
     {
-        printf("\033[0;33m"); // Amarillo
+        printf("\033[0;33m");
         cout << "La cantidad de implementos es: [" << cantidad_implementos << "].\n";
-        printf("\033[0;37m"); // Gris claro
+        printf("\033[0;37m");
     }
 
+    stack<Implemento*> pila;
     Implemento *actual = lista_implemento.siguiente;
     while (actual != nullptr)
     {
-        printf("\033[0;36m"); // Cyan para el nombre del atributo
+        pila.push(actual);
+        actual = actual->siguiente;
+    }
+
+    while (!pila.empty())
+    {
+        actual = pila.top();
+        pila.pop();
+
+        printf("\033[0;36m");
         cout << "Nombre: ";
-        printf("\033[0;37m"); // Gris claro para el valor
+        printf("\033[0;37m");
         cout << actual->nombre_implemento << endl;
 
         printf("\033[0;36m");
@@ -135,10 +145,7 @@ void mostrar_implementos(Implemento &lista_implemento)
         printf("\033[0;36m");
         cout << "Valor: ";
         printf("\033[0;37m");
-        cout << actual->valor << endl
-             << endl;
-
-        actual = actual->siguiente;
+        cout << actual->valor << endl << endl;
     }
     cout << "No hay mas implementos disponibles\n";
 }
