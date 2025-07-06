@@ -130,84 +130,52 @@ void mostrar_personajes(personaje &lista, int tipo)
 {
     if (tipo == 1 && cantidad_personaje_orco == 0)
     {
-        printf("\033[0;31m"); // Rojo
+        printf("\033[0;31m");
         cout << "\nNo hay especies de orcos para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
-        printf("\033[0;37m"); // Gris claro
+        printf("\033[0;37m");
         return;
     }
     if (tipo == 2 && cantidad_personaje_heroe == 0)
     {
-        printf("\033[0;31m"); // Rojo
+        printf("\033[0;31m");
         cout << "\nNo hay personajes heroes para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
-        printf("\033[0;37m"); // Gris claro
+        printf("\033[0;37m");
         return;
     }
 
     if (tipo == 1)
     {
-        printf("\033[0;33m"); // Amarillo
+        printf("\033[0;33m");
         cout << "\nHay [" << cantidad_personaje_orco << "] personajes orcos" << endl;
     }
     else
     {
-        printf("\033[0;33m"); // Amarillo
+        printf("\033[0;33m");
         cout << "\nHay [" << cantidad_personaje_heroe << "] personajes heroes" << endl;
     }
-    printf("\033[0;37m"); // Gris claro
+    printf("\033[0;37m");
 
-    if (tipo == 1 && cantidad_personaje_orco > 0)
+    stack<personaje*> pila;
+    personaje *actual = lista.siguiente;
+    while (actual != nullptr)
     {
-        stack<personaje*> pila_orcos;
-        personaje *actual = lista.siguiente;
-        while (actual != nullptr)
-        {
-            if (actual->identificador > regulador_personaje_orco)
-            {
-                pila_orcos.push(actual);
-            }
-            actual = actual->siguiente;
-        }
-
-        while (!pila_orcos.empty())
-        {
-            personaje* temp = pila_orcos.top();
-            pila_orcos.pop();
-            cout << temp->identificador << " - ";
-            printf("\033[0;35m");
-            cout << "Nombre: " << temp->nombre << endl;
-            printf("\033[0;36m");
-            cout << "Especie: " << temp->tipo->nombre_especie << endl;
-            printf("\033[0;37m");
-            cout << endl;
-        }
+        pila.push(actual);
+        actual = actual->siguiente;
     }
-    else if (tipo == 2 && cantidad_personaje_heroe > 0)
-    {
-        stack<personaje*> pila_heroes;
-        personaje *actual = lista.siguiente;
-        while (actual != nullptr)
-        {
-            if (actual->identificador > regulador_personaje_heroe)
-            {
-                pila_heroes.push(actual);
-            }
-            actual = actual->siguiente;
-        }
 
-        while (!pila_heroes.empty())
-        {
-            personaje* temp = pila_heroes.top();
-            pila_heroes.pop();
-            cout << temp->identificador << " - ";
-            printf("\033[0;35m");
-            cout << "Nombre: " << temp->nombre << endl;
-            printf("\033[0;36m");
-            cout << "Especie: " << temp->tipo->nombre_especie << endl;
-            printf("\033[0;37m");
-            cout << endl;
-        }
+    while (!pila.empty())
+    {
+        personaje* temp = pila.top();
+        pila.pop();
+        cout << temp->identificador << " - ";
+        printf("\033[0;35m");
+        cout << "Nombre: " << temp->nombre << endl;
+        printf("\033[0;36m");
+        cout << "Especie: " << temp->tipo->nombre_especie << endl;
+        printf("\033[0;37m");
+        cout << endl;
     }
 
     cout << "No hay mas personajes.\n";
