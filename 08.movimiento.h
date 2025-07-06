@@ -277,7 +277,7 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
         // reservamos nueva memoria para el orco y copiamos las estadisticas.
         nuevo_orco->tipo = new Especie;
         nuevo_orco->tipo->danno_fortaleza = especie_nuevo_orco->danno_fortaleza;
-        nuevo_orco->tipo->identificador =especie_nuevo_orco->identificador;
+        nuevo_orco->tipo->identificador = especie_nuevo_orco->identificador;
         nuevo_orco->tipo->nombre_especie = especie_nuevo_orco->nombre_especie;
         nuevo_orco->tipo->rapidez = especie_nuevo_orco->rapidez;
         nuevo_orco->tipo->salud = especie_nuevo_orco->salud;
@@ -381,7 +381,7 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Turno de movimient
         {
             cout << "Los Heroes han caido en una emboscada de los Orcos." << endl;
             cout << "!!! A pelear !!!" << endl;
-            combateorcos(sala_moverse);
+            combateorcos(sala_moverse, tipoEspecieHeroe);
             return;
         }
     }
@@ -483,7 +483,7 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         {
             cout << "Los Heroes han emboscado a los orcos." << endl;
             cout << "!!! A pelear !!!" << endl;
-            combateheroes(sala_origen);
+            combateheroes(sala_origen, tipoEspecieHeroe);
             // Si hay pelea, el movimiento se detiene
             return sala_origen;
         }
@@ -495,7 +495,7 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         personaje *heroe_actual = personajes_jugar->siguiente;
         while (heroe_actual != nullptr)
         {
-            Especie *referenci_actual = encontrar_especie_id(lista_heroes,heroe_actual->tipo->identificador);
+            Especie *referenci_actual = encontrar_especie_id(lista_heroes, heroe_actual->tipo->identificador);
             int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
             heroe_actual->tipo->danno_fortaleza = min(referenci_actual->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion);
             cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";

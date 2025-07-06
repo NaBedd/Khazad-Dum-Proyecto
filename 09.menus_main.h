@@ -124,6 +124,7 @@ void menu_orcos() // Case 1 del main
             break;
         }
         }
+        limpiar_pantalla();
     } while (opcion_interna != 9); // Mientras no se salga del menu interno de orcos.
 }
 
@@ -167,6 +168,11 @@ void menu_especies_heroes_personajes() // Case 2 del main
         {
             limpiar_pantalla();
             mostrar_lista(tipoEspecieHeroe, 2);
+            cout << "Pulse enter para continuar:" << endl;
+            getline(cin, pausa1);
+            cout << endl
+                 << endl;
+            limpiar_pantalla();
             break;
         }
         case 4: // Eliminar especies heroe
@@ -211,6 +217,7 @@ void menu_especies_heroes_personajes() // Case 2 del main
             break;
         }
         }
+        limpiar_pantalla();
     } while (opcion_interna != 9); // Mientras no se salga del menu interno de heroes.
 }
 
@@ -256,6 +263,7 @@ void menu_implementos() // Case 3 del main
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
         }
+        limpiar_pantalla();
     } while (opcion_interna != 5); // Mientras no desee salir a menu principal
 }
 
@@ -277,30 +285,43 @@ void menu_poderes_magicos() // Case 4 del main
         switch (opcion_interna)
         {
         case 1:
+        {
             limpiar_pantalla();
             crear_poder(lista_podere_magicos);
             break;
+        }
         case 2:
+        {
             limpiar_pantalla();
             modificar_poder(lista_podere_magicos);
             break;
+        }
         case 3:
+        {
             limpiar_pantalla();
             mostrar_poderes(lista_podere_magicos);
             break;
+        }
         case 4:
+        {
             limpiar_pantalla();
             eliminar_poder(lista_podere_magicos);
             break;
+        }
         case 5:
+        {
             limpiar_pantalla();
             cout << "\nSaliendo al Menu Principal... \n";
             break;
+        }
         default:
+        {
             limpiar_pantalla();
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
         }
+        }
+        limpiar_pantalla();
     } while (opcion_interna != 5);
 }
 
@@ -421,6 +442,7 @@ void menu_mapas() // Case 6 del main
             break;
         }
         }
+        limpiar_pantalla();
     } while (opcion_interna != 6);
 }
 
@@ -448,15 +470,13 @@ void menu_pre_juego() // Caso 7 del main
             cout << "Saliendo al menu principal..." << endl;
             break;
         }
-        else if (cantidad_poderes < 4)
+        else if (grafo.mapa_salas.size() < 4)
         {
-            cout << "No hay poderes suficientes para empezar el juego." << endl;
+            cout << "No hay salas suficientes para empezar el juego (minimo 4)." << endl;
             cout << "Saliendo al menu principal..." << endl;
             break;
         }
 
-        // faltaria el validar que este el mapa
-        // los poderes no porque ya son funciones predeterminadas.
         cout << "¿Esta contento con las modificaciones realizadas?" << endl;
         cout << "Tome en cuenta que al empezar el juego no podra modificar lo siguiente:" << endl;
         cout << "   Tipos de heroes y orcos." << endl;
@@ -464,8 +484,8 @@ void menu_pre_juego() // Caso 7 del main
         cout << "   Poderes, implementos y mapa.\n"
              << endl;
         cout << "Los cambios realizados anteriormente seran permanentes para esta partida" << endl;
-        cout << "1. Si, estoy conforme" << endl;
-        cout << "2. No, no estoy conforme" << endl;
+        cout << "   1. Si, estoy conforme" << endl;
+        cout << "   2. No, no estoy conforme" << endl;
 
         // Pregunta al usuario si desea jugar o seguir editando
         // Si la respuesta es no, hace el break
@@ -508,7 +528,7 @@ void menu_pre_juego() // Caso 7 del main
         switch (opcion_interna)
         {
         case 1:
-            eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos);
+            eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos); //, lista_podere_magicos
             break;
         case 2:
             mostrar_personajes_jugar(personajes_jugar);
@@ -531,6 +551,7 @@ void menu_pre_juego() // Caso 7 del main
             cout << "Invalido. Ingrese una opcion valida \n";
             break;
         }
+        limpiar_pantalla();
     } while (opcion_interna != 5);
 }
 

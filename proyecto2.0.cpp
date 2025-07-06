@@ -193,17 +193,13 @@ int main()
     } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
 
     // ---------------------------------- GAMEPLAY ------------------------------------
-    
-    
-    
+
     // da error
-    //if (opcion_principal != 7)
+    // if (opcion_principal != 7)
     //{
-        //juego(turno);
+    // juego(turno);
     //}
 
-    
-    
     // --------------------------------------------------------------------------------
     // --------------- FIN DEL PROGRAMA. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
@@ -219,9 +215,8 @@ int main()
     destruir_implementos(lista_implementos);
     destruir_poder_magico(lista_podere_magicos);
     destruir_personaje_jugar(personajes_jugar);
-    destruir_grafo(grafo);
+    destruir_grafo(grafo); // Destruye el grafo y todos los personajes en sala
 
     cout << "Gracias por usar el programa. \n";
 }
 // fin del programa.
-

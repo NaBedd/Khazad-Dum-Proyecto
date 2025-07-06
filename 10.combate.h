@@ -68,7 +68,7 @@ personaje *encontrar_heroe_mas_debil(sala *sala_actual) // Encontrar heroe mas d
 // else continue;
 
 // Empiezan los heroes, se ejecuta hasta que TODO el combate haya terminado
-void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
+void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
 {
     if (sala_actual->lista_heroes.empty() || sala_actual->lista_orcos.empty())
     {
@@ -122,10 +122,9 @@ void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
                 while (arma_actual != nullptr)
                 {
 
-
-                    //VERRRR.
-                    //verrrrrrrr.
-                    // esta con la fortalea actual que tenga el herore, no con la estandarr de la especie
+                    // VERRRR.
+                    // verrrrrrrr.
+                    //  esta con la fortalea actual que tenga el herore, no con la estandarr de la especie
                     if (arma_actual->tipo_implemento == "Ataque" && heroe_actual->tipo->danno_fortaleza >= arma_actual->fortalezanecesaria)
                     {
                         cout << contador << ". " << arma_actual->nombre_implemento
@@ -151,12 +150,18 @@ void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
                 }
 
                 Implemento *arma_seleccionada = armas[opcion];
+
+                if (arma_seleccionada->fortalezanecesaria > heroe_actual->tipo->danno_fortaleza)
+                {
+                    cout << "El heroe no posee la fortaleza suficiente para usar el implemento" << endl;
+                    break;
+                }
+
                 int dano = arma_seleccionada->valor;
 
-                
-                //VERRRRRRRR
-                //VERRRRRRRRR
-                //VERRRRRRRRR
+                // VERRRRRRRR
+                // VERRRRRRRRR
+                // VERRRRRRRRR
                 orco_objetivo->tipo->salud -= dano;
                 heroe_actual->tipo->danno_fortaleza -= arma_seleccionada->fortalezanecesaria;
                 arma_seleccionada->usos--;
@@ -188,13 +193,13 @@ void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
             }
             case 2: // Huida
             {
-                if (accion == 5 || puede_huir)
+                if (puede_huir)
                 {
                     cout << heroe_actual->nombre << " intenta huir...\n";
                     // LA LOGICA DE HUIDA VA AQUi DEL MAPA
                     cout << "Los heroes han escapado del combate!\n";
                     // para tener las estadisticas estandar del heroe.
-                    Especie *referencia =encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
+                    Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
                     int recuperacion = referencia->danno_fortaleza * 0.1;
                     heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                     cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
@@ -207,10 +212,10 @@ void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
                 break;
             }
             case 3: // Poderes magicos
-            {   
-                Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-                int recuperacion = refereancia->danno_fortaleza * 0.1;
-                heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+            {
+                Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                int recuperacion = referencia->danno_fortaleza * 0.1;
+                heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                 cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 cout << "\nPoderes magicos disponibles de " << heroe_actual << ":\n";
                 Poder_magico *poder = heroe_actual->mimochila->poderes;
@@ -275,9 +280,9 @@ void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
             }
             case 4: // Curar
             {
-                Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-                int recuperacion = refereancia->danno_fortaleza * 0.1;
-                heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+                Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                int recuperacion = referencia->danno_fortaleza * 0.1;
+                heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                 cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 cout << "\nObjetos de cura disponibles:\n";
                 vector<Implemento *> curas;
@@ -332,9 +337,9 @@ void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
             case 5: // Pasar turno
             {
                 cout << heroe_actual->nombre << "salto su turno\n";
-                Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-                int recuperacion = refereancia->danno_fortaleza * 0.1;
-                heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+                Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                int recuperacion = referencia->danno_fortaleza * 0.1;
+                heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                 break;
             }
 
@@ -467,8 +472,8 @@ void combateheroes(sala *sala_actual,Lista_especie especies_heroes)
 }
 
 // Empiezan los orcos, se ejecuta hasta que TODO el combate haya terminado
-                            // se la coloco para oder tener las estadisticas estandar.
-void combateorcos(sala *sala_actual,Lista_especie especies_heroes)
+// se la coloco para oder tener las estadisticas estandar.
+void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
 {
     if (sala_actual->lista_heroes.empty() || sala_actual->lista_orcos.empty())
     {
@@ -598,20 +603,9 @@ void combateorcos(sala *sala_actual,Lista_especie especies_heroes)
                 continue;
             }
 
-
-
-
-
-
-
-
-
-
-
-
-            Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-            int recuperacion = refereancia->danno_fortaleza * 0.1;
-            heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+            Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+            int recuperacion = referencia->danno_fortaleza * 0.1;
+            heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
             cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
 
             cout << "\nQue deseas hacer con " << heroe_actual->nombre << "?\n";
@@ -702,16 +696,11 @@ void combateorcos(sala *sala_actual,Lista_especie especies_heroes)
                 if (puede_huir)
                 {
 
-
-
-
-
-
                     cout << heroe_actual->nombre << " intenta huir...\n";
                     cout << "Los heroes han escapado del combate!\n";
-                    Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-                    int recuperacion = refereancia->danno_fortaleza * 0.1;
-                    heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+                    Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                    int recuperacion = referencia->danno_fortaleza * 0.1;
+                    heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                     cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                     combate_terminado = true;
                 }
@@ -723,9 +712,9 @@ void combateorcos(sala *sala_actual,Lista_especie especies_heroes)
             }
             case 3: // Usar poder Magico
             {
-                Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-                int recuperacion = refereancia->danno_fortaleza * 0.1;
-                heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+                Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                int recuperacion = referencia->danno_fortaleza * 0.1;
+                heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                 cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 cout << "\nPoderes magicos disponibles de " << heroe_actual << ":\n";
                 Poder_magico *poder = heroe_actual->mimochila->poderes;
@@ -790,9 +779,9 @@ void combateorcos(sala *sala_actual,Lista_especie especies_heroes)
             }
             case 4: // Curar
             {
-                Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-                int recuperacion = refereancia->danno_fortaleza * 0.1;
-                heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+                Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                int recuperacion = referencia->danno_fortaleza * 0.1;
+                heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                 cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 cout << "\nObjetos de cura disponibles:\n";
                 vector<Implemento *> curas;
@@ -847,9 +836,9 @@ void combateorcos(sala *sala_actual,Lista_especie especies_heroes)
             case 5: // Saltar turno
             {
                 cout << heroe_actual->nombre << "salto su turno\n";
-                Especie *refereancia = encontrar_especie_id(especies_heroes,heroe_actual->tipo->identificador);
-                int recuperacion = refereancia->danno_fortaleza * 0.1;
-                heroe_actual->tipo->danno_fortaleza = min(refereancia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
+                Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                int recuperacion = referencia->danno_fortaleza * 0.1;
+                heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                 cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 break;
             }

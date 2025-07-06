@@ -14,6 +14,7 @@
 
 - [ ] Cambiar el main para que se ejecute todo el combate
 - [ ] Comprobar que la recuperacion al moverse y NO pelear este bien. Archivo 08.
+- [ ] Acomodar opcion huir
 
 - [x] Hacer que solo se puedan cargar archivos 1 vez
 - [x] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales

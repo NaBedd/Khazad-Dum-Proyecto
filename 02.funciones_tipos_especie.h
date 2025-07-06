@@ -143,16 +143,13 @@ void mostrar_lista(const Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2
             cout << "Fortaleza: " << actual->danno_fortaleza << endl;
         }
         cout << "Salud: " << actual->salud << endl;
-        cout << "Rapidez: " << actual->rapidez << "\n" << endl;
+        cout << "Rapidez: " << actual->rapidez << "\n"
+             << endl;
         printf("\033[0;37m"); // Gris claro para resetear color
 
         actual = actual->siguiente;
     }
     cout << "No hay mas tipos disponibles.\n";
-    cout << "Pulse enter para continuar:" << endl;
-    getline(cin, pausa1);
-    cout << endl
-         << endl;
 }
 
 // Para actualizar tipos de especies.

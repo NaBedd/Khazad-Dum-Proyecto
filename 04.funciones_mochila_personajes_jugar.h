@@ -15,7 +15,7 @@ struct mochila
 {
     int identificador; // sera el mismo del personaje al que pertenezca.
     Implemento *implementos = nullptr;
-    Poder_magico *poderes = nullptr;  // no se usara en esta entrega
+    Poder_magico *poderes = nullptr; // no se usara en esta entrega
     string num_poder = " ";
 };
 
@@ -775,8 +775,6 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
     }
 }
 
-
-
 // para elegir el personaje y llenar la mochila.
 void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &implementos)
 {
@@ -838,7 +836,8 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     nuevo_para_jugar->siguiente = nullptr;
 
     printf("\033[0;33m"); // Amarillo
-    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl << endl;
+    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl
+         << endl;
     printf("\033[0;37m"); // Gris claro
     cout << "Pulse enter para continuar:" << endl;
     getline(cin, pausa);
@@ -863,63 +862,73 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     printf("\033[0;37m"); // Gris claro
 }
 
+void mostrar_personajes_jugar_recursivo(personaje *actual_personaje)
+{
+    // Caso base
+    if (actual_personaje == nullptr)
+    {
+        return;
+    };
+
+    // Llamadas recursivas
+    mostrar_personajes_jugar_recursivo(actual_personaje->siguiente);
+
+    printf("\033[0;35m"); // Magenta para el nombre
+    cout << "Nombre: " << actual_personaje->nombre << endl;
+
+    printf("\033[0;36m"); // Cyan para los atributos
+    cout << "   ID: " << actual_personaje->identificador << endl;
+    cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl;
+    cout << "   Vitalidad: " << actual_personaje->tipo->salud << endl;
+    cout << "   Fortaleza: " << actual_personaje->tipo->danno_fortaleza << endl;
+    cout << "   Rapidez: " << actual_personaje->tipo->rapidez << endl;
+
+    printf("\033[0;37m"); // Gris claro para el resto del texto
+    cout << "Objetos de la mochila: " << endl;
+
+    Implemento *actual_implemento = actual_personaje->mimochila->implementos;
+    printf("\033[0;32m"); // Verde para "Implementos:"
+    cout << "  Implementos: ";
+    if (actual_implemento == nullptr)
+    {
+        printf("\033[0;31m"); // Rojo para mensaje de vacío
+        cout << "La mochila no tiene implementos." << endl;
+    }
+    else
+    {
+        printf("\033[0;37m"); // Gris claro para lista
+        cout << endl;
+        while (actual_implemento != nullptr)
+        {
+            printf("\033[0;32m"); // Verde para cada implemento
+            cout << "    - " << actual_implemento->nombre_implemento << endl;
+            actual_implemento = actual_implemento->siguiente;
+        }
+    }
+
+    if (actual_personaje->mimochila->num_poder == " ")
+    {
+        printf("\033[0;31m"); // Rojo para "no tiene poder"
+        cout << "Poder: no tiene ningun poder equipado." << endl;
+    }
+    else
+    {
+        printf("\033[0;33m"); // Amarillo para poder
+        cout << "Poder: " << actual_personaje->mimochila->num_poder << endl;
+    }
+    printf("\033[0;37m"); // Gris claro para reset
+    cout << "-------------------------" << endl;
+}
+
+// NO SIRVE BIEN
 void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
 {
-    personaje *actual_personaje = lista_personajes_jugar;
-    while (actual_personaje != nullptr)
-    {
-        printf("\033[0;35m"); // Magenta para el nombre
-        cout << "Nombre: " << actual_personaje->nombre << endl;
+    mostrar_personajes_jugar_recursivo(lista_personajes_jugar);
 
-        printf("\033[0;36m"); // Cyan para los atributos
-        cout << "   ID: " << actual_personaje->identificador << endl;
-        cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl;
-        cout << "   Vitalidad: " << actual_personaje->tipo->salud << endl;
-        cout << "   Fortaleza: " << actual_personaje->tipo->danno_fortaleza << endl;
-        cout << "   Rapidez: " << actual_personaje->tipo->rapidez << endl;
-
-        printf("\033[0;37m"); // Gris claro para el resto del texto
-        cout << "Objetos de la mochila: " << endl;
-
-        Implemento *actual_implemento = actual_personaje->mimochila->implementos;
-        printf("\033[0;32m"); // Verde para "Implementos:"
-        cout << "  Implementos: ";
-        if (actual_implemento == nullptr)
-        {
-            printf("\033[0;31m"); // Rojo para mensaje de vacío
-            cout << "La mochila no tiene implementos." << endl;
-        }
-        else
-        {
-            printf("\033[0;37m"); // Gris claro para lista
-            cout << endl;
-            while (actual_implemento != nullptr)
-            {
-                printf("\033[0;32m"); // Verde para cada implemento
-                cout << "    - " << actual_implemento->nombre_implemento << endl;
-                actual_implemento = actual_implemento->siguiente;
-            }
-        }
-
-        if (actual_personaje->mimochila->num_poder == " ")
-        {
-            printf("\033[0;31m"); // Rojo para "no tiene poder"
-            cout << "Poder: no tiene ningun poder equipado." << endl;
-        }
-        else
-        {
-            printf("\033[0;33m"); // Amarillo para poder
-            cout << "Poder: " << actual_personaje->mimochila->num_poder << endl;
-        }
-        printf("\033[0;37m"); // Gris claro para reset
-        cout << "-------------------------" << endl;
-        actual_personaje = actual_personaje->siguiente;
-    }
     cout << "\nNo hay mas personajes en el equipo\n\n";
     cout << "Pulse enter para continuar:" << endl;
     getline(cin, pausa);
 }
-
 
 void eliminar_personaje_jugar(personaje *&lista_jugar)
 {
