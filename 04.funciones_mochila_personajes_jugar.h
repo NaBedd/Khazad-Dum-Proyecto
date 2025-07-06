@@ -15,7 +15,7 @@ struct mochila
 {
     int identificador; // sera el mismo del personaje al que pertenezca.
     Implemento *implementos = nullptr;
-    Poder_magico *poderes = nullptr; // no se usara en esta entrega
+    Poder_magico *poderes = nullptr;  // no se usara en esta entrega
     string num_poder = " ";
 };
 
@@ -50,8 +50,6 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
         printf("\033[0;31m"); // Rojo
         cout << "Todavia no hay especies disponibles. Debe crearlas antes de crear un personaje." << endl;
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
     personaje *nuevo = new personaje;
@@ -99,8 +97,6 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
         cout << "La especie debe crearse primero." << endl;
         cout << "Creacion del personaje: " << nuevo->nombre << " fue fallida." << endl;
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         delete nuevo;
         return;
     }
@@ -127,8 +123,6 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
         cout << "El heroe: " << nuevo->nombre << ", se agrego correctamente." << endl;
     }
     printf("\033[0;37m"); // Gris claro
-    cout << "Pulse enter para continuar:" << endl;
-    getline(cin, pausa);
 }
 
 // Funcion para mostrar los personajes
@@ -140,8 +134,6 @@ void mostrar_personajes(personaje &lista, int tipo)
         cout << "\nNo hay especies de orcos para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
     if (tipo == 2 && cantidad_personaje_heroe == 0)
@@ -150,8 +142,6 @@ void mostrar_personajes(personaje &lista, int tipo)
         cout << "\nNo hay personajes heroes para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
 
@@ -180,8 +170,6 @@ void mostrar_personajes(personaje &lista, int tipo)
         actual = actual->siguiente;
     }
     cout << "No hay mas personajes.\n";
-    cout << "Pulse enter para continuar:" << endl;
-    getline(cin, pausa);
     cout << endl
          << endl;
 }
@@ -226,8 +214,6 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo)
         cout << "\nNo hay personajes orcos para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
     if (tipo == 2 && cantidad_personaje_heroe == 0)
@@ -236,8 +222,6 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo)
         cout << "\nNo hay personajes heroes para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
 
@@ -278,8 +262,6 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo)
                 cout << "La especie que coloco no se encuentra disponible." << endl;
                 cout << "La actualizacion del personaje: " << actual->nombre << " fue fallida." << endl;
                 printf("\033[0;37m"); // Gris claro
-                cout << "Pulse enter para continuar:" << endl;
-                getline(cin, pausa);
                 return;
             }
             else
@@ -287,8 +269,6 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo)
                 printf("\033[0;32m"); // Verde
                 cout << "El personaje ahora de nombre: " << actual->nombre << " se actualizo correctamente." << endl;
                 printf("\033[0;37m"); // Gris claro
-                cout << "Pulse enter para continuar:" << endl;
-                getline(cin, pausa);
             }
         }
         actual = actual->siguiente;
@@ -299,8 +279,6 @@ void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo)
         cout << "No se encontro ningun personaje con el ID: " << referencia << "." << endl;
         cout << "Actualizacion fallida." << endl;
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
     }
 }
 
@@ -313,8 +291,6 @@ void borrar_personaje(personaje &lista, int tipo)
         cout << "\nNo hay personajes orcos para eliminar actualmente.\n";
         cout << "Primero debe crearlos.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
     if (tipo == 2 && cantidad_personaje_heroe == 0)
@@ -323,8 +299,6 @@ void borrar_personaje(personaje &lista, int tipo)
         cout << "\nNo hay personajes heroes para eliminar actualmente.\n";
         cout << "Primero debe crearlos.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
 
@@ -342,8 +316,6 @@ void borrar_personaje(personaje &lista, int tipo)
         printf("\033[0;32m"); // Verde
         cout << "El personaje: " << actual->nombre << " fue borrado exitosamente." << endl;
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         delete actual;
         if (tipo == 1)
         {
@@ -371,8 +343,6 @@ void borrar_personaje(personaje &lista, int tipo)
         printf("\033[0;32m"); // Verde
         cout << "El personaje " << eliminar->nombre << " se elimino correctamente.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         delete eliminar;
 
         if (tipo == 1)
@@ -392,8 +362,6 @@ void borrar_personaje(personaje &lista, int tipo)
         cout << "El numero de personaje: " << identificador << " no se encuentra en la lista.\n";
         cout << "Eliminacion fallida.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
     }
 }
 
@@ -427,9 +395,7 @@ void borrar_personajes_de_tipo(personaje &lista_personajes, Especie *tipo_borrar
 
             printf("\033[0;32m"); // Verde
             cout << "El personaje: " << eliminar->nombre << " fue borrado." << endl;
-            printf("\033[0;37m"); // Gris claro
-            cout << "Pulse enter para continuar:" << endl;
-            getline(cin, pausa);
+            printf("\033[0;37m"); // Gris claro;
             delete eliminar;
 
             if (tipo == 1)
@@ -459,8 +425,6 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         printf("\033[0;31m"); // Rojo
         cout << "No hay elementos en la lista para borrar\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
         return;
     }
     cout << "Las especies disponibles son: \n";
@@ -504,8 +468,6 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         else if (controlador_eliminar == 2)
         {
             cout << "Eliminacion del tipo " << especie_borrar->nombre_especie << " fallida.\n";
-            cout << "Pulse enter para continuar:" << endl;
-            getline(cin, pausa);
             return;
         }
 
@@ -515,8 +477,6 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
             printf("\033[0;32m"); // Verde
             cout << "El tipo " << actual->nombre_especie << " se elimino correctamente." << endl;
             printf("\033[0;37m"); // Gris claro
-            cout << "Pulse enter para continuar:" << endl;
-            getline(cin, pausa);
             delete actual;
             lista.cantidad -= 1;
             if (tipo == 1)
@@ -543,8 +503,6 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
             printf("\033[0;32m"); // Verde
             cout << "El tipo " << eliminar->nombre_especie << " se elimino correctamente." << endl;
             printf("\033[0;37m"); // Gris claro
-            cout << "Pulse enter para continuar:" << endl;
-            getline(cin, pausa);
             delete eliminar;
             lista.cantidad -= 1;
             if (tipo == 1)
@@ -562,8 +520,6 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
             cout << "El numero de especie: " << identificador << " no se encuentra en la lista.\n";
             cout << "Eliminacion fallida.\n";
             printf("\033[0;37m"); // Gris claro
-            cout << "Pulse enter para continuar:" << endl;
-            getline(cin, pausa);
         }
     }
     else
@@ -571,8 +527,6 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
         printf("\033[0;31m"); // Rojo
         cout << "El numero de especie ingresado no es valido.\n";
         printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
     }
 }
 
@@ -657,8 +611,6 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
             printf("\033[0;32m"); // Verde
             cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
             printf("\033[0;37m"); // Gris claro
-            cout << "Pulse enter para continuar:" << endl;
-            getline(cin, pausa);
         }
         else if (opcio == 2)
         {
@@ -771,9 +723,13 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
         printf("\033[0;33m"); // Amarillo
         cout << "Ya no puedes agregar mas objetos.\n";
         cout << "La mochila del personaje " << personaje_a_llenar->nombre << " se lleno correctamente.\n";
+        cout<<"pulse enter para continuar."<<endl;
+        getline(cin,pausa); 
         printf("\033[0;37m"); // Gris claro
     }
 }
+
+
 
 // para elegir el personaje y llenar la mochila.
 void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &implementos)
@@ -783,6 +739,7 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
         printf("\033[0;33m"); // Amarillo
         cout << "Ya tienes la cantidad de personajes maxima.\n";
         cout << "La lucha sera complicada pero no tanto." << endl;
+        cout <<"Eleccion fallida."<<endl;
         printf("\033[0;37m"); // Gris claro
         cout << "Pulse enter para continuar:" << endl;
         getline(cin, pausa);
@@ -818,6 +775,8 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
         cout << "Eleccion de personaje fallida.\n";
         cout << "Esas acciones le faltan el respeto a los tres guerreros ancestrales de las cavernas." << endl;
         printf("\033[0;37m"); // Gris claro
+        cout<<"pulse enter para continuar."<<endl;
+        getline(cin,pausa); 
         return;
     }
     cantidad_personajes_jugar++;
@@ -836,11 +795,8 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     nuevo_para_jugar->siguiente = nullptr;
 
     printf("\033[0;33m"); // Amarillo
-    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl
-         << endl;
+    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl << endl;
     printf("\033[0;37m"); // Gris claro
-    cout << "Pulse enter para continuar:" << endl;
-    getline(cin, pausa);
     llenar_mochila(nuevo_para_jugar, implementos, lista_jugar);
 
     if (lista_jugar == nullptr)
@@ -862,73 +818,61 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     printf("\033[0;37m"); // Gris claro
 }
 
-void mostrar_personajes_jugar_recursivo(personaje *actual_personaje)
-{
-    // Caso base
-    if (actual_personaje == nullptr)
-    {
-        return;
-    };
-
-    // Llamadas recursivas
-    mostrar_personajes_jugar_recursivo(actual_personaje->siguiente);
-
-    printf("\033[0;35m"); // Magenta para el nombre
-    cout << "Nombre: " << actual_personaje->nombre << endl;
-
-    printf("\033[0;36m"); // Cyan para los atributos
-    cout << "   ID: " << actual_personaje->identificador << endl;
-    cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl;
-    cout << "   Vitalidad: " << actual_personaje->tipo->salud << endl;
-    cout << "   Fortaleza: " << actual_personaje->tipo->danno_fortaleza << endl;
-    cout << "   Rapidez: " << actual_personaje->tipo->rapidez << endl;
-
-    printf("\033[0;37m"); // Gris claro para el resto del texto
-    cout << "Objetos de la mochila: " << endl;
-
-    Implemento *actual_implemento = actual_personaje->mimochila->implementos;
-    printf("\033[0;32m"); // Verde para "Implementos:"
-    cout << "  Implementos: ";
-    if (actual_implemento == nullptr)
-    {
-        printf("\033[0;31m"); // Rojo para mensaje de vacío
-        cout << "La mochila no tiene implementos." << endl;
-    }
-    else
-    {
-        printf("\033[0;37m"); // Gris claro para lista
-        cout << endl;
-        while (actual_implemento != nullptr)
-        {
-            printf("\033[0;32m"); // Verde para cada implemento
-            cout << "    - " << actual_implemento->nombre_implemento << endl;
-            actual_implemento = actual_implemento->siguiente;
-        }
-    }
-
-    if (actual_personaje->mimochila->num_poder == " ")
-    {
-        printf("\033[0;31m"); // Rojo para "no tiene poder"
-        cout << "Poder: no tiene ningun poder equipado." << endl;
-    }
-    else
-    {
-        printf("\033[0;33m"); // Amarillo para poder
-        cout << "Poder: " << actual_personaje->mimochila->num_poder << endl;
-    }
-    printf("\033[0;37m"); // Gris claro para reset
-    cout << "-------------------------" << endl;
-}
-
-// NO SIRVE BIEN
 void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
 {
-    mostrar_personajes_jugar_recursivo(lista_personajes_jugar);
+    personaje *actual_personaje = lista_personajes_jugar;
+    while (actual_personaje != nullptr)
+    {
+        printf("\033[0;35m"); // Magenta para el nombre
+        cout << "Nombre: " << actual_personaje->nombre << endl;
 
+        printf("\033[0;36m"); // Cyan para los atributos
+        cout << "   ID: " << actual_personaje->identificador << endl;
+        cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl;
+        cout << "   Vitalidad: " << actual_personaje->tipo->salud << endl;
+        cout << "   Fortaleza: " << actual_personaje->tipo->danno_fortaleza << endl;
+        cout << "   Rapidez: " << actual_personaje->tipo->rapidez << endl;
+
+        printf("\033[0;37m"); // Gris claro para el resto del texto
+        cout << "Objetos de la mochila: " << endl;
+
+        Implemento *actual_implemento = actual_personaje->mimochila->implementos;
+        printf("\033[0;32m"); // Verde para "Implementos:"
+        cout << "  Implementos: ";
+        if (actual_implemento == nullptr)
+        {
+            printf("\033[0;31m"); // Rojo para mensaje de vacío
+            cout << "La mochila no tiene implementos." << endl;
+        }
+        else
+        {
+            printf("\033[0;37m"); // Gris claro para lista
+            cout << endl;
+            while (actual_implemento != nullptr)
+            {
+                printf("\033[0;32m"); // Verde para cada implemento
+                cout << "    - " << actual_implemento->nombre_implemento << endl;
+                actual_implemento = actual_implemento->siguiente;
+            }
+        }
+
+        if (actual_personaje->mimochila->num_poder == " ")
+        {
+            printf("\033[0;31m"); // Rojo para "no tiene poder"
+            cout << "Poder: no tiene ningun poder equipado." << endl;
+        }
+        else
+        {
+            printf("\033[0;33m"); // Amarillo para poder
+            cout << "Poder: " << actual_personaje->mimochila->num_poder << endl;
+        }
+        printf("\033[0;37m"); // Gris claro para reset
+        cout << "-------------------------" << endl;
+        actual_personaje = actual_personaje->siguiente;
+    }
     cout << "\nNo hay mas personajes en el equipo\n\n";
-    cout << "Pulse enter para continuar:" << endl;
-    getline(cin, pausa);
 }
+
 
 void eliminar_personaje_jugar(personaje *&lista_jugar)
 {
