@@ -1,7 +1,10 @@
+#pragma once // Soluciona errores de redefinicion
+// 02. Ya incluye las genericas
+#include "02.funciones_tipos_especie.h"
+#include <iostream>
+#include <string>
 
-// Librerias Locales:
-#pragma once                        // Soluciona errores de redefinicion
-#include "01.funciones_genericas.h" // Funciones generales para el programa
+using namespace std;
 
 // Regulador para cuando se eliminen tipos de orcos en la lista.
 int regulador_tipo_orco = 7;  // por el archivo
@@ -15,7 +18,7 @@ struct Especie
     int salud;
     int rapidez;
     int identificador;
-    Especie *siguiente; // no se pone como null porque ela lista esta planteada de otra manera.
+    Especie *siguiente; // no se pone como null porque la lista esta planteada de otra manera.
 };
 
 // Listas enlazadas de Especies
@@ -25,11 +28,14 @@ struct Lista_especie
     int cantidad = 0;
 };
 
+string pausa1 = " ";
+
 // PARA CREAR UN NUEVO TIPO DE ORCO.
 void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
-{                                               // toma la direccion de memoria de la lista.
+{
     Especie *nuevo = new Especie();
 
+    printf("\033[0;33m"); // Amarillo
     if (tipo == 1)
     { // si es orco
         cout << "\nIngrese los datos para la nueva especie de Orco: \n";
@@ -40,23 +46,33 @@ void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
     }
     else
     {
+        printf("\033[0;31m"); // Rojo
         cout << "ERROR. TIPO NO ESPECIFICADO. VERIFICAR NUMERO QUE SE LE PUSO A LA FUNCION CREAR_TIPO \n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa1);
+        return;
     }
 
+    printf("\033[0;37m"); // Gris claro
     nuevo->nombre_especie = devolver_string_verificada("Nombre de la especie: ");
 
     if (tipo == 1)
     {
         nuevo->danno_fortaleza = obtener_entero("Danno: ");
     }
-
     else if (tipo == 2)
     {
         nuevo->danno_fortaleza = obtener_entero("Fortaleza: ");
     }
     else
     {
+        printf("\033[0;31m"); // Rojo
         cout << "ERROR. TIPO NO ESPECIFICADO. VERIFICAR NUMERO QUE SE LE PUSO A LA FUNCION CREAR_TIPO \n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa1);
+        return;
     }
 
     nuevo->salud = obtener_entero("Salud: ");
@@ -65,75 +81,97 @@ void Crear_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
     cout << endl;
 
     // inserta de primero en la lista.
-    nuevo->siguiente = lista.primero_especie; // a nuevo lo pone a apuntar a lo que este apuntando la lista (nullptr o otro si ya hay elementos en la lista).
-    lista.primero_especie = nuevo;            // y lista ahora apunta a nuevo ya que lista siempre es la cabeza de la lista en este caso.
+    nuevo->siguiente = lista.primero_especie;
+    lista.primero_especie = nuevo;
     lista.cantidad = lista.cantidad + 1;
 
-    // Sube el identificador uno mas uno
     if (tipo == 1)
     {
-        nuevo->identificador = (lista.cantidad + regulador_tipo_orco); // le sumo el regulador para que el identificador no quede igual al ultimo
-        // se le suma 1
+        nuevo->identificador = (lista.cantidad + regulador_tipo_orco);
+        printf("\033[0;32m"); // Verde
         cout << "Especie de orco " << nuevo->nombre_especie << " ha sido agregada exitosamente. \n";
     }
     else
     {
-        nuevo->identificador = (lista.cantidad + regulador_tipo_heroe); // le sumo el regulador para que el identificador no quede igual al ultimo
-        // se le suma 1
+        nuevo->identificador = (lista.cantidad + regulador_tipo_heroe);
+        printf("\033[0;32m"); // Verde
         cout << "Especie de heroe " << nuevo->nombre_especie << " ha sido agregada exitosamente. \n";
     }
+    printf("\033[0;37m"); // Gris claro
+    cout << "Pulse enter para continuar:" << endl;
+    getline(cin, pausa1);
 }
 
 // Para mostrar listas de especies
 void mostrar_lista(const Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
-{                                                        // toma la direccion de memoria.
+{
     if (lista.cantidad == 0)
-    { // si no hay elementos no hace nada.
+    {
+        printf("\033[0;31m"); // Rojo
         cout << "No hay especies disponibles. \n\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa1);
         return;
     }
 
     if (tipo == 1)
     {
+        printf("\033[0;33m"); // Amarillo
         cout << "\nHay [" << lista.cantidad << "] especies de orcos disponibles" << endl;
     }
     else
     {
+        printf("\033[0;33m"); // Amarillo
         cout << "\nHay [" << lista.cantidad << "] especies de heroes disponibles" << endl;
     }
-    Especie *actual = lista.primero_especie; // se crea una variable auxiliar para igualarla al primer elemnto de la lista.
+    printf("\033[0;37m"); // Gris claro
+
+    Especie *actual = lista.primero_especie;
     while (actual != nullptr)
-    { // si es igual a nullptr significa que es el ultimo elemento de la lista.
-        cout << actual->identificador << ".";
+    {
+        cout << actual->identificador << ". ";
         cout << "Nombre: " << actual->nombre_especie << endl;
+
+        printf("\033[0;36m"); // Cyan para atributos
         if (tipo == 1)
         {
             cout << "Danno: " << actual->danno_fortaleza << endl;
         }
         else
         {
-            cout << "fortaleza: " << actual->danno_fortaleza << endl;
+            cout << "Fortaleza: " << actual->danno_fortaleza << endl;
         }
         cout << "Salud: " << actual->salud << endl;
-        cout << "Rapidez: " << actual->rapidez << "\n"
-             << endl;
-        actual = actual->siguiente; // pasa a siguiente elemento de la lista.
+        cout << "Rapidez: " << actual->rapidez << "\n" << endl;
+        printf("\033[0;37m"); // Gris claro para resetear color
+
+        actual = actual->siguiente;
     }
-    cout << "No hay mas tipos disponibles.\n"
+    cout << "No hay mas tipos disponibles.\n";
+    cout << "Pulse enter para continuar:" << endl;
+    getline(cin, pausa1);
+    cout << endl
          << endl;
 }
 
-// Para actalizar tipos de especies.
+// Para actualizar tipos de especies.
 void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 heroe
 {
     if (lista.cantidad == 0)
     {
+        printf("\033[0;31m"); // Rojo
         cout << "La lista se encuentra vacia.\n\n";
-        return; // deja de ejecutar la funcion
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa1);
+        return;
     }
 
     int referencia;
-    cout << "\nLas especies disponibles son: ";
+    printf("\033[0;33m"); // Amarillo
+    cout << "\nLas especies disponibles son: " << endl;
+    printf("\033[0;37m"); // Gris claro
     cout << "------------------------" << endl;
     mostrar_lista(lista, tipo);
     if (tipo == 1)
@@ -142,11 +180,16 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
     }
     else if (tipo == 2)
     {
-        referencia = obtener_entero("ingrese el numero de especie heroe a modificar: ");
+        referencia = obtener_entero("Ingrese el numero de especie heroe a modificar: ");
     }
     else
     {
+        printf("\033[0;31m"); // Rojo
         cout << "ERROR. VERIFICAR CODIGO. ACTUALIZAR_TIPO" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa1);
+        return;
     }
     Especie *actual = lista.primero_especie;
     bool encontrado = false;
@@ -157,13 +200,15 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
         {
             if (tipo == 1)
             {
+                printf("\033[0;33m"); // Amarillo
                 cout << "\nIngrese los datos a actualizar para la especie orco con identificador " << referencia << ":\n";
             }
             else
             {
+                printf("\033[0;33m"); // Amarillo
                 cout << "\nIngrese los datos a actualizar para la especie heroe con identificador " << referencia << ":\n";
             }
-            // cin.ignore(); // Limpiar el buffer
+            printf("\033[0;37m"); // Gris claro
 
             actual->nombre_especie = devolver_string_verificada("Nombre de la especie: ");
 
@@ -179,37 +224,44 @@ void actualizar_tipo(Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2 her
             actual->salud = obtener_entero("Salud: ");
             actual->rapidez = obtener_entero("Rapidez: ");
 
+            printf("\033[0;32m"); // Verde
             if (tipo == 1)
             {
-                cout << "Datos de la especie orco con ID " << referencia << " actualizados exitosamente.\n";
+                cout << "Datos de la especie orco " << actual->nombre_especie << " actualizados exitosamente.\n";
             }
             else
             {
-                cout << "Datos de la especie heroe con ID " << referencia << " actualizados exitosamente.\n";
+                cout << "Datos de la especie heroe " << actual->nombre_especie << " actualizados exitosamente.\n";
             }
+            printf("\033[0;37m"); // Gris claro
+            cout << "Pulse enter para continuar:" << endl;
+            getline(cin, pausa1);
             encontrado = true;
-            break; // Importante salir del bucle una vez encontrado
+            break;
         }
         actual = actual->siguiente;
     }
 
     if (!encontrado)
     {
-        cout << "No se encontró ninguna especie con ID: " << referencia << ".\n";
+        printf("\033[0;31m"); // Rojo
+        cout << "No se encontro ninguna especie con ID: " << referencia << ".\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa1);
     }
 }
 
 // funcion para liberar memoria dinamica.
 void destruir_lista_especie(Lista_especie &lista)
-{                                            // Toma la direccion de memoria de la lista que se le pase (del tipo).
-    Especie *actual = lista.primero_especie; // declara un nodo actual para igualarlo al primer elemento de la lista.
+{
+    Especie *actual = lista.primero_especie;
     while (actual != nullptr)
-    {                               // si es nullptr es porque es el ultimo elemento.
-        Especie *eliminar = actual; // se crea una variable aux (eliminar) para darle la direccion de memoria de actual.
-        actual = actual->siguiente; // se manda al siguente nodo al actual.
-        delete eliminar;            // se elimina la variable aux (eliminar).
+    {
+        Especie *eliminar = actual;
+        actual = actual->siguiente;
+        delete eliminar;
     }
-    // la declaramos en null a la lista.
     lista.primero_especie = nullptr;
     lista.cantidad = 0;
 }
@@ -226,7 +278,8 @@ Especie *encontrar_especie_id(Lista_especie &lista, int identificador)
         }
         actual = actual->siguiente;
     }
+    printf("\033[0;31m"); // Rojo
     cout << "La especie ingresada no existe." << endl;
-    return actual = nullptr;
+    printf("\033[0;37m"); // Gris claro
+    return nullptr;
 }
-
