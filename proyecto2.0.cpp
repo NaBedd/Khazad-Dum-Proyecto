@@ -42,16 +42,16 @@ void poder_vigor_enano(personaje *lista_personajes_jugar)
         {
             modificado = true;
             // Le recupera toda la vida (La devuelve a su valor original)
-            actual_personaje->vitalidad = actual_personaje->tipo->salud;
-            std::cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido regenerada por completo (" << actual_personaje->vitalidad << ")" << endl;
+            actual_personaje->tipo->salud = actual_personaje->tipo->salud;
+            std::cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido regenerada por completo (" << actual_personaje->tipo->salud << ")" << endl;
 
             // Le aumenta la vida en 100
-            actual_personaje->vitalidad += 100;
-            std::cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido aumentada en 100 (" << actual_personaje->vitalidad << ")" << endl;
+            actual_personaje->tipo->salud += 100;
+            std::cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido aumentada en 100 (" << actual_personaje->tipo->salud << ")" << endl;
 
             // Le aumenta la fortaleza en 1000
-            actual_personaje->fortaleza += 1000;
-            std::cout << "La fuerza del personaje ha sido aumentada en 1000 (" << actual_personaje->fortaleza << ")";
+            actual_personaje->tipo->salud += 1000;
+            std::cout << "La fuerza del personaje ha sido aumentada en 1000 (" << actual_personaje->tipo->danno_fortaleza << ")";
 
             actual_personaje = actual_personaje->siguiente;
         }
@@ -119,8 +119,8 @@ void salud_0_sala()
     cout << "aplicando.." << endl;
     for (size_t i = 0; i < aplicar->lista_orcos.size(); i++)
     {
-        aplicar->lista_orcos[i]->vitalidad = 1;
-        cout << "NOMBRE: " << aplicar->lista_orcos[i]->nombre << " - Vitalidad: " << aplicar->lista_orcos[i]->vitalidad << endl;
+        aplicar->lista_orcos[i]->tipo->salud = 1;
+        cout << "NOMBRE: " << aplicar->lista_orcos[i]->nombre << " - Vitalidad: " << aplicar->lista_orcos[i]->tipo->salud << endl;
     }
     cout << "Poder aplicado exitosamente." << endl;
     return;
@@ -193,11 +193,17 @@ int main()
     } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
 
     // ---------------------------------- GAMEPLAY ------------------------------------
-    if (opcion_principal != 7)
-    {
-        juego(turno);
-    }
+    
+    
+    
+    // da error
+    //if (opcion_principal != 7)
+    //{
+        //juego(turno);
+    //}
 
+    
+    
     // --------------------------------------------------------------------------------
     // --------------- FIN DEL PROGRAMA. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
@@ -218,3 +224,4 @@ int main()
     cout << "Gracias por usar el programa. \n";
 }
 // fin del programa.
+
