@@ -9,7 +9,8 @@ struct mochila
 {
     int identificador; // sera el mismo del personaje al que pernenezca.
     Implemento *implementos = nullptr;
-    Poder_magico *poderes = nullptr;
+    Poder_magico *poderes = nullptr;  // no se usara en esta entrega
+    string num_poder=" ";
     // aqui va el mapa.
 };
 
@@ -19,9 +20,9 @@ struct personaje
     mochila *mimochila = nullptr;
     string nombre;
     Especie *tipo;
-    double vitalidad; // Double para que no explote con vigor enano
-    int fortaleza;
-    int velocidad;
+    //double vitalidad; // Double para que no explote con vigor enano
+    //int fortaleza;
+    //int velocidad;
     int identificador;
     personaje *siguiente = nullptr;
 };
@@ -38,6 +39,8 @@ int cantidad_personaje_heroe = 0;
 int cantidad_personajes_jugar = 0;
 int regulador_personajes_jugar = 0;
 
+
+string pausa=" "; // para que se pare el programa.
 // Para crear personajes.
 void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int tipo)
 {
@@ -507,9 +510,10 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
 
 //----------------------------------- FUNCIONES PERSONAJES JUGAR --------------------------------------
 
-void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Poder_magico &poderes, personaje *lista_personajes_jugar)
+void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, personaje *lista_personajes_jugar)
 {
     int opcio = 0;
+    int con_poderes=0;
     int cantidad_objetos = 0;
     int identificador = 0;
     int contrilador_interno = 0;
@@ -542,7 +546,11 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
                 else if (nuevo_implemento->fortalezanecesaria > personaje_a_llenar->tipo->danno_fortaleza)
                 {
                     cout << "El implemento: " << nuevo_implemento->nombre_implemento << " no puede ser usado por el personaje: " << personaje_a_llenar->nombre << endl;
+                    cout<<"Su fortaleza no es la suficinete."<<endl;
+                    cout<<"la fortaleza de "<<personaje_a_llenar->nombre<<"es: "<<personaje_a_llenar->tipo->danno_fortaleza<<endl;
                     cout << "Coloque uno valido.\n";
+                    cout <<"pulse enter para continuar:"<<endl;
+                    getline(cin, pausa);
                 }
                 else
                 {
@@ -551,64 +559,75 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
             } while (contrilador_interno != 1);
             // procedemos a colocar el implemento en la mochila.
             Implemento *colocar = new Implemento;
-            *colocar = *nuevo_implemento;
+            *colocar = *nuevo_implemento;  // se copia en teoria.
             colocar->siguiente = personaje_a_llenar->mimochila->implementos;
             personaje_a_llenar->mimochila->implementos = colocar;
             cantidad_objetos += 1;
             contrilador_interno = 0;
             cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
+            cout <<"pulse enter para continuar:"<<endl;
+            getline(cin, pausa);
         }
         else if (opcio == 2)
         {
-            Poder_magico *nuevo_poder = nullptr;
+            if (con_poderes == 1){
+                cout<<"Ya seleccionaste un poder y solo puedes tener 1."<<endl;
+                cout<<"por lo tanto se reemplazara el pder actual que tienes implementado."<<endl;
+                cout <<"pulse enter para continuar:"<<endl;
+                getline(cin, pausa);
+            }
+            
+            cout<<"Aqui solo apareceran los podere con magia suficinte para poder ser utilizados."<<endl;
+            cout<<"actualmete se encuentran 4.."<<endl;
+            cout<<"los cuales fueron creados por los tres gerreros ancestrles de las caberna.."<<endl<<endl;
+            // colocar dibujo. y pausa.
             do
             {
-                cout << "Los poderes magicos disponibles son:\n";
-                mostrar_poderes(poderes);
-                cout << "coloque el ID del poder que desea colocar: ";
-                identificador = obtener_entero("");
-                nuevo_poder = encontrar_poder(poderes, identificador);
-                if (nuevo_poder == nullptr)
+                cout<<"Los poderes son: ";
+                cout<<"1. Hechizo mortal: hace que todos los orcos de una sala tengan 1 de salud."<<endl;
+                cout<<"2. Enanos al poder: recuera la vida de todos los enanos y le suma 1000 a su fortaleza."<<endl;
+                cout<<"3. Fuera maldad: traslada a todos los orcos de una sala a otra."<<endl;
+                cout<<"4. Implemento supremo: potencia un implemento de un personaje y la fortaleza se vuelve 0."<<endl;
+                cout<<"5. no quiero ningun poder."; //opcion para los tontos.
+                cout<<"Elija sabiamente: "<<endl;
+                opcio=obtener_entero("");
+                if (opcio==1)
                 {
-                    cout << "El ID: " << identificador << " no existe.\n";
-                    cout << "coloque uno valido.\n";
+                    personaje_a_llenar->mimochila->num_poder ="hechizo mortal"; //sin mayusculas
+                    cantidad_objetos++;
+                    opcio=0;
+                    break;
+                } else if (opcio == 2)
+                {
+                    personaje_a_llenar->mimochila->num_poder ="enanos al poder";
+                    cantidad_objetos++;
+                    opcio=0;
+                    break;
+                }else if (opcio ==3)
+                {
+                    personaje_a_llenar->mimochila->num_poder ="fuera maldad";
+                    cantidad_objetos++;
+                    opcio=0;
+                    break;
+                }else if (opcio ==4)
+                {
+                    personaje_a_llenar->mimochila->num_poder ="implemento supremo";
+                    cantidad_objetos++;
+                    opcio=0;
+                    break;
+                }else if (opcio==5)
+                {
+                    cout<<"Esto es un mal presagio.."<<endl;
+                    cout<<"Salido de la eleccion de poderes.."<<endl;
+                }else{
+                    cout<<"Le faltas el respeto a los tres gerreros ancestrales"<<endl;
+                    cout<<"Coloque el numero de uno de los 4 poderes disponibles."<<endl;
+                    cout<<"O 5 si eres tan tonto como para no querer ninguno poder ancestral."<<endl;        
                 }
-                else
-                {
-                    //verifica si el poder ya está asignado a cualquier personaje
-                    bool poder_en_uso = false;
-                    personaje *temp = lista_personajes_jugar;//comienza desde el primer personaje y va por todos
-                    while (temp != nullptr) {
-                        if (temp->mimochila != nullptr) {
-                            Poder_magico *poder_mochila = temp->mimochila->poderes;
-                            while (poder_mochila != nullptr) {
-                                if (poder_mochila->identificador == nuevo_poder->identificador) {
-                                    poder_en_uso = true;
-                                    break;
-                                }
-                                poder_mochila = poder_mochila->siguiente;
-                            }
-                        }
-                        if (poder_en_uso) break;
-                        temp = temp->siguiente;
-                    }
 
-                    if (poder_en_uso) {
-                        cout << "El poder: " << nuevo_poder->nombre_poder << " ya está asignado a otro personaje.\n";
-                        cout << "Coloque uno valido.\n";
-                    } else {
-                        contrilador_interno = 1;
-                    }
-                }
-            } while (contrilador_interno != 1);
+            } while (opcio != 5);
             
-            Poder_magico *colocar = new Poder_magico;
-            *colocar = *nuevo_poder;
-            colocar->siguiente = personaje_a_llenar->mimochila->poderes;
-            personaje_a_llenar->mimochila->poderes = colocar;
-            cantidad_objetos += 1;
-            contrilador_interno = 0;
-            cout << "El poder " << colocar->nombre_poder << " se agrego correctamente a la mochila.\n";
+            
         }
         else if (opcio == 3)
         {
@@ -628,17 +647,18 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, Pod
 }
 
 // para elegir el personaje y llenar la mochila.
-void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &implementos, Poder_magico &poderes)
+void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &implementos)
 {
-    if (cantidad_personaje_heroe <= 0)
-    {
-        cout << "No hay heroes disponibles para elegir.\n";
-        cout << "Eleccion de personaje fallida \n";
-        return;
-    }
+    //if (cantidad_personaje_heroe <= 0)
+    //{
+    //    cout << "No hay heroes disponibles para elegir.\n";
+    //    cout << "Eleccion de personaje fallida \n";
+    //    return;
+    // }
     if (cantidad_personajes_jugar == 4)
     {
         cout << "Ya tienes la cantidad de personajes maxima.\n";
+        cout <<"La lucha sera complicada pero no tanto."<<endl;
         return;
     }
     if (cantidad_implementos == 0)
@@ -662,13 +682,21 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     {
         cout << "El ID: " << identificador << " no existe.\n";
         cout << "Eleccion de personaje fallida.\n";
+        cout <<"esas acciones le faltan el respeto a los tres gerreros ancetrales de las cabernas."<<endl;
         return;
     }
     cantidad_personajes_jugar += 1;
-    // se copia para evitar probles (daba error si no lo hacia asi)
+    // se copia para evitar probles que cada personaje tenga su cosas individuales.
     personaje *nuevo_para_jugar = new personaje;
     nuevo_para_jugar->nombre = seleccionado->nombre;
-    nuevo_para_jugar->tipo = seleccionado->tipo;
+    // copiamos las cosas del tipo.
+    nuevo_para_jugar->tipo = new Especie;
+    nuevo_para_jugar->tipo->danno_fortaleza = seleccionado->tipo->danno_fortaleza;
+    nuevo_para_jugar->tipo->identificador = seleccionado->tipo->identificador;
+    nuevo_para_jugar->tipo->nombre_especie = seleccionado->tipo->nombre_especie;
+    nuevo_para_jugar->tipo->rapidez = seleccionado->tipo->rapidez;
+    nuevo_para_jugar->tipo->salud = seleccionado->tipo->salud;
+    // copia terminada.
     nuevo_para_jugar->identificador = cantidad_personajes_jugar + regulador_personajes_jugar; // Nuevo ID para el equipo
     nuevo_para_jugar->mimochila = new mochila;
     nuevo_para_jugar->mimochila->implementos = nullptr; // porsia
@@ -676,7 +704,9 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     nuevo_para_jugar->siguiente = nullptr;
 
     cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl<< endl;
-    llenar_mochila(nuevo_para_jugar, implementos, poderes,lista_jugar);
+    cout <<"pulse enter para continuar:"<<endl;
+    getline(cin, pausa);
+    llenar_mochila(nuevo_para_jugar, implementos,lista_jugar);
 
     // verrr la logica de incertar en un poco diferente a las demas funciones. los pone a final.
     // Insertar el nuevo personaje en la lista de personajes para jugar
@@ -694,6 +724,7 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
         ultimo->siguiente = nuevo_para_jugar;
     }
     cout << "El heroe " << nuevo_para_jugar->nombre << " se agrago al equipo.\n";
+    cout <<"buena eleccion.."<<endl;
 }
 
 // para mostrar con copia para no destruir la lista al mometo de mostrar.
@@ -705,8 +736,9 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
         cout << "Nombre: " << actual_personaje->nombre << endl;
         cout << "   ID: " << actual_personaje->identificador << endl;
         cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl; // Asumiendo que 'tipo' es un puntero a Especie
-        cout << "   Vitalidad: " << actual_personaje->vitalidad << endl;
-        cout << "   Fortaleza: " << actual_personaje->fortaleza << endl;
+        cout << "   Vitalidad: " << actual_personaje->tipo->salud << endl;
+        cout << "   Fortaleza: " << actual_personaje->tipo->danno_fortaleza << endl;
+        cout<< "   Rapidez: "<< actual_personaje->tipo->rapidez<<endl;
 
         // para la mochila.
         cout << "Objetos de la mochila: " << endl;
@@ -715,7 +747,7 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
         cout << "  Implementos: ";
         if (actual_implemento == nullptr)
         {
-            cout << "La mochila esta vacia" << endl; // Antes decia "ninguno". Verificar
+            cout << "la mochia no tiene implementos." << endl; // Antes decia "ninguno". Verificar
         }
         else
         {
@@ -728,25 +760,17 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
         }
 
         // Mostrar poderes de la mochila
-        Poder_magico *actual_poder = actual_personaje->mimochila->poderes;
-        cout << "  Poderes Magicos: ";
-        if (actual_poder == nullptr)
-        {
-            cout << "Ninguno" << endl;
+        if (actual_personaje->mimochila->num_poder == " "){
+            cout <<"no tiene un poeder equipado."<<endl;
+        }else{
+            cout<<"Poder: "<<actual_personaje->mimochila->num_poder<<endl;
         }
-        else
-        {
-            cout << endl;
-            while (actual_poder != nullptr)
-            {
-                cout << "    - " << actual_poder->nombre_poder << endl;
-                actual_poder = actual_poder->siguiente;
-            }
-        }
-        cout << endl;
+        cout<<"-------------------------"<<endl;
         actual_personaje = actual_personaje->siguiente; // Pasa al siguiente personaje
     }
     cout << "\n No hay mas personajes en el equipo\n\n ";
+    cout <<"pulse enter para continuar:"<<endl;
+    getline(cin, pausa);
 }
 
 void eliminar_personaje_jugar(personaje *&lista_jugar)
@@ -784,7 +808,7 @@ void eliminar_personaje_jugar(personaje *&lista_jugar)
             delete actual_implemento;
             actual_implemento = siguiente_implemento;
         }
-        // poder magico.
+        // poder magico.(lo deje porcia igual no da error)
         Poder_magico *actual_poder = actual->mimochila->poderes;
         while (actual_poder != nullptr)
         {
@@ -793,8 +817,8 @@ void eliminar_personaje_jugar(personaje *&lista_jugar)
             actual_poder = siguiente_poder;
         }
 
-        // Eliminar el nodo del personaje de la lista
-        // en caso sea el primer nodo.
+        // Eliminar el elemento del personaje de la lista
+        // en caso sea el primer elemento.
         if (anterior == nullptr)
         {
             lista_jugar = actual->siguiente;
@@ -812,6 +836,7 @@ void eliminar_personaje_jugar(personaje *&lista_jugar)
     {
         cout << "El ID " << identificador << " No existe en el equipo. \n";
         cout << "Eliminacion fallida.\n";
+
     }
 }
 
@@ -830,7 +855,7 @@ void destruir_personaje_jugar(personaje *&lista_jugar)
             delete actual_implemento;
             actual_implemento = siguiente_implemento;
         }
-        // poderes.
+        // poderes. (lo dejo asi por que no da error.)
         Poder_magico *actual_poder = actual->mimochila->poderes;
         while (actual_poder != nullptr)
         {
@@ -868,8 +893,9 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 
     if (actual != nullptr)
     {
-        cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
-
+        cout << "Proceda a llenar nuevamente la mochila del personaje nuevamente.: " << actual->nombre << endl;
+        cout <<"pulse enter para continuar:"<<endl;
+        getline(cin, pausa);
         // Liberamos la memoria de los poderes actuales.
         Implemento *actual_implemento = actual->mimochila->implementos;
         while (actual_implemento != nullptr)
@@ -880,7 +906,7 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
         }
         actual->mimochila->implementos = nullptr; // la ponemos vacia
 
-        // Liberar mos la memoria de los poderes actuales.
+        // Liberar mos la memoria de los poderes actuales. (lo dejo por que no da error)
         Poder_magico *actual_poder = actual->mimochila->poderes;
         while (actual_poder != nullptr)
         {
@@ -888,10 +914,12 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
             delete actual_poder;
             actual_poder = siguiente_poder;
         }
+        // colocamos el nombre del pdr en blanco
+        actual->mimochila->num_poder=" ";
         actual->mimochila->poderes = nullptr; // la ponemso vacia.
 
         // se llama a la funcion llenar mochila.
-        llenar_mochila(actual, Implementos, poderes,personajes_jugar);
+        llenar_mochila(actual, Implementos,personajes_jugar);
         cout << "Actualización de la mochila completa para el personaje: " << actual->nombre << endl;
     }
     else
