@@ -69,15 +69,25 @@ void destruir_poder_magico(Poder_magico &lista_poderes)
 // para mostrar los poderes.
 void mostrar_poderes(Poder_magico &lista_poderes)
 {
-    printf("\033[0;33m"); // Amarillo
+    printf("\033[0;33m");
     cout << "La cantidad de poderes actualmente sin magia suficiente es: " << cantidad_poderes << endl
          << endl;
-    printf("\033[0;37m"); // Gris claro
+    printf("\033[0;37m");
 
+    stack<Poder_magico*> pila;
     Poder_magico *actual = lista_poderes.siguiente;
     while (actual != nullptr)
     {
-        printf("\033[0;36m"); // Cyan para atributos
+        pila.push(actual);
+        actual = actual->siguiente;
+    }
+
+    while (!pila.empty())
+    {
+        actual = pila.top();
+        pila.pop();
+
+        printf("\033[0;36m");
         cout << "Nombre: ";
         printf("\033[0;37m");
         cout << actual->nombre_poder << endl;
@@ -90,30 +100,27 @@ void mostrar_poderes(Poder_magico &lista_poderes)
         printf("\033[0;36m");
         cout << "Funcion: ";
         printf("\033[0;37m");
-        cout << actual->funcion << endl
-             << endl;
-
-        actual = actual->siguiente;
+        cout << actual->funcion << endl << endl;
     }
-    printf("\033[0;33m"); // Amarillo
+
+    printf("\033[0;33m");
     cout << "Los poderes con magia suficiente para ser usados son: " << endl;
-    // Cada poder con color diferente para resaltar
-    printf("\033[0;35m"); // Magenta
+    printf("\033[0;35m");
     cout << "1. Hechizo mortal: ";
-    printf("\033[0;37m"); // Gris claro
+    printf("\033[0;37m");
     cout << "hace que todos los orcos de una sala tengan 1 de salud." << endl;
 
-    printf("\033[0;36m"); // Cyan
+    printf("\033[0;36m");
     cout << "2. Enanos al poder: ";
     printf("\033[0;37m");
     cout << "recupera la vida de todos los enanos y le suma 1000 a su fortaleza." << endl;
 
-    printf("\033[0;33m"); // Amarillo
+    printf("\033[0;33m");
     cout << "3. Maldad Fuera: ";
     printf("\033[0;37m");
     cout << "traslada a todos los orcos de una sala a otra." << endl;
 
-    printf("\033[0;34m"); // Azul
+    printf("\033[0;34m");
     cout << "4. Implemento supremo: ";
     printf("\033[0;37m");
     cout << "potencia un implemento de un personaje y la fortaleza se vuelve 0." << endl;
