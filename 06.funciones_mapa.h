@@ -362,6 +362,18 @@ void borrar_sala(mapaGrafo &grafo, int sala_borrar_id) // Borra sala. Solo usar 
             }
         }
 
+        // Borra los heroes de la sala si existen
+        for (int j = salaBorrar->lista_heroes.size() - 1; j >= 0; j--)
+        {
+            salaBorrar->lista_heroes.erase(salaBorrar->lista_heroes.begin() + j);
+        }
+
+        // Borra los orcos de la sala si existen
+        for (int j = salaBorrar->lista_orcos.size() - 1; j >= 0; j--)
+        {
+            salaBorrar->lista_orcos.erase(salaBorrar->lista_orcos.begin() + j);
+        }
+
         // Se borra del grafo (vector)
         grafo.mapa_salas.erase(grafo.mapa_salas.begin() + indiceBorrar);
 
