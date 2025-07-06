@@ -181,7 +181,6 @@ void cargar_implementos(Implemento &lista_implemento, bool &listo_implementos)
 {
     if (!listo_implementos)
     {
-
         ifstream archivo;
         string linea; // guardara una linea de archivo.
 
@@ -402,7 +401,6 @@ void cargar_personajes(personaje &lis_heroes, personaje &lis_orco, Lista_especie
                        Lista_especie &tipos_orcos, bool &listo_personajes)
 {
     if (!listo_personajes)
-
     {
         ifstream archivo;
         string linea; // guardara una linea de archivo.

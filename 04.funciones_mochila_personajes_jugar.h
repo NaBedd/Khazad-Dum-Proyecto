@@ -157,7 +157,7 @@ void mostrar_personajes(personaje &lista, int tipo)
     }
     printf("\033[0;37m");
 
-    stack<personaje*> pila;
+    stack<personaje *> pila;
     personaje *actual = lista.siguiente;
     while (actual != nullptr)
     {
@@ -167,7 +167,7 @@ void mostrar_personajes(personaje &lista, int tipo)
 
     while (!pila.empty())
     {
-        personaje* temp = pila.top();
+        personaje *temp = pila.top();
         pila.pop();
         cout << temp->identificador << " - ";
         printf("\033[0;35m");
@@ -175,11 +175,16 @@ void mostrar_personajes(personaje &lista, int tipo)
         printf("\033[0;36m");
         cout << "Especie: " << temp->tipo->nombre_especie << endl;
         printf("\033[0;37m");
+        cout << "Salud: " << temp->tipo->salud << endl;
+        cout << "Fortaleza: " << temp->tipo->danno_fortaleza << endl;
+        cout << "Rapidez: " << temp->tipo->rapidez << endl;
+        printf("\033[0;37m");
         cout << endl;
     }
 
     cout << "No hay mas personajes.\n";
-    cout << endl << endl;
+    cout << endl
+         << endl;
 }
 
 // Encontrar un personaje
@@ -826,20 +831,24 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     printf("\033[0;37m"); // Gris claro
 }
 
-void mostrar_personajes_jugar(personaje *lista_personajes_jugar) {
-    if (lista_personajes_jugar == nullptr) {
+void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
+{
+    if (lista_personajes_jugar == nullptr)
+    {
         cout << "\nNo hay personajes en el equipo.\n\n";
         return;
     }
 
-    stack<personaje*> pila;
+    stack<personaje *> pila;
     personaje *actual = lista_personajes_jugar;
-    while (actual != nullptr) {
+    while (actual != nullptr)
+    {
         pila.push(actual);
         actual = actual->siguiente;
     }
 
-    while (!pila.empty()) {
+    while (!pila.empty())
+    {
         actual = pila.top();
         pila.pop();
 
@@ -859,25 +868,30 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar) {
         Implemento *implemento_actual = actual->mimochila->implementos;
         printf("\033[0;32m");
         cout << "  Implementos: ";
-        if (implemento_actual == nullptr) {
+        if (implemento_actual == nullptr)
+        {
             printf("\033[0;31m");
             cout << "La mochila no tiene implementos." << endl;
         }
-        else {
+        else
+        {
             printf("\033[0;37m");
             cout << endl;
-            while (implemento_actual != nullptr) {
+            while (implemento_actual != nullptr)
+            {
                 printf("\033[0;32m");
                 cout << "    - " << implemento_actual->nombre_implemento << endl;
                 implemento_actual = implemento_actual->siguiente;
             }
         }
 
-        if (actual->mimochila->num_poder == " ") {
+        if (actual->mimochila->num_poder == " ")
+        {
             printf("\033[0;31m");
             cout << "Poder: no tiene ningun poder equipado." << endl;
         }
-        else {
+        else
+        {
             printf("\033[0;33m");
             cout << "Poder: " << actual->mimochila->num_poder << endl;
         }

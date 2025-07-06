@@ -119,7 +119,7 @@ void mostrar_lista(const Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2
     }
     printf("\033[0;37m");
 
-    stack<Especie*> pila;
+    stack<Especie *> pila;
     Especie *actual = lista.primero_especie;
     while (actual != nullptr)
     {
@@ -145,12 +145,13 @@ void mostrar_lista(const Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2
             cout << "Fortaleza: " << actual->danno_fortaleza << endl;
         }
         cout << "Salud: " << actual->salud << endl;
-        cout << "Rapidez: " << actual->rapidez << "\n" << endl;
-        printf("\033[0;37m");
+        cout << "Rapidez: " << actual->rapidez << "\n"
+             << endl;
     }
 
     cout << "No hay mas tipos disponibles.\n";
-    cout << endl << endl;
+    cout << endl
+         << endl;
 }
 
 // Para actualizar tipos de especies.

@@ -569,6 +569,7 @@ void menu_pre_juego()
             cout << "Opcion invalida. Ingrese una opcion valida." << endl;
             printf("\033[0m"); // Reset color
         }
+        opcion_principal = 7;
     }
 
     // Menu de seleccion de personajes y opciones
@@ -598,26 +599,35 @@ void menu_pre_juego()
 
         switch (opcion_interna)
         {
-        case 1:
+        case 1: // Equipar Personajes Objetos
+        {
             eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos);
             limpiar_pantalla();
             break;
-        case 2:
+        }
+        case 2: // Mostrar Personajes Equipo
+        {
             limpiar_pantalla();
             mostrar_personajes_jugar(personajes_jugar);
             cout << "Pulse enter para continuar." << endl;
             getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 3:
+        }
+        case 3: // Modificar Mochila
+        {
             modificar_mochila(personajes_jugar, lista_implementos, lista_podere_magicos);
             limpiar_pantalla();
             break;
-        case 4:
+        }
+        case 4: // Eliminar PJ Equipo
+        {
             eliminar_personaje_jugar(personajes_jugar);
             limpiar_pantalla();
             break;
-        case 5:
+        }
+        case 5: // Jugar
+        {
             printf("\033[0;32m"); // Verde
             if (personajes_jugar == nullptr)
             {
@@ -645,6 +655,7 @@ void menu_pre_juego()
                 return;
                 break;
             }
+        }
         default:
             printf("\033[0;31m"); // Rojo
             cout << "Opcion invalida. Ingrese una opcion valida." << endl;
@@ -699,6 +710,11 @@ void menu_principal() // MENU PRINCIPAL !!!
         {
             limpiar_pantalla();
             carga_archivos(especies_cargadas, personajes_cargados, implementos_cargados, salas_cargadas, adyacencias_cargadas);
+            especies_cargadas = true;
+            implementos_cargados = true;
+            salas_cargadas = true;
+            adyacencias_cargadas = true;
+            personajes_cargados = true;
             break;
         }
         case 1: // Menu Orcos
@@ -736,7 +752,6 @@ void menu_principal() // MENU PRINCIPAL !!!
             limpiar_pantalla();
             menu_pre_juego();
             // cout << "aqui llego. Case 6 principal" << endl;
-            opcion_principal = 7;
             break;
         }
         case 7: // Salir del programa
@@ -755,5 +770,5 @@ void menu_principal() // MENU PRINCIPAL !!!
         }
         }
     } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
-    cout << "hasta aqui salio del menu principal" << endl;
+    // cout << "hasta aqui salio del menu principal" << endl;
 }

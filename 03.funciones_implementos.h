@@ -85,7 +85,6 @@ void crear_implemento(Implemento &lista_implemento)
     printf("\033[0;32m"); // Verde
     cout << "El implemento: " << nuevo->nombre_implemento << " se creo correctamente.\n";
     printf("\033[0;37m"); // Gris claro
-
 }
 
 void mostrar_implementos(Implemento &lista_implemento)
@@ -104,18 +103,43 @@ void mostrar_implementos(Implemento &lista_implemento)
         printf("\033[0;37m");
     }
 
-    stack<Implemento*> pila;
+    stack<Implemento *> pila_ataque;
+    stack<Implemento *> pila_proteccion;
+    stack<Implemento *> pila_cura;
+    stack<Implemento *> pila_miscelaneos;
     Implemento *actual = lista_implemento.siguiente;
-    while (actual != nullptr)
-    {
-        pila.push(actual);
-        actual = actual->siguiente;
-    }
 
-    while (!pila.empty())
+    /*
+    Ataque
+    Proteccion
+    Cura*/
+    while (actual != nullptr) // Divide los implementos en distintas pilas
     {
-        actual = pila.top();
-        pila.pop();
+        if (actual->tipo_implemento == "Arma") // Ataque
+        {
+            pila_ataque.push(actual);
+        }
+        else if (actual->tipo_implemento == "Defensa") // Proteccion
+        {
+            pila_proteccion.push(actual);
+        }
+        else if (actual->tipo_implemento == "Consumible") // Cura
+        {
+            pila_cura.push(actual);
+        }
+        else // Distinto a lo anterior
+        {
+            pila_miscelaneos.push(actual);
+        }
+
+        actual = actual->siguiente;
+    };
+
+    cout << "--- ARMAS ---" << endl;
+    while (!pila_ataque.empty()) // Ataque
+    {
+        actual = pila_ataque.top();
+        pila_ataque.pop();
 
         printf("\033[0;36m");
         cout << "Nombre: ";
@@ -145,11 +169,125 @@ void mostrar_implementos(Implemento &lista_implemento)
         printf("\033[0;36m");
         cout << "Valor: ";
         printf("\033[0;37m");
-        cout << actual->valor << endl << endl;
+        cout << actual->valor << endl
+             << endl;
     }
+
+    cout << "--- DEFENSA ---" << endl;
+    while (!pila_proteccion.empty()) // Proteccion
+    {
+        actual = pila_proteccion.top();
+        pila_proteccion.pop();
+
+        printf("\033[0;36m");
+        cout << "Nombre: ";
+        printf("\033[0;37m");
+        cout << actual->nombre_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "ID: ";
+        printf("\033[0;37m");
+        cout << actual->identificador << endl;
+
+        printf("\033[0;36m");
+        cout << "Tipo: ";
+        printf("\033[0;37m");
+        cout << actual->tipo_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "Usos: ";
+        printf("\033[0;37m");
+        cout << actual->usos << endl;
+
+        printf("\033[0;36m");
+        cout << "Fortaleza necesaria para usarlo: ";
+        printf("\033[0;37m");
+        cout << actual->fortalezanecesaria << endl;
+
+        printf("\033[0;36m");
+        cout << "Valor: ";
+        printf("\033[0;37m");
+        cout << actual->valor << endl
+             << endl;
+    }
+
+    cout << "--- CONSUMIBLES ---" << endl;
+    while (!pila_cura.empty()) // Curas
+    {
+        actual = pila_cura.top();
+        pila_cura.pop();
+
+        printf("\033[0;36m");
+        cout << "Nombre: ";
+        printf("\033[0;37m");
+        cout << actual->nombre_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "ID: ";
+        printf("\033[0;37m");
+        cout << actual->identificador << endl;
+
+        printf("\033[0;36m");
+        cout << "Tipo: ";
+        printf("\033[0;37m");
+        cout << actual->tipo_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "Usos: ";
+        printf("\033[0;37m");
+        cout << actual->usos << endl;
+
+        printf("\033[0;36m");
+        cout << "Fortaleza necesaria para usarlo: ";
+        printf("\033[0;37m");
+        cout << actual->fortalezanecesaria << endl;
+
+        printf("\033[0;36m");
+        cout << "Valor: ";
+        printf("\033[0;37m");
+        cout << actual->valor << endl
+             << endl;
+    }
+
+    while (!pila_miscelaneos.empty()) // Miscelaneos. No deberia de haber ninguno
+    {
+        actual = pila_miscelaneos.top();
+        pila_miscelaneos.pop();
+
+        printf("\033[0;36m");
+        cout << "Nombre: ";
+        printf("\033[0;37m");
+        cout << actual->nombre_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "ID: ";
+        printf("\033[0;37m");
+        cout << actual->identificador << endl;
+
+        printf("\033[0;36m");
+        cout << "Tipo: ";
+        printf("\033[0;37m");
+        cout << actual->tipo_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "Usos: ";
+        printf("\033[0;37m");
+        cout << actual->usos << endl;
+
+        printf("\033[0;36m");
+        cout << "Fortaleza necesaria para usarlo: ";
+        printf("\033[0;37m");
+        cout << actual->fortalezanecesaria << endl;
+
+        printf("\033[0;36m");
+        cout << "Valor: ";
+        printf("\033[0;37m");
+        cout << actual->valor << endl
+             << endl;
+    }
+
     cout << "No hay mas implementos disponibles\n";
 }
-
 
 // buscar implemento.
 Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
