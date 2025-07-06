@@ -117,8 +117,6 @@ void mostrar_poderes(Poder_magico &lista_poderes)
     cout << "potencia un implemento de un personaje y la fortaleza se vuelve 0." << endl;
     printf("\033[0;37m");
     cout << "No hay mas poderes disponibles.\n";
-    cout <<"pulse enter para continuar:"<<endl;
-    getline(cin, p);
 }
 
 // para encontrar un poder
@@ -144,8 +142,6 @@ void modificar_poder(Poder_magico &lista_poderes)
         printf("\033[0;31m"); // Rojo
         cout << "No hay poderes magicos disponibles para modificar.\n";
         printf("\033[0;37m");
-        cout <<"pulse enter para continuar:"<<endl;
-        getline(cin, p);
         return;
     }
     int identificador = 0;
@@ -164,8 +160,6 @@ void modificar_poder(Poder_magico &lista_poderes)
         cout << "El ID que coloco no existe. \n";
         cout << "Modificacion fallida \n";
         printf("\033[0;37m");
-        cout <<"pulse enter para continuar:"<<endl;
-        getline(cin, p);
         return;
     }
     printf("\033[0;33m"); // Amarillo
@@ -180,12 +174,9 @@ void modificar_poder(Poder_magico &lista_poderes)
     cout << "Nueva Funcion: ";
     printf("\033[0;37m");
     getline(cin, actualizar->funcion);
-
     printf("\033[0;32m"); // Verde
     cout << "Poder magico: " << actualizar->nombre_poder << " ha sido actualizado correctamente.\n";
     printf("\033[0;37m");
-    cout <<"pulse enter para continuar:"<<endl;
-    getline(cin, p);
 }
 
 // para eliminar un poder.
@@ -197,8 +188,6 @@ void eliminar_poder(Poder_magico &lista_poder)
         cout << "No hay poderes magicos disponibles para eliminar. \n";
         cout << "Eliminacion fallida. \n";
         printf("\033[0;37m");
-        cout <<"pulse enter para continuar:"<<endl;
-        getline(cin, p);
         return;
     }
     int identificador = 0;
@@ -207,7 +196,11 @@ void eliminar_poder(Poder_magico &lista_poder)
     cout << "Los poderes magicos disponibles son: \n";
     printf("\033[0;37m");
     mostrar_poderes(lista_poder);
-    identificador = obtener_entero("Ingrese el ID del personaje a modificar: ");
+    printf("\033[0;33m"); // Amarillo
+    cout<<"IMPORTANTE. No tines la magia suficiente."<<endl;
+    cout<<"No puedes borrar un poder creado por los tres guerreros ancestrales de las cavernas."<<endl;
+    printf("\033[0;37m"); // Gris claro
+    identificador = obtener_entero("Ingrese el ID del poder a borrar: ");
     // para validar que el id exista.
     validar = encontrar_poder(lista_poder, identificador);
     // Si no existe:
@@ -217,8 +210,6 @@ void eliminar_poder(Poder_magico &lista_poder)
         cout << "El ID que coloco no existe.\n";
         cout << "Eliminacion fallida.\n";
         printf("\033[0;37m");
-        cout <<"pulse enter para continuar:"<<endl;
-        getline(cin, p);
         return;
     }
     // comienza el procedimiento para borrar el poder.
@@ -231,8 +222,6 @@ void eliminar_poder(Poder_magico &lista_poder)
         printf("\033[0;32m"); // Verde
         cout << "El poder magico: " << actual->nombre_poder << " se elimino correctamente.\n ";
         printf("\033[0;37m");
-        cout <<"pulse enter para continuar:"<<endl;
-        getline(cin, p);
         delete actual;
         cantidad_poderes -= 1;
         regulador_poderes += 1;
