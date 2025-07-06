@@ -1,6 +1,10 @@
 #pragma once                        // Soluciona errores de redefinicion
 #include "01.funciones_genericas.h" // Funciones generales para el programa
 
+#include <iostream>
+#include <string>
+using namespace std;
+
 // Implementos
 struct Implemento
 {
@@ -17,6 +21,8 @@ struct Implemento
 int cantidad_implementos = 0;
 int regulador_implemento = 13; // por el archivo.
 
+string pausa2 = " "; // para que se pare el programa.
+
 //----------------------------------- FUNCIONES IMPLEMENTOS --------------------------------------------
 
 // para obtener el tipo de implemento.
@@ -27,10 +33,12 @@ string tipo_implemento(Implemento *Implemento)
     int infinito = 0; // o lo pone bien o lo pone bien;
     do
     {
+        printf("\033[0;33m"); // Amarillo
         cout << "\nLos tipos de implementos son: \n";
         cout << "1. Ataque\n";
-        cout << "2. Proteccion.\n";
-        cout << "3. Cura.\n";
+        cout << "2. Proteccion\n";
+        cout << "3. Cura\n";
+        printf("\033[0;37m"); // Gris claro
         cout << "Indique que tipo de implemento sera " << Implemento->nombre_implemento << ": ";
         opcion = obtener_entero("");
         if (opcion == 1)
@@ -47,7 +55,9 @@ string tipo_implemento(Implemento *Implemento)
         }
         else
         {
+            printf("\033[0;31m"); // Rojo
             cout << "Opcion invalida, el numero " << opcion << " no esta disponible.\n";
+            printf("\033[0;37m"); // Gris claro
         }
 
     } while (infinito != 1);
@@ -59,51 +69,90 @@ string tipo_implemento(Implemento *Implemento)
 void crear_implemento(Implemento &lista_implemento)
 {
     Implemento *nuevo = new Implemento;
-    cout << "Ingrese los datos del nuevo implemento. \n\n";
+    printf("\033[0;33m"); // Amarillo
+    cout << "Ingrese los datos del nuevo implemento.\n\n";
+    printf("\033[0;37m"); // Gris claro
     nuevo->nombre_implemento = devolver_string_verificada("Nombre: ");
-    nuevo->tipo_implemento = tipo_implemento(nuevo); // funcion para obteren el tipo de implemento.
+    nuevo->tipo_implemento = tipo_implemento(nuevo);
     nuevo->usos = obtener_entero("Usos: ");
     nuevo->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usar el implemento: ");
-    nuevo->valor = obtener_entero("valor: ");
+    nuevo->valor = obtener_entero("Valor: ");
     // lo agregamos a la lista enlazada.
     nuevo->siguiente = lista_implemento.siguiente;
     lista_implemento.siguiente = nuevo;
     cantidad_implementos += 1;
     nuevo->identificador = cantidad_implementos + regulador_implemento;
-    cout << "El implemento: " << nuevo->nombre_implemento << "se creo correctamente.";
+    printf("\033[0;32m"); // Verde
+    cout << "El implemento: " << nuevo->nombre_implemento << " se creo correctamente.\n";
+    printf("\033[0;37m"); // Gris claro
+    cout << "Pulse enter para continuar:" << endl;
+    getline(cin, pausa2);
 }
 
 void mostrar_implementos(Implemento &lista_implemento)
 {
     if (cantidad_implementos == 0)
     {
-        cout << "No hay implementos disponibles en este momento. \n";
+        printf("\033[0;31m"); // Rojo
+        cout << "No hay implementos disponibles en este momento.\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa2);
         return;
     }
     else
     {
-        cout << "la cantidad de implementos es: [" << cantidad_implementos << "]. \n";
+        printf("\033[0;33m"); // Amarillo
+        cout << "La cantidad de implementos es: [" << cantidad_implementos << "].\n";
+        printf("\033[0;37m"); // Gris claro
     }
 
     Implemento *actual = lista_implemento.siguiente;
     while (actual != nullptr)
     {
-        cout << "Nombre: " << actual->nombre_implemento << endl;
-        cout << "ID: " << actual->identificador << endl;
-        cout << "Tipo: " << actual->tipo_implemento << endl;
-        cout << "Uso: " << actual->usos << endl;
-        cout << "Fortaleza necesaria para usarlo: " << actual->fortalezanecesaria << endl;
-        cout << "Valor: " << actual->valor << endl
+        printf("\033[0;36m"); // Cyan para el nombre del atributo
+        cout << "Nombre: ";
+        printf("\033[0;37m"); // Gris claro para el valor
+        cout << actual->nombre_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "ID: ";
+        printf("\033[0;37m");
+        cout << actual->identificador << endl;
+
+        printf("\033[0;36m");
+        cout << "Tipo: ";
+        printf("\033[0;37m");
+        cout << actual->tipo_implemento << endl;
+
+        printf("\033[0;36m");
+        cout << "Usos: ";
+        printf("\033[0;37m");
+        cout << actual->usos << endl;
+
+        printf("\033[0;36m");
+        cout << "Fortaleza necesaria para usarlo: ";
+        printf("\033[0;37m");
+        cout << actual->fortalezanecesaria << endl;
+
+        printf("\033[0;36m");
+        cout << "Valor: ";
+        printf("\033[0;37m");
+        cout << actual->valor << endl
              << endl;
+
         actual = actual->siguiente;
     }
     cout << "No hay mas implementos disponibles\n";
+    cout << "Pulse enter para continuar:" << endl;
+    getline(cin, pausa2);
 }
+
 
 // buscar implemento.
 Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
 {
-    Implemento *encontrado = &lista_implemento;
+    Implemento *encontrado = lista_implemento.siguiente;
     while (encontrado != nullptr)
     {
         if (encontrado->identificador == identificador)
@@ -112,7 +161,7 @@ Implemento *buscar_implemento(Implemento &lista_implemento, int identificador)
         }
         encontrado = encontrado->siguiente;
     }
-    return encontrado = nullptr;
+    return nullptr;
 }
 
 // para modificar los implementos.
@@ -120,35 +169,45 @@ void modificar_implemento(Implemento &lista_implemento)
 {
     if (cantidad_implementos == 0)
     {
-        cout << "No hay implementos disponibles para modificar \n";
-        cout << "modificacion fallida.\n";
+        printf("\033[0;31m"); // Rojo
+        cout << "No hay implementos disponibles para modificar.\n";
+        cout << "Modificacion fallida.\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa2);
         return;
     }
     int identificador = 0;
-    cout << "los impplementos disponibles son: \n";
+    printf("\033[0;33m"); // Amarillo
+    cout << "Los implementos disponibles son:\n";
+    printf("\033[0;37m"); // Gris claro
     mostrar_implementos(lista_implemento);
     identificador = obtener_entero("Coloque el ID del implemento que desea modificar: ");
     Implemento *actualizar = buscar_implemento(lista_implemento, identificador);
     if (actualizar == nullptr)
     {
+        printf("\033[0;31m"); // Rojo
         cout << "El ID que coloco no es valido.\n";
         cout << "No hay ningun implemento con ese ID.\n";
         cout << "Actualizacion fallida.\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa2);
         return;
     }
 
-    //                          VERRRRRRRRRRRRRRRRRRRR
-    // coloco este mensaje porque no se porque el progra no corre normal.
-    cout << "Presione enter para modificar el implemento: " << actualizar->nombre_implemento;
-    // hay que darle enter para que corra.
-
+    cout << "Presione enter para modificar el implemento: " << actualizar->nombre_implemento << endl;
     cin.ignore();
     actualizar->nombre_implemento = devolver_string_verificada("Nombre: ");
     actualizar->tipo_implemento = tipo_implemento(actualizar);
     actualizar->usos = obtener_entero("Usos: ");
-    actualizar->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usarlo:");
+    actualizar->fortalezanecesaria = obtener_entero("Fortaleza necesaria para usarlo: ");
     actualizar->valor = obtener_entero("Valor: ");
-    cout << "Implemento: " << actualizar->nombre_implemento << ", modificado correctamente.\n ";
+    printf("\033[0;32m"); // Verde
+    cout << "Implemento: " << actualizar->nombre_implemento << ", modificado correctamente.\n";
+    printf("\033[0;37m"); // Gris claro
+    cout << "Pulse enter para continuar:" << endl;
+    getline(cin, pausa2);
 }
 
 // para destruir la lista de implementos.
@@ -171,29 +230,42 @@ void borrar_implementos(Implemento &lista_implemento)
 {
     if (cantidad_implementos == 0)
     {
-        cout << "No hay implementos para eliminar: \n";
-        cout << "Eliminacion fallida. \n";
+        printf("\033[0;31m"); // Rojo
+        cout << "No hay implementos para eliminar.\n";
+        cout << "Eliminacion fallida.\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa2);
         return;
     }
-    cout << "Los implementos disponibles son: \n";
+    printf("\033[0;33m"); // Amarillo
+    cout << "Los implementos disponibles son:\n";
+    printf("\033[0;37m"); // Gris claro
     mostrar_implementos(lista_implemento);
-    int identificador = obtener_entero("coloque el ID del implemento que desea eliminar:");
+    int identificador = obtener_entero("Coloque el ID del implemento que desea eliminar: ");
     Implemento *encontrado = buscar_implemento(lista_implemento, identificador);
     if (encontrado == nullptr)
     {
-        cout << "  No existe un implemento con el ID: " << identificador;
-        cout << "\nEliminacion fallida. \n";
+        printf("\033[0;31m"); // Rojo
+        cout << "No existe un implemento con el ID: " << identificador << endl;
+        cout << "Eliminacion fallida.\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa2);
         return;
     }
 
-    // comiza la eliminacion del implemento.
     Implemento *actual = lista_implemento.siguiente;
 
     // si es el primero en la lista.
     if (actual->identificador == identificador)
     {
         lista_implemento.siguiente = actual->siguiente;
-        cout << "El implemento: " << actual->nombre_implemento << "se elimino correctamente.\n";
+        printf("\033[0;32m"); // Verde
+        cout << "El implemento: " << actual->nombre_implemento << " se elimino correctamente.\n";
+        printf("\033[0;37m"); // Gris claro
+        cout << "Pulse enter para continuar:" << endl;
+        getline(cin, pausa2);
         delete actual;
         cantidad_implementos -= 1;
         regulador_implemento += 1;
@@ -208,9 +280,14 @@ void borrar_implementos(Implemento &lista_implemento)
         actual = actual->siguiente;
     }
 
-    // ahora eliminamos.
     Implemento *eliminar = actual;
     anterior->siguiente = actual->siguiente;
-    cout << "El elemento: " << eliminar->nombre_implemento << "se elimino correctamente. ";
+    printf("\033[0;32m"); // Verde
+    cout << "El elemento: " << eliminar->nombre_implemento << " se elimino correctamente.\n";
+    printf("\033[0;37m"); // Gris claro
+    cout << "Pulse enter para continuar:" << endl;
+    getline(cin, pausa2);
     delete eliminar;
+    cantidad_implementos -= 1;
+    regulador_implemento += 1;
 }
