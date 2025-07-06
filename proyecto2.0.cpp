@@ -34,7 +34,7 @@ void poder_vigor_enano(personaje *lista_personajes_jugar)
 
     if (actual_personaje == nullptr)
     {
-        std::cout << "No hay personajes disponibles en el equipo" << endl;
+        cout << "No hay personajes disponibles en el equipo" << endl;
     }
     while (actual_personaje != nullptr)
     {
@@ -43,26 +43,25 @@ void poder_vigor_enano(personaje *lista_personajes_jugar)
             modificado = true;
             // Le recupera toda la vida (La devuelve a su valor original)
             actual_personaje->tipo->salud = actual_personaje->tipo->salud;
-            std::cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido regenerada por completo (" << actual_personaje->tipo->salud << ")" << endl;
+            cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido regenerada por completo (" << actual_personaje->tipo->salud << ")" << endl;
 
             // Le aumenta la vida en 100
             actual_personaje->tipo->salud += 100;
-            std::cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido aumentada en 100 (" << actual_personaje->tipo->salud << ")" << endl;
+            cout << "La vitalidad del personaje" << actual_personaje->nombre << "ha sido aumentada en 100 (" << actual_personaje->tipo->salud << ")" << endl;
 
             // Le aumenta la fortaleza en 1000
             actual_personaje->tipo->salud += 1000;
-            std::cout << "La fuerza del personaje ha sido aumentada en 1000 (" << actual_personaje->tipo->danno_fortaleza << ")";
-
-            actual_personaje = actual_personaje->siguiente;
+            cout << "La fuerza del personaje ha sido aumentada en 1000 (" << actual_personaje->tipo->danno_fortaleza << ")";
         }
+        actual_personaje = actual_personaje->siguiente;
     }
     if (modificado == true)
     {
-        std::cout << "Los personajes Enanos han sido modificados" << endl;
+        cout << "Los personajes Enanos han sido modificados" << endl;
     }
     else
     {
-        std::cout << "No hay personajes Enanos en el equipo" << endl;
+        cout << "No hay personajes Enanos en el equipo" << endl;
     }
 }
 
@@ -193,7 +192,22 @@ int main()
 
     if (iniciar_juego)
     {
-        juego(turno);
+
+        // cout << "Se esta ejecutando el condicional bien" << endl;
+        sala *sala_actual_heroes = designar_sala_spawn_heroes(grafo);
+        if (sala_actual_heroes)
+        {
+            spawn_heroes(sala_actual_heroes, personajes_jugar);
+        }
+        else
+        {
+            cout << "Error en asignacion de sala Spawn" << endl;
+        }
+
+        // Aparece a los heroes en la sala random
+
+        // cout << "cout antes del juego comotal" << endl;
+        juego(turno, sala_actual_heroes, grafo, tipoEspecieHeroe, salas_puerta_pasadas);
     }
 
     cout << "AAAAAAAAAAAAAAAAAAAAAAA SALIO DEL JUEGIO ASDIOPJSADJIOASASD:" << endl;

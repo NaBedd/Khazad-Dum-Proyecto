@@ -95,7 +95,7 @@ bool verificacion_heroes_puerta(vector<int> &salas_puerta_pasadas)
     return false;
 }
 // se la agrgo para poder tener las estadisticas estandar
-void turno_heroes(sala *sala_actual_heroes, mapaGrafo &mapa, Lista_especie especies_herores) // Turno de heroes
+void turno_heroes(sala *&sala_actual_heroes, mapaGrafo &mapa, Lista_especie especies_heroes) // Turno de heroes
 {
     cout << "  --- TURNO HEROES ---" << endl;
     cout << "1. Moverse de Sala." << endl;
@@ -106,7 +106,7 @@ void turno_heroes(sala *sala_actual_heroes, mapaGrafo &mapa, Lista_especie espec
     {
     case 1: // Movimiento heroes
     {
-        sala_actual_heroes = movimiento_heroes(sala_actual_heroes, mapa, especies_herores);
+        sala_actual_heroes = movimiento_heroes(sala_actual_heroes, mapa, especies_heroes);
         break;
     }
     case 2: // Estado del equipo
@@ -125,16 +125,12 @@ void turno_orcos(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de orcos
 {
     movimiento_orcos(sala_actual_heroes, mapa);
 }
+
 // se la agrgo para poder tener las estadisticas estandar
-void juego(int &turno)
+void juego(int &turno, sala *sala_actual_heroes, mapaGrafo &grafo,
+           Lista_especie tipoEspecieHeroe, vector<int> &salas_puerta_pasadas)
 {
-    sala *sala_actual_heroes;
     bool acabo_juego = false;
-    if (turno == 0)
-    {
-        sala_actual_heroes = designar_sala_spawn_heroes(grafo);
-        spawn_heroes(sala_actual_heroes, personajes_jugar);
-    }
 
     while (!acabo_juego)
     {
@@ -143,9 +139,16 @@ void juego(int &turno)
             acabo_juego = true;
         }
 
+        cout << "Personajes en sala: " << sala_actual_heroes->nombre << endl;
+        for (personaje *actual : sala_actual_heroes->lista_heroes)
+        {
+            cout << actual->identificador << actual->nombre << endl;
+        }
+
         cout << "--- TURNO " << turno << " ---" << endl;
         turno_heroes(sala_actual_heroes, grafo, tipoEspecieHeroe);
         turno_orcos(sala_actual_heroes, grafo);
+
         bool heroes_ganaron = verificacion_heroes_puerta(salas_puerta_pasadas);
         if (heroes_ganaron)
         {
@@ -154,7 +157,6 @@ void juego(int &turno)
         }
 
         movimiento_puerta_destino(grafo, salas_puerta_pasadas, turno);
-
         turno += 1;
     }
 }

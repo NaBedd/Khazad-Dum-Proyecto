@@ -635,7 +635,6 @@ void menu_pre_juego()
                 limpiar_pantalla();
                 break;
             }
-
             else // Si todo esta bien:
             {
                 cout << "\nEquipo actual: " << endl;
@@ -643,6 +642,7 @@ void menu_pre_juego()
                 cout << "Entrando al juego..." << endl;
                 printf("\033[0m"); // Reset color
                 iniciar_juego = true;
+                return;
                 break;
             }
         default:
@@ -735,6 +735,8 @@ void menu_principal() // MENU PRINCIPAL !!!
         {
             limpiar_pantalla();
             menu_pre_juego();
+            // cout << "aqui llego. Case 6 principal" << endl;
+            opcion_principal = 7;
             break;
         }
         case 7: // Salir del programa
@@ -753,4 +755,5 @@ void menu_principal() // MENU PRINCIPAL !!!
         }
         }
     } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
+    cout << "hasta aqui salio del menu principal" << endl;
 }

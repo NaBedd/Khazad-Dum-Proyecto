@@ -53,8 +53,15 @@ void eliminarNodoPendiente(mapaGrafo &pendientes, sala *nodoEliminar)
     }
 }
 
-vector<int> dijkstra(sala *nodoInicial, const mapaGrafo &grafo) // Dijkstra. Devuelve la lista de pesos
+vector<int> dijkstra(sala *nodoInicial, mapaGrafo &grafo) // Dijkstra. Devuelve la lista de pesos
 {
+
+    if (!nodoInicial || grafo.mapa_salas.empty())
+    {
+        cout << "Error de codigo. No existe nodo inicial" << endl;
+        return {};
+    }
+
     // Inicializacion de variables
     mapaGrafo pendientesVisitar;
     vector<bool> visitados(grafo.mapa_salas.size(), false);    // Llena el vector con False
@@ -71,6 +78,11 @@ vector<int> dijkstra(sala *nodoInicial, const mapaGrafo &grafo) // Dijkstra. Dev
     {
         // Adyacente con menor peso
         sala *actual = encontrarNodoMinimo(pendientesVisitar, lista_pesos);
+        if (!actual)
+        {
+            cout << "No existe nodo actual. Error de codigo en Dijkstra" << endl;
+            break;
+        }
 
         eliminarNodoPendiente(pendientesVisitar, actual); // Ya se encontro su adyacencia minima. Se elimina de Pendientes
 
@@ -100,6 +112,12 @@ vector<int> dijkstra(sala *nodoInicial, const mapaGrafo &grafo) // Dijkstra. Dev
 
 personaje *encontrar_heroe_lento(sala *sala_actual) // Devuelve el heroe mas lento
 {
+    if (!sala_actual || sala_actual->lista_heroes.empty())
+    {
+        cout << "Error en encontrar heroe lento. Sala vacia o no existente" << endl;
+        cout << "Error de codigo. Retornando" << endl;
+        return nullptr;
+    }
 
     personaje *heroe_lento = nullptr;
     int velocidad_minima = INT_MAX;
@@ -128,19 +146,29 @@ sala *designar_sala_spawn_heroes(const mapaGrafo &grafo) // Spawnean en sala ran
         sala *sala_spawn_heroes = nullptr;
         int indice_random = rand() % grafo.mapa_salas.size();
         sala_spawn_heroes = encontrar_sala(grafo, indice_random);
+        cout << "Los heroes apareceran en: " << sala_spawn_heroes->nombre << endl
+             << endl;
         return sala_spawn_heroes;
     }
 }
 
-void spawn_heroes(sala *sala_spawn_heroes, const personaje *personajes_jugar) // Carga toda la lista de heroes en 1 sala
+void spawn_heroes(sala *&sala_spawn_heroes, personaje *lista_personajes) // Carga toda la lista de heroes en 1 sala
 {
     // Carga la lista de heroes de la sala de spawn
     // NO valida que solo sean 4 heroes. Ya se valido antes de empezar el juego
-    personaje *actual = personajes_jugar->siguiente;
+
+    if (!sala_spawn_heroes)
+    {
+        cout << "No hay sala spawn heroes. Error de codigo" << endl;
+        return;
+    }
+
+    personaje *actual = lista_personajes;
     while (actual != nullptr)
     {
+        cout << "Heroe actual siendo transportado: " << actual->nombre << "AA." << endl;
         sala_spawn_heroes->lista_heroes.push_back(actual);
-        actual = personajes_jugar->siguiente;
+        actual = actual->siguiente;
     }
 }
 
@@ -166,6 +194,8 @@ sala *designar_sala_spawn_orcos(sala *sala_spawn_heroes, mapaGrafo &grafo, const
             sala_spawn_orcos = encontrar_sala(grafo, indice_random);
         }
     }
+    cout << "Borrar DESPUES \n"
+         << "Los orcos apareceran en " << sala_spawn_orcos->nombre << endl;
     return sala_spawn_orcos;
 }
 
@@ -333,12 +363,25 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Turno de movimient
     // Se moveran un maximo de 5 orcos, los mas cercanos a los heroes
     //    Se moveran entre 1 y 5 orcos pq son tontos
 
+    if (!sala_heroes)
+    {
+        cout << "No hay sala heroes. Error de codigo" << endl;
+        return;
+    }
+
     vector<sala *> salas_con_orcos; // Vector que almacena todas las salas donde hay orcos
     sala *sala_mas_cercana;
-    vector<int> lista_adyacencias;
+
     sala *sala_moverse;
     int distancia_minima = INT_MAX;            // Se declara como infinito
     int cant_orcos_moverse = (rand() % 5) + 1; // Cantidad de orcos a mover (entre 1 y 5)
+
+    vector<int> lista_adyacencias = dijkstra(sala_heroes, grafo);
+    if (lista_adyacencias.empty())
+    {
+        cout << "Error: No se pudo calcular Dijkstra." << endl;
+        return;
+    }
 
     for (sala *actual : grafo.mapa_salas) // Agrega todas las salas con orcos a la lista
     {
@@ -401,16 +444,29 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
     // OJO, la funcion NO comprueba que haya o no heroes en la sala
     // Eso se deberia comprobar en la funcion de Turno General (heroes y orcos)
 
-    personaje *heroe_lento;
+    if (sala_origen->lista_heroes.empty()) // Por si acaso
+    {
+        cout << "No hay heroes en la sala " << sala_origen->nombre << endl;
+        cout << "Retornando..." << endl;
+        return sala_origen;
+    }
+
     sala *sala_destino;
-    heroe_lento = encontrar_heroe_lento(sala_origen);
+    personaje *heroe_lento = encontrar_heroe_lento(sala_origen);
+
+    if (!heroe_lento) // Por si acaso
+    {
+        cout << "No se puedo encontrar el heroe mas lento. Error en el juego" << endl;
+        cout << "Retornando..." << endl;
+        return sala_origen;
+    }
+
     int energia_restante = heroe_lento->tipo->rapidez;
     bool pelea = false;
 
     cout << "Los heroes se encuentran en: " << sala_origen->nombre << endl;
     cout << "Pueden recorrer " << energia_restante << "km de distancia" << endl;
 
-    mostrar_adyacencias(sala_origen);
     cout << "\n";
 
     while (energia_restante > 0) // Ejecutar mientras los heroes no se hayan movido
@@ -434,13 +490,14 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         }
 
         // 2. Como SI hay a donde moverse, le pregunta al usuario
-        cout << "Indique a que sala se desea mover " << endl;
         cout << "Ingrese 0 para cancelar su turno" << endl;
-        int entrada_usuario = obtener_entero("Sala: ");
+        mostrar_adyacencias(sala_origen);
+
+        int entrada_usuario = obtener_entero("Indique a que sala se desea mover: ");
         if (entrada_usuario == 0)
         {
             cout << "El jugador ha decidido no moverse." << endl;
-            cout << "Turno cancelado" << endl;
+            cout << "Turno cancelado. " << endl;
             return sala_origen;
         }
 
