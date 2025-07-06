@@ -508,7 +508,7 @@ void menu_pre_juego() // Caso 7 del main
         switch (opcion_interna)
         {
         case 1:
-            eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos, lista_podere_magicos);
+            eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos);
             break;
         case 2:
             mostrar_personajes_jugar(personajes_jugar);
