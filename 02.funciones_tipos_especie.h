@@ -101,31 +101,41 @@ void mostrar_lista(const Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2
 {
     if (lista.cantidad == 0)
     {
-        printf("\033[0;31m"); // Rojo
+        printf("\033[0;31m");
         cout << "No hay especies disponibles. \n\n";
-        printf("\033[0;37m"); // Gris claro
+        printf("\033[0;37m");
         return;
     }
 
     if (tipo == 1)
     {
-        printf("\033[0;33m"); // Amarillo
+        printf("\033[0;33m");
         cout << "\nHay [" << lista.cantidad << "] especies de orcos disponibles" << endl;
     }
     else
     {
-        printf("\033[0;33m"); // Amarillo
+        printf("\033[0;33m");
         cout << "\nHay [" << lista.cantidad << "] especies de heroes disponibles" << endl;
     }
-    printf("\033[0;37m"); // Gris claro
+    printf("\033[0;37m");
 
+    stack<Especie*> pila;
     Especie *actual = lista.primero_especie;
     while (actual != nullptr)
     {
+        pila.push(actual);
+        actual = actual->siguiente;
+    }
+
+    while (!pila.empty())
+    {
+        actual = pila.top();
+        pila.pop();
+
         cout << actual->identificador << ". ";
         cout << "Nombre: " << actual->nombre_especie << endl;
 
-        printf("\033[0;36m"); // Cyan para atributos
+        printf("\033[0;36m");
         if (tipo == 1)
         {
             cout << "Danno: " << actual->danno_fortaleza << endl;
@@ -136,13 +146,11 @@ void mostrar_lista(const Lista_especie &lista, int tipo) // tipo=1 orco / tipo=2
         }
         cout << "Salud: " << actual->salud << endl;
         cout << "Rapidez: " << actual->rapidez << "\n" << endl;
-        printf("\033[0;37m"); // Gris claro para resetear color
-
-        actual = actual->siguiente;
+        printf("\033[0;37m");
     }
+
     cout << "No hay mas tipos disponibles.\n";
-    cout << endl
-         << endl;
+    cout << endl << endl;
 }
 
 // Para actualizar tipos de especies.
