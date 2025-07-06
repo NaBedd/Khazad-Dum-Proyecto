@@ -130,48 +130,56 @@ void mostrar_personajes(personaje &lista, int tipo)
 {
     if (tipo == 1 && cantidad_personaje_orco == 0)
     {
-        printf("\033[0;31m"); // Rojo
+        printf("\033[0;31m");
         cout << "\nNo hay especies de orcos para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
-        printf("\033[0;37m"); // Gris claro
+        printf("\033[0;37m");
         return;
     }
     if (tipo == 2 && cantidad_personaje_heroe == 0)
     {
-        printf("\033[0;31m"); // Rojo
+        printf("\033[0;31m");
         cout << "\nNo hay personajes heroes para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
-        printf("\033[0;37m"); // Gris claro
+        printf("\033[0;37m");
         return;
     }
 
     if (tipo == 1)
     {
-        printf("\033[0;33m"); // Amarillo
+        printf("\033[0;33m");
         cout << "\nHay [" << cantidad_personaje_orco << "] personajes orcos" << endl;
     }
     else
     {
-        printf("\033[0;33m"); // Amarillo
+        printf("\033[0;33m");
         cout << "\nHay [" << cantidad_personaje_heroe << "] personajes heroes" << endl;
     }
-    printf("\033[0;37m"); // Gris claro
+    printf("\033[0;37m");
 
+    stack<personaje*> pila;
     personaje *actual = lista.siguiente;
     while (actual != nullptr)
     {
-        cout << actual->identificador << " - ";
-        printf("\033[0;35m"); // Magenta para el nombre
-        cout << "Nombre: " << actual->nombre << endl;
-        printf("\033[0;36m"); // Cyan para la especie
-        cout << "Especie: " << actual->tipo->nombre_especie << endl;
-        printf("\033[0;37m"); // Gris claro (resetear a color normal después)
-        cout << endl;
+        pila.push(actual);
         actual = actual->siguiente;
     }
+
+    while (!pila.empty())
+    {
+        personaje* temp = pila.top();
+        pila.pop();
+        cout << temp->identificador << " - ";
+        printf("\033[0;35m");
+        cout << "Nombre: " << temp->nombre << endl;
+        printf("\033[0;36m");
+        cout << "Especie: " << temp->tipo->nombre_especie << endl;
+        printf("\033[0;37m");
+        cout << endl;
+    }
+
     cout << "No hay mas personajes.\n";
-    cout << endl
-         << endl;
+    cout << endl << endl;
 }
 
 // Encontrar un personaje
@@ -818,58 +826,66 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     printf("\033[0;37m"); // Gris claro
 }
 
-void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
-{
-    personaje *actual_personaje = lista_personajes_jugar;
-    while (actual_personaje != nullptr)
-    {
-        printf("\033[0;35m"); // Magenta para el nombre
-        cout << "Nombre: " << actual_personaje->nombre << endl;
+void mostrar_personajes_jugar(personaje *lista_personajes_jugar) {
+    if (lista_personajes_jugar == nullptr) {
+        cout << "\nNo hay personajes en el equipo.\n\n";
+        return;
+    }
 
-        printf("\033[0;36m"); // Cyan para los atributos
-        cout << "   ID: " << actual_personaje->identificador << endl;
-        cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl;
-        cout << "   Vitalidad: " << actual_personaje->tipo->salud << endl;
-        cout << "   Fortaleza: " << actual_personaje->tipo->danno_fortaleza << endl;
-        cout << "   Rapidez: " << actual_personaje->tipo->rapidez << endl;
+    stack<personaje*> pila;
+    personaje *actual = lista_personajes_jugar;
+    while (actual != nullptr) {
+        pila.push(actual);
+        actual = actual->siguiente;
+    }
 
-        printf("\033[0;37m"); // Gris claro para el resto del texto
+    while (!pila.empty()) {
+        actual = pila.top();
+        pila.pop();
+
+        printf("\033[0;35m");
+        cout << "Nombre: " << actual->nombre << endl;
+
+        printf("\033[0;36m");
+        cout << "   ID: " << actual->identificador << endl;
+        cout << "   Especie: " << actual->tipo->nombre_especie << endl;
+        cout << "   Vitalidad: " << actual->tipo->salud << endl;
+        cout << "   Fortaleza: " << actual->tipo->danno_fortaleza << endl;
+        cout << "   Rapidez: " << actual->tipo->rapidez << endl;
+
+        printf("\033[0;37m");
         cout << "Objetos de la mochila: " << endl;
 
-        Implemento *actual_implemento = actual_personaje->mimochila->implementos;
-        printf("\033[0;32m"); // Verde para "Implementos:"
+        Implemento *implemento_actual = actual->mimochila->implementos;
+        printf("\033[0;32m");
         cout << "  Implementos: ";
-        if (actual_implemento == nullptr)
-        {
-            printf("\033[0;31m"); // Rojo para mensaje de vacío
+        if (implemento_actual == nullptr) {
+            printf("\033[0;31m");
             cout << "La mochila no tiene implementos." << endl;
         }
-        else
-        {
-            printf("\033[0;37m"); // Gris claro para lista
+        else {
+            printf("\033[0;37m");
             cout << endl;
-            while (actual_implemento != nullptr)
-            {
-                printf("\033[0;32m"); // Verde para cada implemento
-                cout << "    - " << actual_implemento->nombre_implemento << endl;
-                actual_implemento = actual_implemento->siguiente;
+            while (implemento_actual != nullptr) {
+                printf("\033[0;32m");
+                cout << "    - " << implemento_actual->nombre_implemento << endl;
+                implemento_actual = implemento_actual->siguiente;
             }
         }
 
-        if (actual_personaje->mimochila->num_poder == " ")
-        {
-            printf("\033[0;31m"); // Rojo para "no tiene poder"
+        if (actual->mimochila->num_poder == " ") {
+            printf("\033[0;31m");
             cout << "Poder: no tiene ningun poder equipado." << endl;
         }
-        else
-        {
-            printf("\033[0;33m"); // Amarillo para poder
-            cout << "Poder: " << actual_personaje->mimochila->num_poder << endl;
+        else {
+            printf("\033[0;33m");
+            cout << "Poder: " << actual->mimochila->num_poder << endl;
         }
-        printf("\033[0;37m"); // Gris claro para reset
+
+        printf("\033[0;37m");
         cout << "-------------------------" << endl;
-        actual_personaje = actual_personaje->siguiente;
     }
+
     cout << "\nNo hay mas personajes en el equipo\n\n";
 }
 
