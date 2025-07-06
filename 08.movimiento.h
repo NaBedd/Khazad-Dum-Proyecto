@@ -106,9 +106,9 @@ personaje *encontrar_heroe_lento(sala *sala_actual) // Devuelve el heroe mas len
 
     for (personaje *heroe_actual : sala_actual->lista_heroes)
     {
-        if (heroe_actual && heroe_actual->velocidad < velocidad_minima)
+        if (heroe_actual && heroe_actual->tipo->rapidez < velocidad_minima)
         {
-            velocidad_minima = heroe_actual->velocidad;
+            velocidad_minima = heroe_actual->tipo->rapidez;
             heroe_lento = heroe_actual;
         }
     }
@@ -274,8 +274,14 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
         // Estadisticas del orco:
         nuevo_orco->nombre = nombre_nuevo_orco;
         nuevo_orco->identificador = max_id + 1;
-        nuevo_orco->vitalidad = especie_nuevo_orco->salud;
-        nuevo_orco->tipo = especie_nuevo_orco;
+        // reservamos nueva memoria para el orco y copiamos las estadisticas.
+        nuevo_orco->tipo = new Especie;
+        nuevo_orco->tipo->danno_fortaleza = especie_nuevo_orco->danno_fortaleza;
+        nuevo_orco->tipo->identificador =especie_nuevo_orco->identificador;
+        nuevo_orco->tipo->nombre_especie = especie_nuevo_orco->nombre_especie;
+        nuevo_orco->tipo->rapidez = especie_nuevo_orco->rapidez;
+        nuevo_orco->tipo->salud = especie_nuevo_orco->salud;
+        // se termino la copia.
 
         // Se agrega a la lista enlazada
         nuevo_orco->siguiente = lista_personajes_orco.siguiente;
@@ -380,8 +386,8 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Turno de movimient
         }
     }
 }
-
-sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimiento de heroes
+//                                               la coloque para poder encontra las estadisticas estandar de los tipo
+sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista_heroes) // Turno de movimiento de heroes
 {
     // OJO, la funcion NO comprueba que haya o no heroes en la sala
     // Eso se deberia comprobar en la funcion de Turno General (heroes y orcos)
@@ -389,7 +395,7 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimie
     personaje *heroe_lento;
     sala *sala_destino;
     heroe_lento = encontrar_heroe_lento(sala_origen);
-    int energia_restante = heroe_lento->velocidad;
+    int energia_restante = heroe_lento->tipo->rapidez;
     bool pelea = false;
 
     cout << "Los heroes se encuentran en: " << sala_origen->nombre << endl;
@@ -489,8 +495,9 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo) // Turno de movimie
         personaje *heroe_actual = personajes_jugar->siguiente;
         while (heroe_actual != nullptr)
         {
+            Especie *referenci_actual = encontrar_especie_id(lista_heroes,heroe_actual->tipo->identificador);
             int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
-            heroe_actual->fortaleza = min(heroe_actual->tipo->danno_fortaleza, heroe_actual->fortaleza + recuperacion);
+            heroe_actual->tipo->danno_fortaleza = min(referenci_actual->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion);
             cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
 
             heroe_actual = heroe_actual->siguiente;
