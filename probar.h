@@ -157,29 +157,61 @@ void mostrar_personajes(personaje &lista, int tipo)
     }
     printf("\033[0;37m"); // Gris claro
 
-    stack<personaje*> pila;
-    personaje *actual = lista.siguiente;
-    while (actual != nullptr)
+    if (tipo == 1 && cantidad_personaje_orco > 0)
     {
-        pila.push(actual);
-        actual = actual->siguiente;
+        stack<personaje*> pila_orcos;
+        personaje *actual = lista.siguiente;
+        while (actual != nullptr)
+        {
+            if (actual->identificador > regulador_personaje_orco)
+            {
+                pila_orcos.push(actual);
+            }
+            actual = actual->siguiente;
+        }
+
+        while (!pila_orcos.empty())
+        {
+            personaje* temp = pila_orcos.top();
+            pila_orcos.pop();
+            cout << temp->identificador << " - ";
+            printf("\033[0;35m");
+            cout << "Nombre: " << temp->nombre << endl;
+            printf("\033[0;36m");
+            cout << "Especie: " << temp->tipo->nombre_especie << endl;
+            printf("\033[0;37m");
+            cout << endl;
+        }
+    }
+    else if (tipo == 2 && cantidad_personaje_heroe > 0)
+    {
+        stack<personaje*> pila_heroes;
+        personaje *actual = lista.siguiente;
+        while (actual != nullptr)
+        {
+            if (actual->identificador > regulador_personaje_heroe)
+            {
+                pila_heroes.push(actual);
+            }
+            actual = actual->siguiente;
+        }
+
+        while (!pila_heroes.empty())
+        {
+            personaje* temp = pila_heroes.top();
+            pila_heroes.pop();
+            cout << temp->identificador << " - ";
+            printf("\033[0;35m");
+            cout << "Nombre: " << temp->nombre << endl;
+            printf("\033[0;36m");
+            cout << "Especie: " << temp->tipo->nombre_especie << endl;
+            printf("\033[0;37m");
+            cout << endl;
+        }
     }
 
-    while (!pila.empty())
-    {
-        personaje* temporal = pila.top();
-        pila.pop();
-        cout << temporal->identificador << " - ";
-        printf("\033[0;35m");
-        cout << "Nombre: " << temporal->nombre << endl;
-        printf("\033[0;36m");
-        cout << "Especie: " << temporal->tipo->nombre_especie << endl;
-        printf("\033[0;37m");
-        cout << endl;
-    }
     cout << "No hay mas personajes.\n";
-    cout << endl
-         << endl;
+    cout << endl << endl;
 }
 
 // Encontrar un personaje
