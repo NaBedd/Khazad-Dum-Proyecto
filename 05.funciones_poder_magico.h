@@ -17,6 +17,8 @@ struct Poder_magico
 int cantidad_poderes = 0;
 int regulador_poderes = 0;
 
+string p=" "; // para que se pare el programa.
+
 // para crear poderes.
 void crear_poder(Poder_magico &lista_poderes)
 {
@@ -33,6 +35,8 @@ void crear_poder(Poder_magico &lista_poderes)
     nuevo->siguiente = lista_poderes.siguiente;
     lista_poderes.siguiente = nuevo;
     cout << "El poder: " << nuevo->nombre_poder << "se creo correctamente.\n";
+    cout <<"pulse enter para continuar:"<<endl;
+    getline(cin, p);
 }
 
 void destruir_poder_magico(Poder_magico &lista_poderes)
@@ -55,6 +59,8 @@ void mostrar_poderes(Poder_magico &lista_poderes)
     if (cantidad_poderes == 0)
     {
         cout << "No hay poderes disponibles actualmente. \n";
+        cout <<"pulse enter para continuar:"<<endl;
+        getline(cin, p);
         return;
     }
     Poder_magico *actual = lista_poderes.siguiente;
@@ -69,6 +75,8 @@ void mostrar_poderes(Poder_magico &lista_poderes)
         actual = actual->siguiente;
     }
     cout << "No hay mas poderes disponibles.\n";
+    cout <<"pulse enter para continuar:"<<endl;
+    getline(cin, p);
 }
 
 // para encontrar un poder
@@ -92,6 +100,8 @@ void modificar_poder(Poder_magico &lista_poderes)
     if (cantidad_poderes == 0)
     {
         cout << "No hay poder magicos disponibles para modificar.\n";
+        cout <<"pulse enter para continuar:"<<endl;
+        getline(cin, p);
         return;
     }
     int identificador = 0;
@@ -106,6 +116,8 @@ void modificar_poder(Poder_magico &lista_poderes)
     {
         cout << "El ID que coloco no existe. \n";
         cout << "Modificacion fallida \n";
+        cout <<"pulse enter para continuar:"<<endl;
+        getline(cin, p);
         return;
     }
     cout << "Proceda a actualizar el poder: " << actualizar->nombre_poder << endl;
@@ -115,6 +127,8 @@ void modificar_poder(Poder_magico &lista_poderes)
     getline(cin, actualizar->funcion);
 
     cout << "Poder magico: " << actualizar->nombre_poder << " ha sido actualizado correctamente.\n";
+    cout <<"pulse enter para continuar:"<<endl;
+    getline(cin, p);
 }
 
 // para eliminar un poder.
@@ -124,6 +138,8 @@ void eliminar_poder(Poder_magico &lista_poder)
     {
         cout << "No hay poderes magicos disponibles para eliminar. \n";
         cout << "Eliminacion fallida. \n";
+        cout <<"pulse enter para continuar:"<<endl;
+        getline(cin, p);
         return;
     }
     int identificador = 0;
@@ -138,6 +154,8 @@ void eliminar_poder(Poder_magico &lista_poder)
     {
         cout << "El ID que coloco no existe.\n";
         cout << "Eliminacion fallida.\n";
+        cout <<"pulse enter para continuar:"<<endl;
+        getline(cin, p);
         return;
     }
     // comienza el procedimiento para borrar el poder.
@@ -148,6 +166,8 @@ void eliminar_poder(Poder_magico &lista_poder)
     {
         lista_poder.siguiente = actual->siguiente;
         cout << "el poder magico: " << actual->nombre_poder << " se elimino correctamente.\n ";
+        cout <<"pulse enter para continuar:"<<endl;
+        getline(cin, p);
         delete actual;
         cantidad_poderes -= 1;
         regulador_poderes += 1;
@@ -163,6 +183,8 @@ void eliminar_poder(Poder_magico &lista_poder)
     Poder_magico *eliminar = actual;
     anterior->siguiente = actual->siguiente;
     cout << "El poder magico: " << eliminar->nombre_poder << " se elimino correctamente.\n";
+    cout <<"pulse enter para continuar:"<<endl;
+    getline(cin, p);
     delete eliminar;
     cantidad_poderes -= 1;
     regulador_poderes += 1;
@@ -171,6 +193,8 @@ void eliminar_poder(Poder_magico &lista_poder)
 // Poderes del Juego:
 // Vigor Enano esta en el main
 
+//REVISARRRRR.
+// nose para que es esto.
 void Poder1(Implemento *lista_implementos)
 {
     if (lista_implementos == nullptr)
