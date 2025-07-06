@@ -229,3 +229,4 @@ Especie *encontrar_especie_id(Lista_especie &lista, int identificador)
     cout << "La especie ingresada no existe." << endl;
     return actual = nullptr;
 }
+
