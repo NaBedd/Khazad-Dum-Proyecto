@@ -94,8 +94,8 @@ bool verificacion_heroes_puerta(vector<int> &salas_puerta_pasadas)
     }
     return false;
 }
-
-void turno_heroes(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de heroes
+                                                    // se la agrgo para poder tener las estadisticas estandar
+void turno_heroes(sala *sala_actual_heroes, mapaGrafo &mapa, Lista_especie especies_herores) // Turno de heroes
 {
     cout << "  --- TURNO HEROES ---" << endl;
     cout << "1. Moverse de Sala." << endl;
@@ -106,7 +106,7 @@ void turno_heroes(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de heroes
     {
     case 1: // Movimiento heroes
     {
-        sala_actual_heroes = movimiento_heroes(sala_actual_heroes, mapa);
+        sala_actual_heroes = movimiento_heroes(sala_actual_heroes, mapa,especies_herores);
         break;
     }
     case 2: // Estado del equipo
@@ -125,8 +125,8 @@ void turno_orcos(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de orcos
 {
     movimiento_orcos(sala_actual_heroes, mapa);
 }
-
-void juego(int &turno)
+        //se la agrgo para poder tener las estadisticas estandar
+void juego(int &turno,Lista_especie especies_heroes)
 {
     sala *sala_actual_heroes;
     bool acabo_juego = false;
@@ -144,8 +144,8 @@ void juego(int &turno)
         }
 
         cout << "--- TURNO " << turno << " ---";
-        turno_heroes(sala_actual_heroes, grafo);
-        turno_orcos(sala_actual_heroes, grafo);
+        turno_heroes(sala_actual_heroes, grafo,especies_heroes);
+        turno_orcos(sala_actual_heroes, grafo,especies_heroes);
         bool heroes_ganaron = verificacion_heroes_puerta(salas_puerta_pasadas);
         if (heroes_ganaron)
         {
