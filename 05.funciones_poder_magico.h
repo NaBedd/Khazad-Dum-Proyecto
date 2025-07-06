@@ -17,17 +17,17 @@ struct Poder_magico
 int cantidad_poderes = 0;
 int regulador_poderes = 0;
 
-string p=" "; // para que se pare el programa.
+string p = " "; // para que se pare el programa.
 
 // para crear poderes.
 void crear_poder(Poder_magico &lista_poderes)
 {
     printf("\033[0;33m"); // Amarillo
-    cout<<"Ten en cuenta que tu no tienes la magia suficiente para crear poderes."<<endl;
-    cout<<"Solo los tres guerreros ancestrales de las cavernas tienen la magia suficiente actualmente."<<endl;
-    cout<<"Aqui estaras creando una especie de prototipo que tiene que ser aprobado por ellos en la corte real."<<endl;
+    cout << "Ten en cuenta que tu no tienes la magia suficiente para crear poderes." << endl;
+    cout << "Solo los tres guerreros ancestrales de las cavernas tienen la magia suficiente actualmente." << endl;
+    cout << "Aqui estaras creando una especie de prototipo que tiene que ser aprobado por ellos en la corte real." << endl;
     printf("\033[0;37m"); // Gris claro
-    cout <<"pulse enter para continuar:"<<endl;
+    cout << "pulse enter para continuar:" << endl;
     getline(cin, p);
     cout << "Proceda a llenar las especificaciones del nuevo poder. \n";
     printf("\033[0;36m"); // Cyan para atributos
@@ -49,7 +49,7 @@ void crear_poder(Poder_magico &lista_poderes)
     printf("\033[0;32m"); // Verde
     cout << "El poder: " << nuevo->nombre_poder << " se creo correctamente.\n";
     printf("\033[0;37m");
-    cout <<"pulse enter para continuar:"<<endl;
+    cout << "pulse enter para continuar:" << endl;
     getline(cin, p);
 }
 
@@ -70,7 +70,8 @@ void destruir_poder_magico(Poder_magico &lista_poderes)
 void mostrar_poderes(Poder_magico &lista_poderes)
 {
     printf("\033[0;33m"); // Amarillo
-    cout << "La cantidad de poderes actualmente sin magia suficiente es: " << cantidad_poderes << endl << endl;
+    cout << "La cantidad de poderes actualmente sin magia suficiente es: " << cantidad_poderes << endl
+         << endl;
     printf("\033[0;37m"); // Gris claro
 
     Poder_magico *actual = lista_poderes.siguiente;
@@ -89,12 +90,13 @@ void mostrar_poderes(Poder_magico &lista_poderes)
         printf("\033[0;36m");
         cout << "Funcion: ";
         printf("\033[0;37m");
-        cout << actual->funcion << endl << endl;
+        cout << actual->funcion << endl
+             << endl;
 
         actual = actual->siguiente;
     }
     printf("\033[0;33m"); // Amarillo
-    cout<<"Los poderes con magia suficiente para ser usados son: "<<endl;
+    cout << "Los poderes con magia suficiente para ser usados son: " << endl;
     // Cada poder con color diferente para resaltar
     printf("\033[0;35m"); // Magenta
     cout << "1. Hechizo mortal: ";
@@ -107,7 +109,7 @@ void mostrar_poderes(Poder_magico &lista_poderes)
     cout << "recupera la vida de todos los enanos y le suma 1000 a su fortaleza." << endl;
 
     printf("\033[0;33m"); // Amarillo
-    cout << "3. Fuera maldad: ";
+    cout << "3. Maldad Fuera: ";
     printf("\033[0;37m");
     cout << "traslada a todos los orcos de una sala a otra." << endl;
 
@@ -197,8 +199,8 @@ void eliminar_poder(Poder_magico &lista_poder)
     printf("\033[0;37m");
     mostrar_poderes(lista_poder);
     printf("\033[0;33m"); // Amarillo
-    cout<<"IMPORTANTE. No tines la magia suficiente."<<endl;
-    cout<<"No puedes borrar un poder creado por los tres guerreros ancestrales de las cavernas."<<endl;
+    cout << "IMPORTANTE. No tines la magia suficiente." << endl;
+    cout << "No puedes borrar un poder creado por los tres guerreros ancestrales de las cavernas." << endl;
     printf("\033[0;37m"); // Gris claro
     identificador = obtener_entero("Ingrese el ID del poder a borrar: ");
     // para validar que el id exista.
@@ -239,7 +241,7 @@ void eliminar_poder(Poder_magico &lista_poder)
     printf("\033[0;32m"); // Verde
     cout << "El poder magico: " << eliminar->nombre_poder << " se elimino correctamente.\n";
     printf("\033[0;37m");
-    cout <<"pulse enter para continuar:"<<endl;
+    cout << "pulse enter para continuar:" << endl;
     getline(cin, p);
     delete eliminar;
     cantidad_poderes -= 1;

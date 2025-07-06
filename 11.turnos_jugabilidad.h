@@ -126,7 +126,7 @@ void turno_orcos(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de orcos
     movimiento_orcos(sala_actual_heroes, mapa);
 }
 // se la agrgo para poder tener las estadisticas estandar
-void juego(int &turno, Lista_especie especies_heroes)
+void juego(int &turno)
 {
     sala *sala_actual_heroes;
     bool acabo_juego = false;
@@ -143,8 +143,8 @@ void juego(int &turno, Lista_especie especies_heroes)
             acabo_juego = true;
         }
 
-        cout << "--- TURNO " << turno << " ---";
-        turno_heroes(sala_actual_heroes, grafo, especies_heroes);
+        cout << "--- TURNO " << turno << " ---" << endl;
+        turno_heroes(sala_actual_heroes, grafo, tipoEspecieHeroe);
         turno_orcos(sala_actual_heroes, grafo);
         bool heroes_ganaron = verificacion_heroes_puerta(salas_puerta_pasadas);
         if (heroes_ganaron)

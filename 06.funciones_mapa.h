@@ -290,7 +290,7 @@ void mostrar_adyacencias(sala *salaOrigen)
     }
 
     printf("\033[0;33m");
-    cout << "La sala \"" << salaOrigen->nombre << "\" tiene como adyacentes: " << endl;
+    cout << "Adyacentes de " << salaOrigen->nombre << "\": " << endl;
     cout << "ID.Sala Adyacente   Distancia" << endl;
     cout << "---------------------" << endl;
     printf("\033[0;37m");

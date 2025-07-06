@@ -15,7 +15,7 @@ struct mochila
 {
     int identificador; // sera el mismo del personaje al que pertenezca.
     Implemento *implementos = nullptr;
-    Poder_magico *poderes = nullptr;  // no se usara en esta entrega
+    Poder_magico *poderes = nullptr; // no se usara en esta entrega
     string num_poder = " ";
 };
 
@@ -566,8 +566,9 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
 
         opcio = obtener_entero("");
 
-        if (opcio == 1)
+        if (opcio == 1) // Llenar implementos
         {
+            limpiar_pantalla();
             Implemento *nuevo_implemento = nullptr;
             do
             {
@@ -612,8 +613,9 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
             cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
             printf("\033[0;37m"); // Gris claro
         }
-        else if (opcio == 2)
+        else if (opcio == 2) // Llenar poderes
         {
+            limpiar_pantalla();
             if (con_poderes == 1)
             {
                 printf("\033[0;33m"); // Amarillo
@@ -645,7 +647,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
                 cout << "recupera la vida de todos los enanos y le suma 1000 a su fortaleza." << endl;
 
                 printf("\033[0;33m"); // Amarillo
-                cout << "3. Fuera maldad: ";
+                cout << "3. Maldad Fuera: ";
                 printf("\033[0;37m");
                 cout << "traslada a todos los orcos de una sala a otra." << endl;
 
@@ -658,8 +660,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
                 cout << "5. No quiero ningun poder." << endl;
                 printf("\033[0;37m");
 
-                cout << "Elija sabiamente: " << endl;
-                opcio = obtener_entero("");
+                opcio = obtener_entero("Elija sabiamente: ");
                 if (opcio == 1)
                 {
                     personaje_a_llenar->mimochila->num_poder = "hechizo mortal";
@@ -676,7 +677,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
                 }
                 else if (opcio == 3)
                 {
-                    personaje_a_llenar->mimochila->num_poder = "fuera maldad";
+                    personaje_a_llenar->mimochila->num_poder = "Maldad Fuera";
                     cantidad_objetos++;
                     opcio = 0;
                     break;
@@ -723,13 +724,11 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
         printf("\033[0;33m"); // Amarillo
         cout << "Ya no puedes agregar mas objetos.\n";
         cout << "La mochila del personaje " << personaje_a_llenar->nombre << " se lleno correctamente.\n";
-        cout<<"pulse enter para continuar."<<endl;
-        getline(cin,pausa); 
+        cout << "pulse enter para continuar." << endl;
+        getline(cin, pausa);
         printf("\033[0;37m"); // Gris claro
     }
 }
-
-
 
 // para elegir el personaje y llenar la mochila.
 void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &implementos)
@@ -739,7 +738,7 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
         printf("\033[0;33m"); // Amarillo
         cout << "Ya tienes la cantidad de personajes maxima.\n";
         cout << "La lucha sera complicada pero no tanto." << endl;
-        cout <<"Eleccion fallida."<<endl;
+        cout << "Eleccion fallida." << endl;
         printf("\033[0;37m"); // Gris claro
         cout << "Pulse enter para continuar:" << endl;
         getline(cin, pausa);
@@ -775,8 +774,8 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
         cout << "Eleccion de personaje fallida.\n";
         cout << "Esas acciones le faltan el respeto a los tres guerreros ancestrales de las cavernas." << endl;
         printf("\033[0;37m"); // Gris claro
-        cout<<"pulse enter para continuar."<<endl;
-        getline(cin,pausa); 
+        cout << "pulse enter para continuar." << endl;
+        getline(cin, pausa);
         return;
     }
     cantidad_personajes_jugar++;
@@ -795,7 +794,8 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     nuevo_para_jugar->siguiente = nullptr;
 
     printf("\033[0;33m"); // Amarillo
-    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl << endl;
+    cout << "Proceda a llenar la mochila del personaje: " << nuevo_para_jugar->nombre << endl
+         << endl;
     printf("\033[0;37m"); // Gris claro
     llenar_mochila(nuevo_para_jugar, implementos, lista_jugar);
 
@@ -872,7 +872,6 @@ void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
     }
     cout << "\nNo hay mas personajes en el equipo\n\n";
 }
-
 
 void eliminar_personaje_jugar(personaje *&lista_jugar)
 {
@@ -1005,9 +1004,9 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
     {
         printf("\033[0;33m"); // Amarillo
         cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
-        printf("\033[0;37m"); // Gris claro
-        cout << "Pulse enter para continuar:" << endl;
-        getline(cin, pausa);
+        // printf("\033[0;37m"); // Gris claro
+        // cout << "Pulse enter para continuar:" << endl;
+        // getline(cin, pausa);
 
         Implemento *actual_implemento = actual->mimochila->implementos;
         while (actual_implemento != nullptr)

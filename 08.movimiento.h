@@ -117,10 +117,19 @@ personaje *encontrar_heroe_lento(sala *sala_actual) // Devuelve el heroe mas len
 
 sala *designar_sala_spawn_heroes(const mapaGrafo &grafo) // Spawnean en sala random
 {
-    sala *sala_spawn_heroes = nullptr;
-    int indice_random = rand() % grafo.mapa_salas.size();
-    sala_spawn_heroes = encontrar_sala(grafo, indice_random);
-    return sala_spawn_heroes;
+    if (grafo.mapa_salas.empty())
+    {
+        cout << "El mapa esta vacio" << endl;
+        return nullptr;
+    }
+
+    else
+    {
+        sala *sala_spawn_heroes = nullptr;
+        int indice_random = rand() % grafo.mapa_salas.size();
+        sala_spawn_heroes = encontrar_sala(grafo, indice_random);
+        return sala_spawn_heroes;
+    }
 }
 
 void spawn_heroes(sala *sala_spawn_heroes, const personaje *personajes_jugar) // Carga toda la lista de heroes en 1 sala

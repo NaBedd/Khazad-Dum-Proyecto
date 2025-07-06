@@ -13,14 +13,10 @@
 #include "05.funciones_poder_magico.h"             // Funciones para los Poderes Magicos
 #include "06.funciones_mapa.h"                     // Funciones para el mapa (grafo)
 #include "07.funciones_cargar_archivo.h"           // Funciones para la carga de archivos
-
-//#include "08.movimiento.h"                         // Movimiento Ingame (Orcos y heroes)
-
+#include "08.movimiento.h"                         // Movimiento Ingame (Orcos y heroes)
 #include "09.menus_main.h"                         // Todos los menus del main
-
-
-//#include "10.combate.h"                            // Sistema de combate
-//#include "11.turnos_jugabilidad.h"                 // Implementacion de todos los sistemas de mov y pelea
+#include "10.combate.h"                            // Sistema de combate
+#include "11.turnos_jugabilidad.h"                 // Implementacion de todos los sistemas de mov y pelea
 
 // Funcion declarada aqui porque sino daba error
 // Sepa Dios por que
@@ -191,23 +187,16 @@ int main()
     cout << "¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
     cout << "Se recomienda visitar todos los menus en orden descendente para una mejor experiencia de juego." << endl;
 
-    do // Menu mientras.
-    {
-        menu_principal();
-    } while (opcion_principal != 7 && !iniciar_juego); // Ambas opciones hacen que salga del menu
+    menu_principal();
 
     // ---------------------------------- GAMEPLAY ------------------------------------
-    
-    
-    
-    // da error
-    //if (opcion_principal != 7)
-    //{
-        //juego(turno);
-    //}
 
-    
-    
+    if (iniciar_juego)
+    {
+        juego(turno);
+    }
+
+    cout << "AAAAAAAAAAAAAAAAAAAAAAA SALIO DEL JUEGIO ASDIOPJSADJIOASASD:" << endl;
     // --------------------------------------------------------------------------------
     // --------------- FIN DEL PROGRAMA. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
