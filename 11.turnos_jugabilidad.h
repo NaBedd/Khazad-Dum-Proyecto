@@ -14,7 +14,7 @@ Falta:
     La energia se les va a recuperar por cada TURNO de movimiento, no por sala movida
 */
 
-void spawn_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasadas) // Spawnear puerta destino
+sala *spawn_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasadas) // Spawnear puerta destino
 {
     int indice_random;
     bool sala_valida = false;
@@ -52,17 +52,17 @@ void spawn_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasadas) //
 
     // La ubicacion más actual de la puerta será la última posición de la lista
     salas_puerta_pasadas.push_back(nueva_sala_puerta->id);
-    return;
+    return nueva_sala_puerta;
 }
 
-void movimiento_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasadas,
-                               const int turno_actual) // Spawnear nueva y eliminar anterior puerta destino
+sala *movimiento_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasadas,
+                                const int turno_actual) // Spawnear nueva y eliminar anterior puerta destino
 {
-
+    sala *sala_puerta = nullptr;
     // Cada 5 turnos se mueve la puerta
     if (turno_actual % 5 != 0)
     {
-        return;
+        return sala_puerta;
     }
     // Si no esta vacio(deberia ser siempre), entonces:
     if (!salas_puerta_pasadas.empty())
@@ -72,7 +72,8 @@ void movimiento_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasada
         ultima_sala_puerta->contiene_puerta_destino = false;
     }
     // El print de la nueva ubicacion esta en la funcion de spawn
-    spawn_puerta_destino(mapa, salas_puerta_pasadas);
+    sala_puerta = spawn_puerta_destino(mapa, salas_puerta_pasadas);
+    return sala_puerta;
 }
 
 bool verificacion_heroes_puerta(vector<int> &salas_puerta_pasadas)
@@ -83,6 +84,7 @@ bool verificacion_heroes_puerta(vector<int> &salas_puerta_pasadas)
         sala *sala_puerta_actual = encontrar_sala(grafo, salas_puerta_pasadas.back());
         if (!sala_puerta_actual->lista_heroes.empty() && sala_puerta_actual->lista_orcos.empty()) // 1. Los heroes llegan y NO hay orcos
         {
+            cout << endl;
             cout << "¡¡¡ FELICIDADES HEROES !!!" << endl;
             cout << "Han llegado a la puerta del destino" << endl;
             cout << "La aldea ha sido salvada de los malvados orcos." << endl;
@@ -148,7 +150,7 @@ void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_
     sala *sala_spawn_orcos = designar_sala_spawn_orcos(sala_actual_heroes, grafo, lista_pesos_sala_heroes); // designa spawn orcos
     spawnear_personajes_orcos(sala_spawn_orcos, tipoEspecieOrco, personajes_orco);                          // spawnea orcos antes del juego
 
-    spawn_puerta_destino(grafo, salas_puerta_pasadas); // Spawnear puerta destino
+    sala *sala_puerta_destino = spawn_puerta_destino(grafo, salas_puerta_pasadas); // Spawnear puerta destino
 
     while (!acabo_juego)
     {
@@ -157,13 +159,13 @@ void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_
             acabo_juego = true;
         }
 
-        cout << "Personajes en: " << sala_actual_heroes->nombre << endl;
+        cout << "Los Heroes se encuentran en: " << sala_actual_heroes->nombre << endl;
         for (personaje *actual : sala_actual_heroes->lista_heroes)
         {
             cout << "  " << actual->identificador << "." << actual->nombre << endl;
         }
 
-        cout << "   --- TURNO " << turno << " ---" << endl;
+        cout << "      --- TURNO " << turno << " ---" << endl;
         sala *sala_heroes = turno_heroes(sala_actual_heroes, grafo, tipoEspecieHeroe);
 
         checkear_entidades_grafo(grafo);
@@ -179,7 +181,7 @@ void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_
             return;
         }
 
-        movimiento_puerta_destino(grafo, salas_puerta_pasadas, turno);
         turno += 1;
+        movimiento_puerta_destino(grafo, salas_puerta_pasadas, turno); // Primero se suma el turno para que en el 0 no la genere 2 veces
     }
 }

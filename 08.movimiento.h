@@ -177,7 +177,7 @@ void spawn_heroes(sala *&sala_spawn_heroes, personaje *lista_personajes) // Carg
     personaje *actual = lista_personajes;
     while (actual != nullptr)
     {
-        cout << "Heroe actual siendo transportado: " << actual->nombre << "AA." << endl;
+        cout << "Heroe actual siendo transportado: " << actual->nombre << endl;
         sala_spawn_heroes->lista_heroes.push_back(actual);
         actual = actual->siguiente;
     }
@@ -205,8 +205,8 @@ sala *designar_sala_spawn_orcos(sala *sala_spawn_heroes, mapaGrafo &grafo, const
             sala_spawn_orcos = encontrar_sala(grafo, indice_random);
         }
     }
-    cout << "\n Borrar DESPUES \n"
-         << "ORCOS APARECERAN EN " << sala_spawn_orcos->nombre << endl;
+    // cout << "Spawn de Orcos: " << sala_spawn_orcos->nombre << endl;
+    cout << "Los orcos han entrado al mapa..." << endl;
     return sala_spawn_orcos;
 }
 
@@ -243,8 +243,8 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
     int cantidad_orcos_spawnear = (rand() % 5) + 1;
 
     // borrar despues
-    cout << "Generando " << cantidad_orcos_spawnear << " orcos en sala "
-         << sala_spawn_orcos->nombre << " (ID: " << sala_spawn_orcos->id << ")\n";
+    // cout << "Generando " << cantidad_orcos_spawnear << " orcos en sala "
+    //  << sala_spawn_orcos->nombre << " (ID: " << sala_spawn_orcos->id << ")\n";
 
     // Selecciona las especies que apareceran y crea los personajes Orco
     for (size_t i = 0; i < cantidad_orcos_spawnear; i++)
@@ -342,10 +342,10 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
         lista_personajes_orco.siguiente = nuevo_orco;
 
         // Se agrega a la sala
-        cout << "Orco creado: " << nombre_nuevo_orco << endl;
+        // cout << "Orco creado: " << nombre_nuevo_orco << endl;
         sala_spawn_orcos->lista_orcos.push_back(nuevo_orco);
     }
-    cout << "Total orcos en sala: " << sala_spawn_orcos->lista_orcos.size() << endl;
+    // cout << "Total orcos en sala: " << sala_spawn_orcos->lista_orcos.size() << endl;
 }
 
 bool verificar_pelea(sala *sala_siguiente, int movimiento_heroes_orcos) // Empieza la pelea si es el caso
@@ -580,6 +580,13 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
             cout << "!!! A pelear !!!" << endl;
             combateheroes(sala_origen, tipoEspecieHeroe);
             // Si hay pelea, el movimiento se detiene
+            return sala_origen;
+        }
+
+        // Se verifica que sea la sala de la puerta destino
+        if (sala_origen->contiene_puerta_destino)
+        {
+            // EL mensaje de felicidades y todo lo demas, esta en el main
             return sala_origen;
         }
     }

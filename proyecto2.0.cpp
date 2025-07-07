@@ -173,10 +173,11 @@ void potenciar_implemento(personaje *&aplicar)
 
 int main()
 {
+
     // Semilla aleatoria inicializada (para el num random de orcos)
     srand(time(NULL));
 
-    cout << "¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
+    cout << "                       ¡¡¡ Bienvenido al juego Khazad-Dum !!!" << endl;
     cout << "Se recomienda visitar todos los menus en orden descendente para una mejor experiencia de juego." << endl;
 
     menu_principal();
@@ -185,14 +186,13 @@ int main()
 
     if (iniciar_juego)
     {
-
         juego(grafo, tipoEspecieHeroe, salas_puerta_pasadas);
     }
 
-    cout << "AAAAAAAAAAAAAAAAAAAAAAA SALIO DEL JUEGIO ASDIOPJSADJIOASASD:" << endl;
     // --------------------------------------------------------------------------------
     // --------------- FIN DEL PROGRAMA. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
+    cout << "\n";
     cout << "Borrando archivos temporales..." << endl;
     // Destructor de especies
     destruir_lista_especie(tipoEspecieHeroe);
@@ -208,6 +208,6 @@ int main()
     destruir_personaje_jugar(personajes_jugar);
     destruir_grafo(grafo);
 
-    cout << "Gracias por usar el programa. \n";
+    cout << "Gracias jugar nuestro juego. \n";
 }
 // fin del programa.
