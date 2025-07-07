@@ -618,9 +618,9 @@ void menu_pre_juego()
             else
             {
                 printf("\033[0;31m"); // Rojo
-                cout << "actualmte te faltan personajes para iniciar el juego." << endl;
+                cout << "Actualmente te faltan personajes para iniciar el juego." << endl;
                 printf("\033[0m"); // Reset color
-                cout << "pulse enter para continuar." << endl;
+                cout << "Pulse enter para continuar." << endl;
                 getline(cin, pausa5);
                 limpiar_pantalla();
             }
