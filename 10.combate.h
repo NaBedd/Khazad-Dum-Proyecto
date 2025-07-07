@@ -703,6 +703,7 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                     heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                     cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                     combate_terminado = true;
+                    return;
                 }
                 else
                 {
@@ -842,10 +843,11 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                 cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 break;
             }
-
             default:
+            {
                 cout << "Opcion invalida\n";
                 break;
+            }
             }
         }
         if (sala_actual->lista_orcos.empty())

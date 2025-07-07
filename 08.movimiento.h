@@ -375,94 +375,7 @@ bool verificar_pelea(sala *sala_siguiente, int movimiento_heroes_orcos) // Empie
     return false;
 }
 
-/* void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Turno de movimiento de orcos
-    {
-        // Se moveran entre 1 y 5 orcos pq son tontos
-        if (!sala_heroes)
-        {
-            cout << "No hay sala heroes. Error de codigo" << endl;
-            return;
-        }
-
-        vector<sala *> salas_con_orcos; // Vector que almacena todas las salas donde hay orcos
-        sala *sala_mas_cercana = nullptr;
-
-        sala *sala_moverse;
-        int distancia_minima = INT_MAX;            // Se declara como infinito
-        int cant_orcos_moverse = (rand() % 5) + 1; // Cantidad de orcos a mover (entre 1 y 5)
-
-        vector<int> lista_adyacencias = dijkstra(sala_heroes, grafo);
-        if (lista_adyacencias.empty())
-        {
-            cout << "Error: No se pudo calcular Dijkstra." << endl;
-            return;
-        }
-
-        for (sala *actual : grafo.mapa_salas) // Agrega todas las salas con orcos a la lista
-        {
-            if (!actual->lista_orcos.empty())
-            {
-                salas_con_orcos.push_back(actual);
-            }
-        }
-        //  Una vez que ya tengo todas las salas donde hay orcos,
-        // Decido cual de ellos se movera
-
-    for (sala *actual : salas_con_orcos) // Elegir que sala de Orcos se movera
-    {
-        lista_adyacencias = dijkstra(actual, grafo);
-        if (lista_adyacencias[sala_heroes->id] < distancia_minima && actual != sala_heroes) // No movera a los orcos en sala heroes
-        {
-            distancia_minima = lista_adyacencias[sala_heroes->id];
-            sala_mas_cercana = encontrar_sala(grafo, actual->id);
-        }
-    }
-
-    if (!sala_mas_cercana)
-    {
-        cout << "Error en codigo. No existe sala_mas_cercana" << endl;
-        return;
-    }
-
-    // Decidir hacia donde se moveran los orcos de la sala elegida
-    if (sala_mas_cercana && sala_mas_cercana != sala_heroes) // Comprueba que exista y no esten ya en donde los heroes
-    {
-        lista_adyacencias = dijkstra(sala_mas_cercana, grafo);
-        distancia_minima = INT_MAX;
-
-        // Busca el adyacente que esté más cerca de los héroes
-        for (const arista &vecino : sala_mas_cercana->lista_adyacentes)
-        {
-            if (lista_adyacencias[vecino.destino->id] < distancia_minima)
-            {
-                distancia_minima = lista_adyacencias[vecino.destino->id];
-                sala_moverse = vecino.destino;
-            }
-        }
-
-        // Mover a los orcos a las salas seleccionadas
-        for (int i = 0; i < cant_orcos_moverse; i++) // En funcion de la cantidad de orcos a mover
-        {
-            if (!sala_mas_cercana->lista_orcos.empty()) // Mientras la lista no este vacia:
-            {
-                sala_moverse->lista_orcos.push_back(sala_mas_cercana->lista_orcos[0]);
-                sala_mas_cercana->lista_orcos.erase(sala_mas_cercana->lista_orcos.begin());
-            }
-        }
-        cout << "El grupo de Orcos se ha movido de sala!" << endl; // Creo que el print esta bienn
-        bool pelea = verificar_pelea(sala_moverse, 2);
-        if (pelea)
-        {
-            cout << "Los Heroes han caido en una emboscada de los Orcos." << endl;
-            cout << "!!! A pelear !!!" << endl;
-            combateorcos(sala_moverse, tipoEspecieHeroe);
-            return;
-        }
-    }
-}
-*/
-
-void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo)
+void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
 {
     // 1. Validación básica
     if (!sala_heroes)
@@ -554,7 +467,7 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo)
         combateorcos(mejor_destino, tipoEspecieHeroe);
     }
 }
-// la coloque para poder encontra las estadisticas estandar de los tipo
+
 sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista_heroes) // Turno de movimiento de heroes
 {
     // OJO, la funcion NO comprueba que haya o no heroes en la sala

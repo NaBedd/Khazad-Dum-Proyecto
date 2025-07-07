@@ -17,7 +17,7 @@ Implementos
     - [ ] Los heroes han llegado a la puerta del destino y mataron a los orcos de esa sala (si es que los hay)
       - Ya hice la condicion para ganar pero hay que probar que funcione OJO!!!!
 
-- [ ] Cambiar el main para que se ejecute todo el combate
+- [x] Cambiar el main para que se ejecute todo el combate
 - [ ] Comprobar que la recuperacion al moverse y NO pelear este bien. Archivo 08.
 - [ ] Acomodar opcion huir
 
@@ -47,9 +47,9 @@ Implementos
 - [x] Agregar atributo defensa a las especies (orcos y heroes)
 - [x] Asegurarnos de que NADA explote (numeros grandes)
 - [x] Arreglar la edicion de Armas y Personajes
-- [ ] La funcion mostrar listas, las muestra de la ultima a la primera (3→2→1) en vez de (1→2→3)
-- [ ] Funcion para borrar toda la mochila
-- [ ] Ordenar Main(orden de opciones)
+- [x] La funcion mostrar listas, las muestra de la ultima a la primera (3→2→1) en vez de (1→2→3)
+- [x] Funcion para borrar toda la mochila
+- [x] Ordenar Main(orden de opciones)
 
 ### Mapa:
 
@@ -58,7 +58,7 @@ Implementos
 - [x] Hacer mapa con grafos
 - [x] Acomodar sistema de mapas: Adyacencias, numero de orcos en sala (lista de orcos)
 - [x] El turno se acaba cuando se acaba la energia para moverse entre salas
-- [ ] Asignacion de Puerta Magica
+- [x] Asignacion de Puerta Magica
 - [x] Crear sitio de aparicion aleatorio en el mapa
 
 ### Sistemas y Jugabilidad
@@ -70,9 +70,9 @@ Implementos
 
 ### Opcional
 
-- [ ] usar system("cls") para limpiar la pantalla de Menus
+- [x] usar system("cls") para limpiar la pantalla de Menus
 - [ ] Podemos hacer una opcion de eliminar, o sino hacer que el usuario ingrese 0 en todas las caracteristicas
-- [ ] Revisar redundancia en funciones (eliminar personajes, ...)
+- [x] Revisar redundancia en funciones (eliminar personajes, ...)
 
 ### Nuevos errores conocidos
 

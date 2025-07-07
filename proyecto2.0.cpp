@@ -197,6 +197,7 @@ int main()
     // --------------------------------------------------------------------------------
     // --------------- FIN DEL PROGRAMA. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
+    cout << "Borrando archivos temporales..." << endl;
     // Destructor de especies
     destruir_lista_especie(tipoEspecieHeroe);
     destruir_lista_especie(tipoEspecieOrco); // se destruye la lista al final del programa.

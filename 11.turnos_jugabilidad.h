@@ -148,6 +148,8 @@ void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_
     sala *sala_spawn_orcos = designar_sala_spawn_orcos(sala_actual_heroes, grafo, lista_pesos_sala_heroes); // designa spawn orcos
     spawnear_personajes_orcos(sala_spawn_orcos, tipoEspecieOrco, personajes_orco);                          // spawnea orcos antes del juego
 
+    spawn_puerta_destino(grafo, salas_puerta_pasadas); // Spawnear puerta destino
+
     while (!acabo_juego)
     {
         if (turno >= 25) // Si llega al turno 5 (puerta se ha movido 5 veces)
