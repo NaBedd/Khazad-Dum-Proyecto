@@ -174,7 +174,6 @@ void potenciar_implemento(personaje *&aplicar)
 
 int main()
 {
-
     // Semilla aleatoria inicializada (para el num random de orcos)
     srand(time(NULL));
 
@@ -189,20 +188,9 @@ int main()
     {
 
         // cout << "Se esta ejecutando el condicional bien" << endl;
-        sala *sala_actual_heroes = designar_sala_spawn_heroes(grafo);
-        if (sala_actual_heroes)
-        {
-            spawn_heroes(sala_actual_heroes, personajes_jugar);
-        }
-        else
-        {
-            cout << "Error en asignacion de sala Spawn" << endl;
-        }
+        // Para spawnear a los orcos al menos 10 pasos de distancia de los heroes
 
-        // Aparece a los heroes en la sala random
-
-        // cout << "cout antes del juego comotal" << endl;
-        juego(turno, sala_actual_heroes, grafo, tipoEspecieHeroe, salas_puerta_pasadas);
+        juego(grafo, tipoEspecieHeroe, salas_puerta_pasadas);
     }
 
     cout << "AAAAAAAAAAAAAAAAAAAAAAA SALIO DEL JUEGIO ASDIOPJSADJIOASASD:" << endl;

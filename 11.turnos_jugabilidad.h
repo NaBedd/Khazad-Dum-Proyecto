@@ -78,59 +78,75 @@ void movimiento_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasada
 bool verificacion_heroes_puerta(vector<int> &salas_puerta_pasadas)
 {
     bool heroes_ganaron;
-    sala *sala_puerta_actual = encontrar_sala(grafo, salas_puerta_pasadas.back());
-    if (!sala_puerta_actual->lista_heroes.empty() && sala_puerta_actual->lista_orcos.empty()) // 1. Los heroes llegan y NO hay orcos
+    if (!salas_puerta_pasadas.empty())
     {
-        cout << "¡¡¡ FELICIDADES HEROES !!!" << endl;
-        cout << "Han llegado a la puerta del destino" << endl;
-        cout << "La aldea ha sido salvada de los malvados orcos." << endl;
-        return heroes_ganaron = true;
-    }
-    // 2. Los heroes llegan y SI hay orcos
-    // creeeo que primero se ejecuta el combate, entonces nunca pasaria este caso (????)
-    else if (!sala_puerta_actual->lista_heroes.empty() && !sala_puerta_actual->lista_orcos.empty())
-    {
-        cout << "Verificar funcionamiento. Evitar multiples peleas" << endl;
+        sala *sala_puerta_actual = encontrar_sala(grafo, salas_puerta_pasadas.back());
+        if (!sala_puerta_actual->lista_heroes.empty() && sala_puerta_actual->lista_orcos.empty()) // 1. Los heroes llegan y NO hay orcos
+        {
+            cout << "¡¡¡ FELICIDADES HEROES !!!" << endl;
+            cout << "Han llegado a la puerta del destino" << endl;
+            cout << "La aldea ha sido salvada de los malvados orcos." << endl;
+            return heroes_ganaron = true;
+        }
+        // 2. Los heroes llegan y SI hay orcos
+        // creeeo que primero se ejecuta el combate, entonces nunca pasaria este caso (????)
+        else if (!sala_puerta_actual->lista_heroes.empty() && !sala_puerta_actual->lista_orcos.empty())
+        {
+            cout << "Verificar funcionamiento. Evitar multiples peleas" << endl;
+        }
     }
     return false;
 }
 // se la agrgo para poder tener las estadisticas estandar
-void turno_heroes(sala *&sala_actual_heroes, mapaGrafo &mapa, Lista_especie especies_heroes) // Turno de heroes
+sala *turno_heroes(sala *&sala_actual_heroes, mapaGrafo &mapa, Lista_especie especies_heroes) // Turno de heroes
 {
-    cout << "  --- TURNO HEROES ---" << endl;
-    cout << "1. Moverse de Sala." << endl;
-    cout << "2. Consultar estado del equipo." << endl;
-    opcion_interna = obtener_opcion();
+    do
+    {
+        cout << "  --- TURNO HEROES ---" << endl;
+        cout << "1. Moverse de Sala." << endl;
+        cout << "2. Consultar estado del equipo." << endl;
+        opcion_interna = obtener_opcion();
 
-    switch (opcion_interna)
-    {
-    case 1: // Movimiento heroes
-    {
-        sala_actual_heroes = movimiento_heroes(sala_actual_heroes, mapa, especies_heroes);
-        break;
-    }
-    case 2: // Estado del equipo
-    {
-        mostrar_personajes_jugar(personajes_jugar);
-        break;
-    }
-    default:
-    {
-        cout << "Invalido. Ingrese una opcion valida" << endl;
-        break;
-    }
-    }
+        switch (opcion_interna)
+        {
+        case 1: // Movimiento heroes
+        {
+            sala_actual_heroes = movimiento_heroes(sala_actual_heroes, mapa, especies_heroes);
+            break;
+        }
+        case 2: // Estado del equipo
+        {
+            mostrar_personajes_jugar(personajes_jugar);
+            break;
+        }
+        default:
+        {
+            cout << "Invalido. Ingrese una opcion valida" << endl;
+            break;
+        }
+        }
+    } while (opcion_interna != 1);
+    return sala_actual_heroes;
 }
+
 void turno_orcos(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de orcos
 {
+    cout << "  --- TURNO ORCOS ---" << endl;
     movimiento_orcos(sala_actual_heroes, mapa);
 }
 
 // se la agrgo para poder tener las estadisticas estandar
-void juego(int &turno, sala *sala_actual_heroes, mapaGrafo &grafo,
-           Lista_especie tipoEspecieHeroe, vector<int> &salas_puerta_pasadas)
+void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_puerta_pasadas)
 {
+    int turno = 0;
     bool acabo_juego = false;
+
+    sala *sala_actual_heroes = designar_sala_spawn_heroes(grafo); // Inicializa la sala
+    spawn_heroes(sala_actual_heroes, personajes_jugar);           // Spawnea los heroes
+
+    vector<int> lista_pesos_sala_heroes = dijkstra(sala_actual_heroes, grafo);                              // Lista de pesos desde sala heroes
+    sala *sala_spawn_orcos = designar_sala_spawn_orcos(sala_actual_heroes, grafo, lista_pesos_sala_heroes); // designa spawn orcos
+    spawnear_personajes_orcos(sala_spawn_orcos, tipoEspecieOrco, personajes_orco);                          // spawnea orcos antes del juego
 
     while (!acabo_juego)
     {
@@ -146,8 +162,13 @@ void juego(int &turno, sala *sala_actual_heroes, mapaGrafo &grafo,
         }
 
         cout << "--- TURNO " << turno << " ---" << endl;
-        turno_heroes(sala_actual_heroes, grafo, tipoEspecieHeroe);
-        turno_orcos(sala_actual_heroes, grafo);
+        sala *sala_heroes = turno_heroes(sala_actual_heroes, grafo, tipoEspecieHeroe);
+
+        checkear_entidades_grafo(grafo);
+
+        spawnear_personajes_orcos(sala_spawn_orcos, tipoEspecieOrco, personajes_orco); // spawnea orcos cada turno
+        cout << "Orcos generados en: " << sala_spawn_orcos->nombre << "\n";
+        turno_orcos(sala_heroes, grafo);
 
         bool heroes_ganaron = verificacion_heroes_puerta(salas_puerta_pasadas);
         if (heroes_ganaron)
