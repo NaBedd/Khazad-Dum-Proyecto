@@ -707,10 +707,10 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
                 if (opcio >= 1 && opcio <= 4) {
                     string poder_seleccionado;
                     switch(opcio) {
-                        case 1: poder_seleccionado = "hechizo mortal"; break;
-                        case 2: poder_seleccionado = "enanos al poder"; break;
-                        case 3: poder_seleccionado = "maldad Fuera"; break;
-                        case 4: poder_seleccionado = "implemento supremo"; break;
+                        case 1: poder_seleccionado = "Poder1"; break;
+                        case 2: poder_seleccionado = "Poder2"; break;
+                        case 3: poder_seleccionado = "Poder3"; break;
+                        case 4: poder_seleccionado = "Poder4"; break;
                     }
                     
                     if (poder_ya_usado(lista_personajes_jugar, poder_seleccionado)) {
