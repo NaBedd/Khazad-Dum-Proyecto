@@ -43,6 +43,7 @@ bool salas_cargadas = false;
 bool adyacencias_cargadas = false;
 bool personajes_cargados = false;
 
+bool acabo_juego = false;
 // Para puerta destino
 vector<int> salas_puerta_pasadas;
 

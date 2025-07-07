@@ -143,7 +143,7 @@ sala *designar_sala_spawn_heroes(const mapaGrafo &grafo) // Spawnean en sala ran
         sala_spawn_heroes = encontrar_sala(grafo, indice_random);
         cout << "Los heroes apareceran en: " << sala_spawn_heroes->nombre << endl
              << endl;
-        cout << "Acabando funcion designar sala" << endl;
+        // cout << "Acabando funcion designar sala" << endl;
         return sala_spawn_heroes;
     }
 }
@@ -404,7 +404,8 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
             // Verificar ID válido
             if (distancias[sala_actual->id] < min_distancia)
             {
-                cout << "Distancia minima entre Orcos y Heroes actualizada" << endl;
+                cout << "Los orcos se mueven hacia los heroes...\n"
+                     << endl;
                 min_distancia = distancias[sala_actual->id];
                 sala_orcos_cercana = sala_actual;
             }
@@ -456,9 +457,9 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
         }
     }
 
-    cout << cantidad_mover << " orcos movidos de "
-         << sala_orcos_cercana->nombre << " a "
-         << mejor_destino->nombre << endl;
+    // cout << cantidad_mover << " orcos movidos de "
+    //      << sala_orcos_cercana->nombre << " a "
+    //      << mejor_destino->nombre << endl;
 
     // 8. Verificar combate
     if (!mejor_destino->lista_heroes.empty())
@@ -584,7 +585,7 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         }
 
         // Se verifica que sea la sala de la puerta destino
-        if (sala_origen->contiene_puerta_destino)
+        if (sala_origen->contiene_puerta_destino == true)
         {
             // EL mensaje de felicidades y todo lo demas, esta en el main
             return sala_origen;

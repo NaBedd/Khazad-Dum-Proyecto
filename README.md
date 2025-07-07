@@ -8,21 +8,21 @@ Implementos
 ### Pendiente:
 
 - [ ] El juego NO termina si todos los heroes mueren. Cambiar !!!!
-- [ ] Terminar juego si las condiciones de victoria o derrota se cumplen
+- [x] Terminar juego si las condiciones de victoria o derrota se cumplen
 
   - Condiciones para perder:
-    - [ ] Todos los heroes han muerto
+    - [x] Todos los heroes han muerto
     - [ ] Ya la puerta se movio 5 veces y se acabo el tiempo
   - Condiciones para ganar:
-    - [ ] Los heroes han llegado a la puerta del destino y mataron a los orcos de esa sala (si es que los hay)
+    - [x] Los heroes han llegado a la puerta del destino y mataron a los orcos de esa sala (si es que los hay)
       - Ya hice la condicion para ganar pero hay que probar que funcione OJO!!!!
 
 - [x] Cambiar el main para que se ejecute todo el combate
-- [ ] Comprobar que la recuperacion al moverse y NO pelear este bien. Archivo 08.
+- [x] Comprobar que la recuperacion al moverse y NO pelear este bien. Archivo 08.
 - [ ] Acomodar opcion huir
 
 - [ ] Arreglar asignacion de ID por la carga de archivos
-- [ ] Acomodar prints 3→2→1, 1→2→3
+- [x] Acomodar prints 3→2→1, 1→2→3
 
 - [x] Hacer que solo se puedan cargar archivos 1 vez
 - [x] Hacer el ciclo for para el combate. Recorrer todos los heroes e ir preguntando al usuario que desea hacer para cada uno. El jugador NO elige que heroe usar, son secuenciales
@@ -31,19 +31,18 @@ Implementos
 - [x] Designar spawn de Orcos
 - [x] Implementar movimiento de Orcos Dijkstra
 - [x] Agregar Print al combate (X Orco tiene Y vida, X Heroe tiene Y vida, etc... despues de un ataque)
-- [ ] a
   - [x] [Heroe] atacó a [Orco]
     - [x] Si el orco No murio: [Orco] ahora tiene [vida] vida
     - [x] Si el orco murio: [Orco] ha sido debilitado
     - [x] [Arma] de [Heroe] ahora tiene [durabilidad] durabilidad
-  - [ ] Se permite la opcion de pasar turno en caso de que no se pueda realizar ninguna de las opciones, pero siempre va a estar en el menu
+  - [x] Se permite la opcion de pasar turno en caso de que no se pueda realizar ninguna de las opciones, pero siempre va a estar en el menu
   - [x] Poder curar fuera de combate (Curar fuera de combate, hace que se pase el turno)
 
 ### General:
 
 - [x] Preguntarle al usuario si desea ver TODAS las salas antes de editar, eliminar, etc en el CRUD del Mapa!!!
-- [ ] Mejorar los prints al momento de Cargar Archivos
-- [ ] Añadir los 4 poderes que dijo el profe
+- [x] Mejorar los prints al momento de Cargar Archivos
+- [x] Añadir los 4 poderes que dijo el profe
 - [x] Agregar atributo defensa a las especies (orcos y heroes)
 - [x] Asegurarnos de que NADA explote (numeros grandes)
 - [x] Arreglar la edicion de Armas y Personajes

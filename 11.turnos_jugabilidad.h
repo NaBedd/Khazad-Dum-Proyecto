@@ -133,7 +133,8 @@ sala *turno_heroes(sala *&sala_actual_heroes, mapaGrafo &mapa, Lista_especie esp
 
 void turno_orcos(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de orcos
 {
-    cout << "  --- TURNO ORCOS ---" << endl;
+    cout << "\n  --- TURNO ORCOS ---"
+         << endl;
     movimiento_orcos(sala_actual_heroes, mapa);
 }
 
@@ -141,7 +142,6 @@ void turno_orcos(sala *sala_actual_heroes, mapaGrafo &mapa) // Turno de orcos
 void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_puerta_pasadas)
 {
     int turno = 0;
-    bool acabo_juego = false;
 
     sala *sala_actual_heroes = designar_sala_spawn_heroes(grafo); // Inicializa la sala
     spawn_heroes(sala_actual_heroes, personajes_jugar);           // Spawnea los heroes
@@ -156,7 +156,12 @@ void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_
     {
         if (turno >= 25) // Si llega al turno 5 (puerta se ha movido 5 veces)
         {
+            cout << endl;
+            cout << "Los heroes han tardado demasiado en encontrar la puerta del destino" << endl;
+            cout << "           La aldea ha perecido ante los imbatibles orcos" << endl;
+            cout << "               Los heroes han fracasado..." << endl;
             acabo_juego = true;
+            return;
         }
 
         cout << "Los Heroes se encuentran en: " << sala_actual_heroes->nombre << endl;
@@ -165,10 +170,10 @@ void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_
             cout << "  " << actual->identificador << "." << actual->nombre << endl;
         }
 
-        cout << "      --- TURNO " << turno << " ---" << endl;
+        cout << "     --- TURNO " << turno << " ---" << endl;
         sala *sala_heroes = turno_heroes(sala_actual_heroes, grafo, tipoEspecieHeroe);
 
-        checkear_entidades_grafo(grafo);
+        // checkear_entidades_grafo(grafo);
 
         spawnear_personajes_orcos(sala_spawn_orcos, tipoEspecieOrco, personajes_orco); // spawnea orcos cada turno
         cout << "Orcos generados en: " << sala_spawn_orcos->nombre << "\n";

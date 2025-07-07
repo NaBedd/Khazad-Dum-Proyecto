@@ -177,7 +177,9 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                          << heroe_actual->nombre << " ha atacado al orco " << orco_objetivo->nombre << "!\n";
                     cout << "Danno causado: " << dano << "\n";
                     cout << "Usos que quedan del arma: " << arma_seleccionada->usos << "\n";
-                    cout << "La vida del orco " << orco_objetivo->nombre << " cambio a: " << orco_objetivo->tipo->salud << "\n";
+                    if (orco_objetivo->tipo->salud < 0)
+                        orco_objetivo->tipo->salud = 0;
+                    cout << "La vida del orco " << orco_objetivo->nombre << " ahora es: " << orco_objetivo->tipo->salud << "\n";
 
                     if (orco_objetivo->tipo->salud <= 0)
                     {
@@ -219,34 +221,44 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                     {
                         cout << "No puedes huir ahora (necesitas estar superado en numero 3 a 1).\n";
                     }
-                    break;
+                    // break;
                 }
                 case 3: // Poderes magicos
                 {
                     Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
-                    cout << "\nPoderes magicos disponibles de " << heroe_actual << ":\n";
+                    cout << "\nPoderes magicos disponibles de " << heroe_actual->nombre << ":\n";
                     Poder_magico *poder = heroe_actual->mimochila->poderes;
                     Poder_magico *anterior = nullptr;
                     int contador = 1;
                     vector<Poder_magico *> poderes_disponibles;
 
-                    while (poder != nullptr)
+                    if (heroe_actual->mimochila->num_poder == " ")
                     {
-                        cout << contador << ". " << poder->nombre_poder << " - " << poder->funcion << "\n";
-                        poderes_disponibles.push_back(poder);
-                        contador++;
-                        poder = poder->siguiente;
-                    }
-
-                    if (poderes_disponibles.empty())
-                    {
-                        cout << heroe_actual << " no tiene poderes magicos disponibles.\n";
+                        cout << heroe_actual->nombre << " no tiene poderes magicos disponibles.\n";
                         break;
                     }
+                    else
+                    {
+                        cout << heroe_actual->mimochila->num_poder << endl;
+                    }
+
+                    // while (poder != nullptr)
+                    // {
+                    //     cout << contador << ". " << poder->nombre_poder << " - " << poder->funcion << "\n";
+                    //     poderes_disponibles.push_back(poder);
+                    //     contador++;
+                    //     poder = poder->siguiente;
+                    // }
+
+                    // if (poderes_disponibles.empty())
+                    // {
+                    //     cout << heroe_actual->nombre << " no tiene poderes magicos disponibles.\n";
+                    //     break;
+                    // }
 
                     int opcion_poder = obtener_entero("Elige un poder: ") - 1;
 
-                    if (opcion_poder < 0 || opcion_poder >= poderes_disponibles.size())
+                    if (opcion_poder != 1) // Solo hay 1 poder por pj
                     {
                         cout << "Poder invalido.\n";
                         break;
@@ -329,7 +341,8 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                 }
                 case 5: // Pasar turno
                 {
-                    cout << heroe_actual->nombre << "salto su turno\n";
+                    cout << heroe_actual->nombre << "salto su turno\n"
+                         << endl;
                     Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
                     int recuperacion = referencia->danno_fortaleza * 0.1;
                     heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
@@ -347,7 +360,9 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
         {
             cout << "Todos los orcos han sido derrotados!, ganaron los heroes\n";
             combate_terminado = true;
-            break;
+            acabo_juego = true;
+            return;
+            // break;
         }
         else if (sala_actual->lista_heroes.empty())
         {
@@ -431,6 +446,8 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
         {
             heroe_objetivo->tipo->salud -= dano_acumulado;
             cout << "El heroe " << heroe_objetivo->nombre << " recibe danno!," << "\n";
+            if (heroe_objetivo->tipo->salud <= 0)
+                heroe_objetivo->tipo->salud = 0;
             cout << "La vida restante de " << heroe_objetivo->nombre << " ahora es de " << heroe_objetivo->tipo->salud << "\n";
         }
         if (heroe_objetivo->tipo->salud <= 0)
@@ -561,6 +578,8 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
         {
             heroe_objetivo->tipo->salud -= dano_acumulado;
             cout << "El heroe" << heroe_objetivo->nombre << " recibe danno!," << "\n";
+            if (heroe_objetivo->tipo->salud <= 0)
+                heroe_objetivo->tipo->salud = 0;
             cout << "La vida restante de " << heroe_objetivo->nombre << " ahora es de " << heroe_objetivo->tipo->salud << "\n";
         }
 
@@ -674,6 +693,8 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                          << heroe_actual->nombre << " ha atacado al orco " << orco_objetivo->nombre << "!\n";
                     cout << "Danno causado: " << dano << "\n";
                     cout << "Usos que quedan del arma: " << arma_seleccionada->usos << "\n";
+                    if (orco_objetivo->tipo->salud < 0)
+                        orco_objetivo->tipo->salud = 0;
                     cout << "La vida del orco " << orco_objetivo->nombre << " ahora es: " << orco_objetivo->tipo->salud << "\n";
 
                     if (orco_objetivo->tipo->salud <= 0)
@@ -720,7 +741,7 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                     int recuperacion = referencia->danno_fortaleza * 0.1;
                     heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                     cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
-                    cout << "\nPoderes magicos disponibles de " << heroe_actual << ":\n";
+                    cout << "\nPoderes magicos disponibles de " << heroe_actual->nombre << ":\n";
                     Poder_magico *poder = heroe_actual->mimochila->poderes;
                     Poder_magico *anterior = nullptr;
                     int contador = 1;
@@ -749,23 +770,6 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                     }
 
                     Poder_magico *poder_seleccionado = poderes_disponibles[opcion_poder];
-
-                    if (poder_seleccionado->nombre_poder == "Poder1")
-                    {
-                        Poder1(heroe_actual->mimochila->implementos);
-                    }
-                    else if (poder_seleccionado->nombre_poder == "Poder2")
-                    {
-                        // Poder2(heroe_actual);
-                    }
-                    else if (poder_seleccionado->nombre_poder == "Poder3")
-                    {
-                        // Poder3(sala_actual);
-                    }
-                    else if (poder_seleccionado->nombre_poder == "Poder4")
-                    {
-                        // Poder4(heroe_actual, sala_actual);
-                    }
 
                     Poder_magico **pp = &(heroe_actual->mimochila->poderes);
                     while (*pp != nullptr)
@@ -840,7 +844,8 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                 }
                 case 5: // Saltar turno
                 {
-                    cout << heroe_actual->nombre << "salto su turno\n";
+                    cout << heroe_actual->nombre << "salto su turno\n"
+                         << endl;
                     Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
                     int recuperacion = referencia->danno_fortaleza * 0.1;
                     heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie

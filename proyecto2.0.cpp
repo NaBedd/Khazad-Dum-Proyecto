@@ -71,7 +71,7 @@ void cambiar_pos_orco_sala()
     sala *sala_1 = nullptr;
     sala *sala_2 = nullptr;
     int id;
-    cout << "has utilozado el poder numero: 2" << endl;
+    cout << "has utilizado el poder numero: 2" << endl;
     cout << "las salas disponibles son: ";
     mostrar_salas_grafo(grafo);
     cout << "Coloque el ID de la sala inicio: ";
@@ -192,7 +192,7 @@ int main()
     // --------------------------------------------------------------------------------
     // --------------- FIN DEL PROGRAMA. DESTRUCTORES DE ARCHIVOS TEMPORALES ----------
 
-    cout << "\n";
+    cout << "\n\n\n";
     cout << "Borrando archivos temporales..." << endl;
     // Destructor de especies
     destruir_lista_especie(tipoEspecieHeroe);
