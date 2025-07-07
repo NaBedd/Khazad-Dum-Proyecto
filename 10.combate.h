@@ -39,7 +39,7 @@ personaje *encontrar_heroe_mas_debil(sala *sala_actual) // Encontrar heroe mas d
 
             while (implemento_actual != nullptr)
             {
-                if (implemento_actual->tipo_implemento == "Proteccion")
+                if (implemento_actual->tipo_implemento == "Defensa")
                 {
                     vitalidad_efectiva += implemento_actual->valor;
                 }
@@ -92,6 +92,15 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                 ++it;
                 continue;
             }
+            personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
+            if (!orco_objetivo)
+                {
+                    cout << "Todos los orcos han sido derrotados!, los heroes han ganado, enhorabuena!!\n";
+                    combate_terminado = true;
+                    break;
+                }
+            cout << heroe_actual->nombre << " esta peleando contra " << orco_objetivo->nombre << " con vida de: " << orco_objetivo->tipo->salud << "\n";
+
 
             cout << "\nQue deseas hacer con " << heroe_actual->nombre << "?\n";
             cout << "1. Atacar\n";
@@ -106,13 +115,6 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
             {
             case 1: // Ataque
             {
-                personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
-                if (!orco_objetivo)
-                {
-                    cout << "Todos los orcos han sido derrotados!, los heroes han ganado, enhorabuena!!\n";
-                    combate_terminado = true;
-                    break;
-                }
 
                 cout << heroe_actual->nombre << " tiene para atacar:\n";
                 vector<Implemento *> armas;
@@ -125,7 +127,7 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                     // VERRRR.
                     // verrrrrrrr.
                     //  esta con la fortalea actual que tenga el herore, no con la estandarr de la especie
-                    if (arma_actual->tipo_implemento == "Ataque" && heroe_actual->tipo->danno_fortaleza >= arma_actual->fortalezanecesaria)
+                    if (arma_actual->tipo_implemento == "Arma" && heroe_actual->tipo->danno_fortaleza >= arma_actual->fortalezanecesaria)
                     {
                         cout << contador << ". " << arma_actual->nombre_implemento
                              << "- Danno: " << arma_actual->valor
@@ -138,7 +140,7 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
 
                 if (armas.empty())
                 {
-                    cout << heroe_actual->nombre << "No tiene armas disponibles para atacar.\n";
+                    cout << heroe_actual->nombre << " No tiene armas disponibles para atacar o no tiene la energía necesaria para usar armas.\n";
                     break;
                 }
 
@@ -291,7 +293,7 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
 
                 while (cura_actual != nullptr)
                 {
-                    if (cura_actual->tipo_implemento == "Cura")
+                    if (cura_actual->tipo_implemento == "Consumible")
                     {
                         cout << contador << ". " << cura_actual->nombre_implemento
                              << " Cura: " << cura_actual->valor << "\n";
@@ -388,7 +390,7 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
         while (implemento_actual != nullptr) // Se buscan si el heroe tiene implementos que lo protegen
                                              //   y se meten los implementos que protegen al heroe en un vector
         {
-            if (implemento_actual->tipo_implemento == "Proteccion")
+            if (implemento_actual->tipo_implemento == "Defensa")
             {
                 implementos_proteccion.push_back(implemento_actual);
             }
@@ -511,7 +513,7 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
 
         while (implemento_actual != nullptr)
         {
-            if (implemento_actual->tipo_implemento == "Proteccion")
+            if (implemento_actual->tipo_implemento == "Defensa")
             {
                 implementos_proteccion.push_back(implemento_actual);
             }
@@ -607,6 +609,14 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
             int recuperacion = referencia->danno_fortaleza * 0.1;
             heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
             cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
+            personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
+            if (!orco_objetivo)
+                {
+                    cout << "Todos los orcos han sido derrotados!, los heroes han ganado, enhorabuena!!\n";
+                    combate_terminado = true;
+                    break;
+                }
+            cout << heroe_actual->nombre << " esta peleando contra " << orco_objetivo->nombre << " con vida de: " << orco_objetivo->tipo->salud << "\n";
 
             cout << "\nQue deseas hacer con " << heroe_actual->nombre << "?\n";
             cout << "1. Atacar\n";
@@ -620,13 +630,6 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
             {
             case 1: // Atacar
             {
-                personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
-                if (!orco_objetivo)
-                {
-                    cout << "Todos los orcos han sido derrotados!, los heroes han ganado\n";
-                    combate_terminado = true;
-                    break;
-                }
 
                 cout << heroe_actual->nombre << " tiene para atacar:\n";
                 vector<Implemento *> armas;
@@ -635,7 +638,7 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
 
                 while (arma_actual != nullptr)
                 {
-                    if (arma_actual->tipo_implemento == "Ataque" && heroe_actual->tipo->danno_fortaleza >= arma_actual->fortalezanecesaria)
+                    if (arma_actual->tipo_implemento == "Arma" && heroe_actual->tipo->danno_fortaleza >= arma_actual->fortalezanecesaria)
                     {
                         cout << contador << ". " << arma_actual->nombre_implemento
                              << "- Danno: " << arma_actual->valor
@@ -648,7 +651,7 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
 
                 if (armas.empty())
                 {
-                    cout << heroe_actual->nombre << "No tiene armas disponibles para atacar.\n";
+                    cout << heroe_actual->nombre << " No tiene armas disponibles para atacar o no tiene la energía necesaria para usar armas.\n";
                     break;
                 }
 
@@ -703,7 +706,6 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                     heroe_actual->tipo->danno_fortaleza = min(referencia->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion); // con esto se evita que exceda el maximo de vida de su especie
                     cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                     combate_terminado = true;
-                    return;
                 }
                 else
                 {
@@ -791,7 +793,7 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
 
                 while (cura_actual != nullptr)
                 {
-                    if (cura_actual->tipo_implemento == "Cura")
+                    if (cura_actual->tipo_implemento == "Consumible")
                     {
                         cout << contador << ". " << cura_actual->nombre_implemento
                              << " Cura: " << cura_actual->valor << "\n";
@@ -843,11 +845,10 @@ void combateorcos(sala *sala_actual, Lista_especie especies_heroes)
                 cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
                 break;
             }
+
             default:
-            {
                 cout << "Opcion invalida\n";
                 break;
-            }
             }
         }
         if (sala_actual->lista_orcos.empty())
