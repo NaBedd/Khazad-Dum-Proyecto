@@ -43,7 +43,9 @@ int obtener_entero(const string &mensaje)
         if (entrada.length() > MAX_DIGITOS)
         {
             es_valido = false;
+            printf("\033[1;31m"); // Rojo negrita
             cout << "Error. El número ingresado es demasiado grande.\n";
+            printf("\033[0;37m"); // Gris claro
             continue; // Volver al inicio del bucle para pedir una nueva entrada
         }
 
@@ -65,14 +67,18 @@ int obtener_entero(const string &mensaje)
             }
             catch (const out_of_range &oor)
             {
+                printf("\033[1;31m"); // Rojo negrita
                 cout << "Error. El número ingresado está fuera del rango permitido.\n";
+                printf("\033[0;37m"); // Gris claro
                 // No es estrictamente necesario aquí si ya validamos la longitud,
                 // pero es una buena práctica para cubrir otros casos.
             }
         }
         else
         {
+            printf("\033[1;31m"); // Rojo negrita
             cout << "Error. Ingrese solo números naturales.\n";
+            printf("\033[0;37m"); // Gris claro
         }
     }
 }
@@ -119,8 +125,10 @@ string devolver_string_verificada(const string &mensaje)
 
     while (!(verificar_string(entrada)))
     {
+        printf("\033[1;31m"); // Rojo negrita
         cout << "Formato Invalido." << endl;
         cout << mensaje;
+        printf("\033[0;37m"); // Gris claro
         getline(cin, entrada);
     }
 
