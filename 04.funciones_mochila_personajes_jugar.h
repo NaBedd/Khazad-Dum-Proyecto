@@ -40,11 +40,6 @@ int cantidad_personaje_heroe = 0;
 int cantidad_personajes_jugar = 0;
 int regulador_personajes_jugar = 0;
 
-bool hechizomortal_usado = false;
-bool enanospoder_usado = false;
-bool maldadfuera_usado = false;
-bool implementosupremo_usado = false;
-
 string pausa = " "; // para que se pare el programa.
 
 // Para crear personajes.
@@ -238,6 +233,17 @@ int cantidad_personajes_por_especie(personaje &lista_personajes, Especie *mostra
         actual = actual->siguiente;
     }
     return contador;
+}
+
+bool poder_ya_usado(personaje* lista_personajes, const string& poder) {
+    personaje* actual = lista_personajes;
+    while (actual != nullptr) {
+        if (actual->mimochila != nullptr && actual->mimochila->num_poder == poder) {
+            return true;
+        }
+        actual = actual->siguiente;
+    }
+    return false;
 }
 
 // funcion para modificar a los personajes.
@@ -698,92 +704,27 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
                 printf("\033[0;37m");
 
                 opcio = obtener_entero("Elija sabiamente: ");
-                if (opcio == 1) // Hechizo mortal
-                {
-                    if (hechizomortal_usado)
-                    {
-                        printf("\033[0;31m"); // Rojo
-                        cout << "Este poder ya esta en uso" << endl;
-                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
-                        printf("\033[0;37m"); // Gris claro
+                if (opcio >= 1 && opcio <= 4) {
+                    string poder_seleccionado;
+                    switch(opcio) {
+                        case 1: poder_seleccionado = "hechizo mortal"; break;
+                        case 2: poder_seleccionado = "enanos al poder"; break;
+                        case 3: poder_seleccionado = "maldad Fuera"; break;
+                        case 4: poder_seleccionado = "implemento supremo"; break;
                     }
-                    else
-                    {
-                        personaje_a_llenar->mimochila->num_poder = "hechizo mortal";
-                        if (con_poderes == 0)
-                        {
-                            con_poderes += 1;
-                            hechizomortal_usado = true;
-                            cantidad_objetos++;
-                        }
+                    
+                    if (poder_ya_usado(lista_personajes_jugar, poder_seleccionado)) {
+                        printf("\033[0;31m"); // Mensaje de error
+                        cout << "¡Este poder ya está en uso por otro personaje!\n";
+                        printf("\033[0;37m");
+                        continue;
                     }
-                    opcio = 0;
-                    break;
-                }
-                else if (opcio == 2) // Enanos al poder
-                {
-                    if (enanospoder_usado)
-                    {
-                        printf("\033[0;31m"); // Rojo
-                        cout << "Este poder ya esta en uso" << endl;
-                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
-                        printf("\033[0;37m"); // Gris claro
+                    
+                    personaje_a_llenar->mimochila->num_poder = poder_seleccionado;
+                    if (con_poderes == 0) {
+                        con_poderes++;
+                        cantidad_objetos++;
                     }
-                    else
-                    {
-                        personaje_a_llenar->mimochila->num_poder = "enanos al poder";
-                        if (con_poderes == 0)
-                        {
-                            con_poderes += 1;
-                            enanospoder_usado = true;
-                            cantidad_objetos++;
-                        }
-                    }
-                    opcio = 0;
-                    break;
-                }
-                else if (opcio == 3) // Maldad Fuera
-                {
-                    if (maldadfuera_usado)
-                    {
-                        printf("\033[0;31m"); // Rojo
-                        cout << "Este poder ya esta en uso" << endl;
-                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
-                        printf("\033[0;37m"); // Gris claro
-                    }
-                    else
-                    {
-                        personaje_a_llenar->mimochila->num_poder = "Maldad Fuera";
-                        if (con_poderes == 0)
-                        {
-                            con_poderes += 1;
-                            maldadfuera_usado = true;
-                            cantidad_objetos++;
-                        }
-                    }
-                    opcio = 0;
-                    break;
-                }
-                else if (opcio == 4) // Implemento Supremo
-                {
-                    if (implementosupremo_usado)
-                    {
-                        printf("\033[0;31m"); // Rojo
-                        cout << "Este poder ya esta en uso" << endl;
-                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
-                        printf("\033[0;37m"); // Gris claro
-                    }
-                    else
-                    {
-                        personaje_a_llenar->mimochila->num_poder = "implemento supremo";
-                        if (con_poderes == 0)
-                        {
-                            con_poderes += 1;
-                            implementosupremo_usado = true;
-                            cantidad_objetos++;
-                        }
-                    }
-                    opcio = 0;
                     break;
                 }
                 else if (opcio == 5)
