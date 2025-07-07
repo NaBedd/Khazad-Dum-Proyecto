@@ -4,7 +4,6 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <stack>
 
 using namespace std;
 
@@ -54,7 +53,6 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
         return;
     }
     personaje *nuevo = new personaje;
-    nuevo->mimochila = new mochila;
     int num_tipo = 0;
     Especie *puntero_especie = nullptr;
 
@@ -99,7 +97,6 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
         cout << "La especie debe crearse primero." << endl;
         cout << "Creacion del personaje: " << nuevo->nombre << " fue fallida." << endl;
         printf("\033[0;37m"); // Gris claro
-        delete nuevo->mimochila;
         delete nuevo;
         return;
     }
@@ -133,32 +130,32 @@ void mostrar_personajes(personaje &lista, int tipo)
 {
     if (tipo == 1 && cantidad_personaje_orco == 0)
     {
-        printf("\033[0;31m");
+        printf("\033[0;31m"); // Rojo
         cout << "\nNo hay especies de orcos para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
-        printf("\033[0;37m");
+        printf("\033[0;37m"); // Gris claro
         return;
     }
     if (tipo == 2 && cantidad_personaje_heroe == 0)
     {
-        printf("\033[0;31m");
+        printf("\033[0;31m"); // Rojo
         cout << "\nNo hay personajes heroes para mostrar actualmente.\n";
         cout << "Primero debe crearlos.\n";
-        printf("\033[0;37m");
+        printf("\033[0;37m"); // Gris claro
         return;
     }
 
     if (tipo == 1)
     {
-        printf("\033[0;33m");
+        printf("\033[0;33m"); // Amarillo
         cout << "\nHay [" << cantidad_personaje_orco << "] personajes orcos" << endl;
     }
     else
     {
-        printf("\033[0;33m");
+        printf("\033[0;33m"); // Amarillo
         cout << "\nHay [" << cantidad_personaje_heroe << "] personajes heroes" << endl;
     }
-    printf("\033[0;37m");
+    printf("\033[0;37m"); // Gris claro
 
     stack<personaje*> pila;
     personaje *actual = lista.siguiente;
@@ -170,19 +167,19 @@ void mostrar_personajes(personaje &lista, int tipo)
 
     while (!pila.empty())
     {
-        personaje* temp = pila.top();
+        personaje* temporal = pila.top();
         pila.pop();
-        cout << temp->identificador << " - ";
+        cout << temporal->identificador << " - ";
         printf("\033[0;35m");
-        cout << "Nombre: " << temp->nombre << endl;
+        cout << "Nombre: " << temporal->nombre << endl;
         printf("\033[0;36m");
-        cout << "Especie: " << temp->tipo->nombre_especie << endl;
+        cout << "Especie: " << temporal->tipo->nombre_especie << endl;
         printf("\033[0;37m");
         cout << endl;
     }
-
     cout << "No hay mas personajes.\n";
-    cout << endl << endl;
+    cout << endl
+         << endl;
 }
 
 // Encontrar un personaje
@@ -217,7 +214,7 @@ int cantidad_personajes_por_especie(personaje &lista_personajes, Especie *mostra
 }
 
 // funcion para modificar a los personajes.
-void actualizar_personaje(personaje &lista, Lista_especie &lista_tipo, int tipo)
+void actualizar_personaje(personaje &lista, Lista_especie lista_tipo, int tipo)
 {
     if (tipo == 1 && cantidad_personaje_orco == 0)
     {
@@ -277,7 +274,6 @@ void actualizar_personaje(personaje &lista, Lista_especie &lista_tipo, int tipo)
             }
             else
             {
-                actual->tipo = especie_nueva; // Línea crítica faltante
                 printf("\033[0;32m"); // Verde
                 cout << "El personaje ahora de nombre: " << actual->nombre << " se actualizo correctamente." << endl;
                 printf("\033[0;37m"); // Gris claro
@@ -325,31 +321,6 @@ void borrar_personaje(personaje &lista, int tipo)
     if ((actual != nullptr) && (actual->identificador == identificador))
     {
         lista.siguiente = actual->siguiente;
-        
-        // Liberar memoria de la mochila
-        if (actual->mimochila != nullptr)
-        {
-            // Liberar implementos
-            Implemento *imp = actual->mimochila->implementos;
-            while (imp != nullptr)
-            {
-                Implemento *temp = imp;
-                imp = imp->siguiente;
-                delete temp;
-            }
-            
-            // Liberar poderes
-            Poder_magico *poder = actual->mimochila->poderes;
-            while (poder != nullptr)
-            {
-                Poder_magico *temp = poder;
-                poder = poder->siguiente;
-                delete temp;
-            }
-            
-            delete actual->mimochila;
-        }
-        
         printf("\033[0;32m"); // Verde
         cout << "El personaje: " << actual->nombre << " fue borrado exitosamente." << endl;
         printf("\033[0;37m"); // Gris claro
@@ -377,31 +348,6 @@ void borrar_personaje(personaje &lista, int tipo)
     {
         personaje *eliminar = actual;
         anterior->siguiente = actual->siguiente;
-        
-        // Liberar memoria de la mochila
-        if (eliminar->mimochila != nullptr)
-        {
-            // Liberar implementos
-            Implemento *imp = eliminar->mimochila->implementos;
-            while (imp != nullptr)
-            {
-                Implemento *temp = imp;
-                imp = imp->siguiente;
-                delete temp;
-            }
-            
-            // Liberar poderes
-            Poder_magico *poder = eliminar->mimochila->poderes;
-            while (poder != nullptr)
-            {
-                Poder_magico *temp = poder;
-                poder = poder->siguiente;
-                delete temp;
-            }
-            
-            delete eliminar->mimochila;
-        }
-        
         printf("\033[0;32m"); // Verde
         cout << "El personaje " << eliminar->nombre << " se elimino correctamente.\n";
         printf("\033[0;37m"); // Gris claro
@@ -435,31 +381,6 @@ void destruir_lista_personajes(personaje &lista)
     {
         personaje *eliminar = actual;
         actual = actual->siguiente;
-        
-        // Liberar memoria de la mochila
-        if (eliminar->mimochila != nullptr)
-        {
-            // Liberar implementos
-            Implemento *imp = eliminar->mimochila->implementos;
-            while (imp != nullptr)
-            {
-                Implemento *temp = imp;
-                imp = imp->siguiente;
-                delete temp;
-            }
-            
-            // Liberar poderes
-            Poder_magico *poder = eliminar->mimochila->poderes;
-            while (poder != nullptr)
-            {
-                Poder_magico *temp = poder;
-                poder = poder->siguiente;
-                delete temp;
-            }
-            
-            delete eliminar->mimochila;
-        }
-        
         delete eliminar;
     }
     lista.siguiente = nullptr;
@@ -479,30 +400,6 @@ void borrar_personajes_de_tipo(personaje &lista_personajes, Especie *tipo_borrar
             eliminar = actual;
             anterior->siguiente = actual->siguiente;
             actual = actual->siguiente;
-
-            // Liberar memoria de la mochila
-            if (eliminar->mimochila != nullptr)
-            {
-                // Liberar implementos
-                Implemento *imp = eliminar->mimochila->implementos;
-                while (imp != nullptr)
-                {
-                    Implemento *temp = imp;
-                    imp = imp->siguiente;
-                    delete temp;
-                }
-                
-                // Liberar poderes
-                Poder_magico *poder = eliminar->mimochila->poderes;
-                while (poder != nullptr)
-                {
-                    Poder_magico *temp = poder;
-                    poder = poder->siguiente;
-                    delete temp;
-                }
-                
-                delete eliminar->mimochila;
-            }
 
             printf("\033[0;32m"); // Verde
             cout << "El personaje: " << eliminar->nombre << " fue borrado." << endl;
@@ -648,6 +545,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
     int opcio = 0;
     int con_poderes = 0;
     int cantidad_objetos = 0;
+
     int identificador = 0;
     int contrilador_interno = 0;
 
@@ -659,6 +557,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
     {
         cout << "Tiene " << cantidad_objetos << " objetos en la mochila.\n";
 
+        // Opciones principales con números en cian y texto en blanco
         printf("\033[0;36m"); // Cyan para números
         cout << "1.";
         printf("\033[0;37m"); // Gris claro para texto
@@ -726,7 +625,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
         else if (opcio == 2) // Llenar poderes
         {
             limpiar_pantalla();
-            if (con_poderes == 1)
+            if (con_poderes > 0)
             {
                 printf("\033[0;33m"); // Amarillo
                 cout << "Ya seleccionaste un poder y solo puedes tener 1." << endl;
@@ -745,6 +644,7 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
 
             do
             {
+                // Cada poder con color diferente para resaltar
                 printf("\033[0;35m"); // Magenta
                 cout << "1. Hechizo mortal: ";
                 printf("\033[0;37m"); // Gris claro
@@ -773,28 +673,41 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
                 if (opcio == 1)
                 {
                     personaje_a_llenar->mimochila->num_poder = "hechizo mortal";
-                    cantidad_objetos++;
+                    if (con_poderes == 0)
+                    {
+                        cantidad_objetos++;
+                    }
+                    
                     opcio = 0;
                     break;
                 }
                 else if (opcio == 2)
                 {
                     personaje_a_llenar->mimochila->num_poder = "enanos al poder";
-                    cantidad_objetos++;
+                    if (con_poderes == 0)
+                    {
+                        cantidad_objetos++;
+                    }
                     opcio = 0;
                     break;
                 }
                 else if (opcio == 3)
                 {
                     personaje_a_llenar->mimochila->num_poder = "Maldad Fuera";
-                    cantidad_objetos++;
+                    if (con_poderes == 0)
+                    {
+                        cantidad_objetos++;
+                    }
                     opcio = 0;
                     break;
                 }
                 else if (opcio == 4)
                 {
                     personaje_a_llenar->mimochila->num_poder = "implemento supremo";
-                    cantidad_objetos++;
+                    if (con_poderes == 0)
+                    {
+                        cantidad_objetos++;
+                    }
                     opcio = 0;
                     break;
                 }
@@ -927,66 +840,58 @@ void eleccion_personaje(personaje *&lista_jugar, personaje &heroes, Implemento &
     printf("\033[0;37m"); // Gris claro
 }
 
-void mostrar_personajes_jugar(personaje *lista_personajes_jugar) {
-    if (lista_personajes_jugar == nullptr) {
-        cout << "\nNo hay personajes en el equipo.\n\n";
-        return;
-    }
+void mostrar_personajes_jugar(personaje *lista_personajes_jugar)
+{
+    personaje *actual_personaje = lista_personajes_jugar;
+    while (actual_personaje != nullptr)
+    {
+        printf("\033[0;35m"); // Magenta para el nombre
+        cout << "Nombre: " << actual_personaje->nombre << endl;
 
-    stack<personaje*> pila;
-    personaje *actual = lista_personajes_jugar;
-    while (actual != nullptr) {
-        pila.push(actual);
-        actual = actual->siguiente;
-    }
+        printf("\033[0;36m"); // Cyan para los atributos
+        cout << "   ID: " << actual_personaje->identificador << endl;
+        cout << "   Especie: " << actual_personaje->tipo->nombre_especie << endl;
+        cout << "   Vitalidad: " << actual_personaje->tipo->salud << endl;
+        cout << "   Fortaleza: " << actual_personaje->tipo->danno_fortaleza << endl;
+        cout << "   Rapidez: " << actual_personaje->tipo->rapidez << endl;
 
-    while (!pila.empty()) {
-        actual = pila.top();
-        pila.pop();
-
-        printf("\033[0;35m");
-        cout << "Nombre: " << actual->nombre << endl;
-
-        printf("\033[0;36m");
-        cout << "   ID: " << actual->identificador << endl;
-        cout << "   Especie: " << actual->tipo->nombre_especie << endl;
-        cout << "   Vitalidad: " << actual->tipo->salud << endl;
-        cout << "   Fortaleza: " << actual->tipo->danno_fortaleza << endl;
-        cout << "   Rapidez: " << actual->tipo->rapidez << endl;
-
-        printf("\033[0;37m");
+        printf("\033[0;37m"); // Gris claro para el resto del texto
         cout << "Objetos de la mochila: " << endl;
 
-        Implemento *implemento_actual = actual->mimochila->implementos;
-        printf("\033[0;32m");
+        Implemento *actual_implemento = actual_personaje->mimochila->implementos;
+        printf("\033[0;32m"); // Verde para "Implementos:"
         cout << "  Implementos: ";
-        if (implemento_actual == nullptr) {
-            printf("\033[0;31m");
+        if (actual_implemento == nullptr)
+        {
+            printf("\033[0;31m"); // Rojo para mensaje de vacío
             cout << "La mochila no tiene implementos." << endl;
         }
-        else {
-            printf("\033[0;37m");
+        else
+        {
+            printf("\033[0;37m"); // Gris claro para lista
             cout << endl;
-            while (implemento_actual != nullptr) {
-                printf("\033[0;32m");
-                cout << "    - " << implemento_actual->nombre_implemento << endl;
-                implemento_actual = implemento_actual->siguiente;
+            while (actual_implemento != nullptr)
+            {
+                printf("\033[0;32m"); // Verde para cada implemento
+                cout << "    - " << actual_implemento->nombre_implemento << endl;
+                actual_implemento = actual_implemento->siguiente;
             }
         }
 
-        if (actual->mimochila->num_poder == " ") {
-            printf("\033[0;31m");
+        if (actual_personaje->mimochila->num_poder == " ")
+        {
+            printf("\033[0;31m"); // Rojo para "no tiene poder"
             cout << "Poder: no tiene ningun poder equipado." << endl;
         }
-        else {
-            printf("\033[0;33m");
-            cout << "Poder: " << actual->mimochila->num_poder << endl;
+        else
+        {
+            printf("\033[0;33m"); // Amarillo para poder
+            cout << "Poder: " << actual_personaje->mimochila->num_poder << endl;
         }
-
-        printf("\033[0;37m");
+        printf("\033[0;37m"); // Gris claro para reset
         cout << "-------------------------" << endl;
+        actual_personaje = actual_personaje->siguiente;
     }
-
     cout << "\nNo hay mas personajes en el equipo\n\n";
 }
 
@@ -1090,6 +995,27 @@ void destruir_personaje_jugar(personaje *&lista_jugar)
     }
 }
 
+// para obtener la cantidad de impementos actuales
+int cantidad_implemento(personaje *heroe){
+    if (heroe == nullptr){
+        return 0;
+    }
+    int num_equipado;
+    //para ver la cantidad de implementos que tine.
+    Implemento *actual_implemento = heroe->mimochila->implementos;
+    while (actual_implemento != nullptr){
+        num_equipado++;
+        actual_implemento= actual_implemento->siguiente;
+    }
+    // para ver si nine poder equipado
+    if (heroe->mimochila->num_poder != " ")
+    {
+        num_equipado++;
+    }
+    return num_equipado;
+    
+}
+
 void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Poder_magico &poderes)
 {
     if (cantidad_personajes_jugar == 0)
@@ -1103,6 +1029,9 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
         return;
     }
 
+    int opcion=0;
+    int opcion_inter=0;
+    int num_equipados=0;
     int identificador;
     printf("\033[0;33m"); // Amarillo
     cout << "Los personajes que forman parte del equipo son:\n";
@@ -1119,30 +1048,208 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
 
     if (actual != nullptr)
     {
-        printf("\033[0;33m"); // Amarillo
-        cout << "Proceda a llenar nuevamente la mochila del personaje: " << actual->nombre << endl;
-
-        if (actual->mimochila != nullptr)
+        do
         {
-            Implemento *imp = actual->mimochila->implementos;
-            while (imp != nullptr)
+            cout<<"el equipamiento de la mochila actual es: "<<endl;
+            mostrar_personajes_jugar(actual);
+            cout <<endl<<"que decea haacer"<<endl;
+            cout <<"1.agregar elemento a al mochila."<<endl;
+            cout <<"2.elimir elemento de la mochila."<<endl;
+            cout <<"3. termir modificacion de la mochila."<<endl;
+            opcion = obtener_entero(" ");
+            if (opcion == 1)
             {
-                Implemento *temp = imp;
-                imp = imp->siguiente;
-                delete temp;
-            }
-            actual->mimochila->implementos = nullptr;
+                num_equipados =cantidad_implemento(actual);
+                if (num_equipados == 5)
+                {
+                    cout<<"no puedes agregar mas implementos tines el numero maximo."<<endl;
+                }else{
+                    cout<<"que decea agregar. "<<endl;
+                    cout<<"1. implemento."<<endl;
+                    cout<<"2. poder magico."<<endl;
+                    cout<<"coloque su occion"<<endl;
+                    opcion_inter=obtener_entero(" ");
+                    if (opcion_inter == 1)
+                    {   
+                        Implemento *referencia;
+                        cout<<"los implementos diponibles son: "<<endl;
+                        mostrar_implementos(Implementos);
+                        cout<<"coloque el ID del implemento que decea modificar: "<<endl;
+                        identificador = obtener_entero(" ");
+                        referencia=buscar_implemento(Implementos,identificador); 
+                        if (referencia == nullptr)
+                        {
+                            printf("\033[0;31m"); // Rojo
+                            cout << "El ID: " << identificador << " no existe.\n";
+                            cout << "Coloque uno valido.\n";
+                            printf("\033[0;37m"); // Gris claro
+                        }
+                        else if (referencia->fortalezanecesaria > actual->tipo->danno_fortaleza)
+                        {
+                            printf("\033[0;31m"); // Rojo
+                            cout << "El implemento: " << referencia->nombre_implemento << " no puede ser usado por el personaje: " << actual->nombre << endl;
+                            cout << "Su fortaleza no es la suficiente." << endl;
+                            cout << "La fortaleza de " << actual->nombre << " es: " << actual->tipo->danno_fortaleza << endl;
+                            cout << "Coloque uno valido.\n";
+                            cout << "Pulse enter para continuar:" << endl;
+                            getline(cin, pausa);
+                            printf("\033[0;37m"); // Gris claro
+                        }
+                        else
+                        {
+                            Implemento *colocar = new Implemento;
+                            *colocar = *referencia;
+                            colocar->siguiente = actual->mimochila->implementos;
+                            actual->mimochila->implementos = colocar;
 
-            Poder_magico *poder = actual->mimochila->poderes;
-            while (poder != nullptr)
+                            printf("\033[0;32m"); // Verde
+                            cout << "El implemento " << colocar->nombre_implemento << " se agrego correctamente a la mochila.\n";
+                            printf("\033[0;37m"); // Gris claro   
+                        }           
+                    }else if (opcion_inter == 2)
+                    {
+                        cout<<"los poderes disponibles son: "<<endl;
+                        // Cada poder con color diferente para resaltar
+                        printf("\033[0;35m"); // Magenta
+                        cout << "1. Hechizo mortal: ";
+                        printf("\033[0;37m"); // Gris claro
+                        cout << "hace que todos los orcos de una sala tengan 1 de salud." << endl;
+
+                        printf("\033[0;36m"); // Cyan
+                        cout << "2. Enanos al poder: ";
+                        printf("\033[0;37m");
+                        cout << "recupera la vida de todos los enanos y le suma 1000 a su fortaleza." << endl;
+
+                        printf("\033[0;33m"); // Amarillo
+                        cout << "3. Maldad Fuera: ";
+                        printf("\033[0;37m");
+                        cout << "traslada a todos los orcos de una sala a otra." << endl;
+
+                        printf("\033[0;34m"); // Azul
+                        cout << "4. Implemento supremo: ";
+                        printf("\033[0;37m");
+                        cout << "potencia un implemento de un personaje y la fortaleza se vuelve 0." << endl;
+
+                        printf("\033[0;31m"); // Rojo
+                        cout << "5. No quiero ningun poder." << endl;
+                        printf("\033[0;37m");
+
+                        identificador = obtener_entero("Elija sabiamente: ");
+                        if (identificador == 1)
+                        {
+                            actual->mimochila->num_poder = "hechizo mortal";
+                        }
+                        else if (identificador == 2)
+                        {
+                            actual->mimochila->num_poder = "enanos al poder";
+                        }
+                        else if (identificador == 3)
+                        {
+                            actual->mimochila->num_poder = "Maldad Fuera";
+                        }
+                        else if (identificador == 4)
+                        {
+                            actual->mimochila->num_poder = "implemento supremo";
+
+                        } else
+                        {
+                            printf("\033[0;31m"); // Rojo
+                            cout << "Le faltas el respeto a los tres guerreros ancestrales" << endl;
+                            cout << "Coloque el numero de uno de los 4 poderes disponibles." << endl;
+                            cout << "O 5 si eres tan tonto como para no querer ningun poder ancestral." << endl;
+                            printf("\033[0;37m"); // Gris claro
+                            cout<<"saliendo al menu de modificacion.."<<endl;
+                        }        
+                    }else
+                    {
+                        cout<<"la opcion "<<opcion_inter<<" no existe."<<endl;
+                        cout<<"saliendo al menu principal de modificacion.."<<endl;
+                    }
+                    
+                    
+                }
+                
+                
+            }else if (opcion == 2)
             {
-                Poder_magico *temp = poder;
-                poder = poder->siguiente;
-                delete temp;
+                cout<<"que decea eliminar. "<<endl;
+                cout<<"1. implemento."<<endl;
+                cout<<"2. poder magico."<<endl;
+                cout<<"coloque su occion"<<endl;
+                opcion_inter=obtener_entero(" ");
+                if (opcion_inter == 1){
+                    if (actual->mimochila->implementos ==  nullptr)
+                    {
+                        cout<<"el personaje "<<actual->nombre<<" no tine implementos para borrar."<<endl;
+                        cout<<"saliendo al menu de modificacion."<<endl;
+                    }else
+                    {
+                        cout<<"los que tine "<<actual->nombre<<" son: "<<endl;
+                        Implemento *mostrar=actual->mimochila->implementos;
+                        while (mostrar!= nullptr)
+                        {
+                            cout<<"Nombre: "<<mostrar->nombre_implemento<<endl;
+                            cout<<"ID: "<<mostrar->identificador<<endl;
+                            cout<<"tipo: "<<mostrar->tipo_implemento<<endl;
+                            cout<<"------------------"<<endl;
+                        }
+                        cout<<"coloque el ID del implemeno que desea modificar."<<endl;
+                        identificador=obtener_entero(" ");
+                        // para borrar el implemento
+                        Implemento *actual_implemen = actual->mimochila->implementos;
+                        Implemento *anterior_implemento=nullptr;
+                        while ((actual_implemen != nullptr) && (actual->identificador != identificador))
+                        {
+                            anterior_implemento = actual_implemen;
+                            actual_implemen = actual_implemen->siguiente;
+                        }
+
+                        Implemento *eliminar = actual_implemen;
+                        if (eliminar == nullptr)
+                        {
+                            cout<<"El personaje "<<actual->nombre<<" no tiene implemento con el ID: "<<identificador<<endl;
+                        }else{
+                            anterior_implemento->siguiente = actual_implemen->siguiente;
+                            printf("\033[0;32m"); // Verde
+                            cout << "El elemento: " << eliminar->nombre_implemento << " se elimino correctamente.\n";
+                            printf("\033[0;37m"); // Gris claro
+                            delete eliminar;
+                        }
+                    }
+                }else if (opcion_inter == 2)
+                {
+                    cout<<"el poder que tiene el personaje "<<actual->nombre<<"es: "<<endl;
+                    cout<<actual->mimochila->num_poder<<endl;
+                    cout<<"decea eliminarlo."<<endl;
+                    cout<<"1. si."<<endl;
+                    cout<<"2. no."<<endl;
+                    cout<<"coloque su occion"<<endl;
+                    identificador=obtener_entero(" ");
+                    if (identificador == 1)
+                    {
+                        cout <<"el poder "<<actual->mimochila->num_poder<<" se elimino correctamente."<<endl;
+                        actual->mimochila->num_poder=" ";
+                    }else if (identificador == 2)
+                    {
+                        cout<<"exeente el poder "<<actual->mimochila->num_poder<<" premanece."<<endl;
+                    }else{
+                        cout<<"la opcion "<<identificador<<" no existe."<<endl;
+                        cout<<"saliendo al menu de modificacion."<<endl;
+                    }
+                    
+                }
+                
+            }else if (opcion == 3)
+            {
+                cout<<"exelente."<<endl;
+            }else{
+                cout<<"la opcion "<<opcion<<" no existe."<<endl;
+                cout<<"coloque una valida."<<endl;
             }
-            actual->mimochila->poderes = nullptr;
-            actual->mimochila->num_poder = " ";
-        }
+            
+        } while (opcion != 3);
+        
+
 
         llenar_mochila(actual, Implementos, personajes_jugar);
         printf("\033[0;32m"); // Verde
@@ -1160,6 +1267,7 @@ void modificar_mochila(personaje *personajes_jugar, Implemento &Implementos, Pod
     }
 }
 
+// para crear el vector de personajes para usarlo al momento de jugar.
 vector<personaje *> crear_vector_personajes(personaje *&lista)
 {
     personaje *actual = lista;
