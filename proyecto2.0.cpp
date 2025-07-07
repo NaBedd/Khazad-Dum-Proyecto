@@ -5,7 +5,6 @@
 // - Nabil Bedros
 
 // Librerias Locales:
-
 #include "01.funciones_genericas.h"                // Funciones generales y librerias para el programa
 #include "02.funciones_tipos_especie.h"            // Funciones para las Especies de Heroes y Orcos
 #include "03.funciones_implementos.h"              // Funciones para Implementos
@@ -186,9 +185,6 @@ int main()
 
     if (iniciar_juego)
     {
-
-        // cout << "Se esta ejecutando el condicional bien" << endl;
-        // Para spawnear a los orcos al menos 10 pasos de distancia de los heroes
 
         juego(grafo, tipoEspecieHeroe, salas_puerta_pasadas);
     }

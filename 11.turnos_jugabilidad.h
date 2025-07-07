@@ -48,7 +48,7 @@ void spawn_puerta_destino(mapaGrafo &mapa, vector<int> &salas_puerta_pasadas) //
     }
 
     nueva_sala_puerta->contiene_puerta_destino = true;
-    cout << "La Puerta del Destino se encuentra en " << nueva_sala_puerta->nombre << endl;
+    cout << "La Puerta del Destino se encuentra en: " << nueva_sala_puerta->nombre << endl;
 
     // La ubicacion más actual de la puerta será la última posición de la lista
     salas_puerta_pasadas.push_back(nueva_sala_puerta->id);
@@ -157,13 +157,13 @@ void juego(mapaGrafo &grafo, Lista_especie tipoEspecieHeroe, vector<int> &salas_
             acabo_juego = true;
         }
 
-        cout << "Personajes en sala: " << sala_actual_heroes->nombre << endl;
+        cout << "Personajes en: " << sala_actual_heroes->nombre << endl;
         for (personaje *actual : sala_actual_heroes->lista_heroes)
         {
-            cout << actual->identificador << actual->nombre << endl;
+            cout << "  " << actual->identificador << "." << actual->nombre << endl;
         }
 
-        cout << "--- TURNO " << turno << " ---" << endl;
+        cout << "   --- TURNO " << turno << " ---" << endl;
         sala *sala_heroes = turno_heroes(sala_actual_heroes, grafo, tipoEspecieHeroe);
 
         checkear_entidades_grafo(grafo);

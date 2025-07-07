@@ -49,7 +49,7 @@ vector<int> salas_puerta_pasadas;
 // Turno
 int turno = 0;
 
-string pausa5=" "; //para las pausas.
+string pausa5 = " "; // para las pausas.
 
 void menu_orcos() // Case 1 del main
 {
@@ -89,52 +89,52 @@ void menu_orcos() // Case 1 del main
 
         switch (opcion_interna)
         {
-        case 1: 
-            Crear_tipo(tipoEspecieOrco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 1:
+            Crear_tipo(tipoEspecieOrco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 2: 
-            actualizar_tipo(tipoEspecieOrco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 2:
+            actualizar_tipo(tipoEspecieOrco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 3: 
-            mostrar_lista(tipoEspecieOrco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 3:
+            mostrar_lista(tipoEspecieOrco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 4: 
-            eliminar_elemento_lista(tipoEspecieOrco, personajes_orco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 4:
+            eliminar_elemento_lista(tipoEspecieOrco, personajes_orco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 5: 
-            crear_personaje(personajes_orco, tipoEspecieOrco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 5:
+            crear_personaje(personajes_orco, tipoEspecieOrco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 6: 
-            mostrar_personajes(personajes_orco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 6:
+            mostrar_personajes(personajes_orco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 7: 
-            actualizar_personaje(personajes_orco, tipoEspecieOrco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 7:
+            actualizar_personaje(personajes_orco, tipoEspecieOrco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 8: 
-            borrar_personaje(personajes_orco, 1); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 8:
+            borrar_personaje(personajes_orco, 1);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
         case 9:
@@ -185,55 +185,55 @@ void menu_especies_heroes_personajes() // Case 2 del main
 
         switch (opcion_interna)
         {
-        case 1: 
-            limpiar_pantalla(); 
+        case 1:
+            limpiar_pantalla();
             Crear_tipo(tipoEspecieHeroe, 2);
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 2: 
-            limpiar_pantalla(); 
-            actualizar_tipo(tipoEspecieHeroe, 2); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+        case 2:
+            limpiar_pantalla();
+            actualizar_tipo(tipoEspecieHeroe, 2);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 3: 
-            limpiar_pantalla(); 
+        case 3:
+            limpiar_pantalla();
             mostrar_lista(tipoEspecieHeroe, 2);
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             break;
-        case 4: 
-            limpiar_pantalla(); 
-            eliminar_elemento_lista(tipoEspecieHeroe, personajes_hero, 2); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+        case 4:
+            limpiar_pantalla();
+            eliminar_elemento_lista(tipoEspecieHeroe, personajes_hero, 2);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             break;
-        case 5: 
-            limpiar_pantalla(); 
+        case 5:
+            limpiar_pantalla();
             crear_personaje(personajes_hero, tipoEspecieHeroe, 2);
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             break;
         case 6:
-            limpiar_pantalla(); 
-            mostrar_personajes(personajes_hero, 2); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+            limpiar_pantalla();
+            mostrar_personajes(personajes_hero, 2);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             break;
-        case 7: 
-            limpiar_pantalla(); 
+        case 7:
+            limpiar_pantalla();
             actualizar_personaje(personajes_hero, tipoEspecieHeroe, 2);
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             break;
-        case 8: 
-            limpiar_pantalla(); 
+        case 8:
+            limpiar_pantalla();
             borrar_personaje(personajes_hero, 2);
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             break;
         case 9:
             limpiar_pantalla();
@@ -272,31 +272,31 @@ void menu_implementos() // Case 3 del main
         switch (opcion_interna)
         {
         case 1:
-            limpiar_pantalla(); 
-            crear_implemento(lista_implementos); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+            limpiar_pantalla();
+            crear_implemento(lista_implementos);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 2: 
-            limpiar_pantalla(); 
-            modificar_implemento(lista_implementos); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+        case 2:
+            limpiar_pantalla();
+            modificar_implemento(lista_implementos);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 3: 
-            limpiar_pantalla(); 
-            mostrar_implementos(lista_implementos); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+        case 3:
+            limpiar_pantalla();
+            mostrar_implementos(lista_implementos);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 4: 
-            limpiar_pantalla(); 
-            borrar_implementos(lista_implementos); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+        case 4:
+            limpiar_pantalla();
+            borrar_implementos(lista_implementos);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
         case 5:
@@ -336,34 +336,34 @@ void menu_poderes_magicos() // Case 4 del main
 
         switch (opcion_interna)
         {
-        case 1: 
-            limpiar_pantalla(); 
+        case 1:
+            limpiar_pantalla();
             crear_poder(lista_podere_magicos);
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
-            limpiar_pantalla(); 
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
+            limpiar_pantalla();
             break;
 
-        case 2: 
+        case 2:
             limpiar_pantalla();
-            modificar_poder(lista_podere_magicos); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
-            limpiar_pantalla();
-            break;
-            
-        case 3: 
-            limpiar_pantalla(); 
-            mostrar_poderes(lista_podere_magicos); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+            modificar_poder(lista_podere_magicos);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 4: 
-            limpiar_pantalla(); 
-            eliminar_poder(lista_podere_magicos); 
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
+
+        case 3:
+            limpiar_pantalla();
+            mostrar_poderes(lista_podere_magicos);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
+            limpiar_pantalla();
+            break;
+        case 4:
+            limpiar_pantalla();
+            eliminar_poder(lista_podere_magicos);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
         case 5:
@@ -442,7 +442,10 @@ void menu_mapas() // Case 6 del main
 
         switch (opcion_interna)
         {
-        case 1: limpiar_pantalla(); crear_sala_usuario(grafo); break;
+        case 1:
+            limpiar_pantalla();
+            crear_sala_usuario(grafo);
+            break;
         case 2:
             limpiar_pantalla();
             printf("\033[1;35m"); // Magenta negrita
@@ -547,7 +550,7 @@ void menu_pre_juego()
             printf("\033[1;31m"); // Rojo
             cout << "Retornando al menu principal..." << endl;
             printf("\033[0m"); // Reset color
-            return; // Salir del menu_pre_juego
+            return;            // Salir del menu_pre_juego
         }
         else if (res != 1)
         {
@@ -589,8 +592,8 @@ void menu_pre_juego()
             break;
         case 2:
             mostrar_personajes_jugar(personajes_jugar);
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5); 
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
             limpiar_pantalla();
             break;
         case 3:
@@ -602,24 +605,26 @@ void menu_pre_juego()
             limpiar_pantalla();
             break;
         case 5:
-        if (cantidad_personajes_jugar ==4)
-        {
-            printf("\033[0;32m"); // Verde
-            cout << "\nEquipo actual: " << endl;
-            mostrar_personajes_jugar(personajes_jugar);
-            cout << "Entrando al juego..." << endl;
-            printf("\033[0m"); // Reset color
-            iniciar_juego = true;
-            break;    
-        }else{
-            printf("\033[0;31m"); // Rojo
-            cout<<"actualmte te falatan personajes para iniciar el juego."<<endl;
-            printf("\033[0m"); // Reset color
-            cout<<"pulse enter para continuar."<<endl;
-            getline(cin,pausa5);
-            limpiar_pantalla();
-        }
-        
+            if (cantidad_personajes_jugar == 4)
+            {
+                printf("\033[0;32m"); // Verde
+                cout << "\nEquipo actual: " << endl;
+                mostrar_personajes_jugar(personajes_jugar);
+                cout << "Entrando al juego..." << endl;
+                printf("\033[0m"); // Reset color
+                iniciar_juego = true;
+                break;
+            }
+            else
+            {
+                printf("\033[0;31m"); // Rojo
+                cout << "actualmte te faltan personajes para iniciar el juego." << endl;
+                printf("\033[0m"); // Reset color
+                cout << "pulse enter para continuar." << endl;
+                getline(cin, pausa5);
+                limpiar_pantalla();
+            }
+
         default:
             printf("\033[0;31m"); // Rojo
             cout << "Opcion invalida. Ingrese una opcion valida." << endl;
@@ -629,84 +634,101 @@ void menu_pre_juego()
     } while (opcion_interna != 5 && !iniciar_juego);
 }
 
-
-
 void menu_principal() // MENU PRINCIPAL !!!
 {
-    printf("\033[0;33m"); // Amarillo
-    cout << "\n==========================================" << endl;
-    cout << "             MENU PRINCIPAL                " << endl;
-    cout << "==========================================" << endl;
-    printf("\033[0;37m"); // Gris claro
-    cout << "0. Cargar datos predeterminados" << endl;
-    printf("\033[0;37m"); // Gris claro
-    cout << "------------------------------------------" << endl;
-    printf("\033[1;36m"); // Cyan negrita
-    cout << "1. Menu de Orcos" << endl;
-    cout << "2. Menu de Heroes" << endl;
-    printf("\033[0;37m"); // Gris claro
-    cout << "------------------------------------------" << endl;
-    printf("\033[1;34m"); // Azul negrita
-    cout << "3. Menu de Implementos" << endl;
-    cout << "4. Menu de Poderes Magicos" << endl;
-    printf("\033[0;37m"); // Gris claro
-    cout << "------------------------------------------" << endl;
-    printf("\033[1;35m"); // Magenta negrita
-    cout << "5. Menu del Mapa" << endl;
-    printf("\033[0;37m"); // Gris claro
-    cout << "------------------------------------------" << endl;
-    printf("\033[1;32m"); // Verde negrita
-    cout << "6. Empezar el juego" << endl;
-    printf("\033[0;37m"); // Gris claro
-    cout << "------------------------------------------" << endl;
-    printf("\033[1;31m"); // Rojo negrita
-    cout << "7. Salir del programa" << endl;
-    printf("\033[0;37m"); // Gris claro
-    cout << "------------------------------------------" << endl;
-    printf("\033[0;34m"); // Azul
-    cout << "Ingrese su opcion: ";
-    opcion_principal = obtener_opcion();
-    printf("\033[0m"); // Reset color
-
-    switch (opcion_principal)
+    do
     {
-    case 0:
-        limpiar_pantalla();
-        carga_archivos(especies_cargadas, personajes_cargados, implementos_cargados, salas_cargadas, adyacencias_cargadas);
-        break;
-    case 1:
-        limpiar_pantalla();
-        menu_orcos();
-        break;
-    case 2:
-        limpiar_pantalla();
-        menu_especies_heroes_personajes();
-        break;
-    case 3:
-        limpiar_pantalla();
-        menu_implementos();
-        break;
-    case 4:
-        limpiar_pantalla();
-        menu_poderes_magicos();
-        break;
-    case 5:
-        limpiar_pantalla();
-        menu_mapas();
-        break;
-    case 6:
-        limpiar_pantalla();
-        menu_pre_juego();
-        break;
-    case 7:
-        limpiar_pantalla();
-        cout << "Saliendo del programa... Hasta pronto!" << endl;
-        break;
-    default:
-        limpiar_pantalla();
-        printf("\033[0;31m"); // Rojo
-        cout << "Opcion invalida. Ingrese una opcion valida." << endl;
+        printf("\033[0;33m"); // Amarillo
+        cout << "\n==========================================" << endl;
+        cout << "             MENU PRINCIPAL                " << endl;
+        cout << "==========================================" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "0. Cargar datos predeterminados" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "------------------------------------------" << endl;
+        printf("\033[1;36m"); // Cyan negrita
+        cout << "1. Menu de Orcos" << endl;
+        cout << "2. Menu de Heroes" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "------------------------------------------" << endl;
+        printf("\033[1;34m"); // Azul negrita
+        cout << "3. Menu de Implementos" << endl;
+        cout << "4. Menu de Poderes Magicos" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "------------------------------------------" << endl;
+        printf("\033[1;35m"); // Magenta negrita
+        cout << "5. Menu del Mapa" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "------------------------------------------" << endl;
+        printf("\033[1;32m"); // Verde negrita
+        cout << "6. Empezar el juego" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "------------------------------------------" << endl;
+        printf("\033[1;31m"); // Rojo negrita
+        cout << "7. Salir del programa" << endl;
+        printf("\033[0;37m"); // Gris claro
+        cout << "------------------------------------------" << endl;
+        printf("\033[0;34m"); // Azul
+        cout << "Ingrese su opcion: ";
+        opcion_principal = obtener_opcion();
         printf("\033[0m"); // Reset color
-        break;
-    }
+
+        switch (opcion_principal)
+        {
+        case 0:
+        {
+            limpiar_pantalla();
+            carga_archivos(especies_cargadas, personajes_cargados, implementos_cargados, salas_cargadas, adyacencias_cargadas);
+            break;
+        }
+        case 1:
+        {
+            limpiar_pantalla();
+            menu_orcos();
+            break;
+        }
+        case 2:
+        {
+            limpiar_pantalla();
+            menu_especies_heroes_personajes();
+            break;
+        }
+        case 3:
+        {
+            limpiar_pantalla();
+            menu_implementos();
+            break;
+        }
+        case 4:
+        {
+            limpiar_pantalla();
+            menu_poderes_magicos();
+            break;
+        }
+        case 5:
+        {
+            limpiar_pantalla();
+            menu_mapas();
+            break;
+        }
+        case 6:
+        {
+            limpiar_pantalla();
+            menu_pre_juego();
+            break;
+        }
+        case 7:
+        {
+            limpiar_pantalla();
+            cout << "Saliendo del programa... Hasta pronto!" << endl;
+            break;
+        }
+        default:
+            limpiar_pantalla();
+            printf("\033[0;31m"); // Rojo
+            cout << "Opcion invalida. Ingrese una opcion valida." << endl;
+            printf("\033[0m"); // Reset color
+            break;
+        }
+    } while (opcion_principal != 7 && !iniciar_juego);
 }
