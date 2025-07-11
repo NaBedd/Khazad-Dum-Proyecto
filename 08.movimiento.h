@@ -1,15 +1,18 @@
 // Librerias Locales:
 #pragma once
-#include "01.funciones_genericas.h"                // Funciones generales y librerias para el programa
-#include "02.funciones_tipos_especie.h"            // Funciones para las Especies de Heroes y Orcos
-#include "03.funciones_implementos.h"              // Funciones para Implementos
+#include "01.funciones_genericas.h"          // Funciones generales y librerias para el programa
+#include "02.funciones_tipos_especie.h"      // Funciones para las Especies de Heroes y Orcos
+#include "03.funciones_implementos.h"        // Funciones para Implementos
 #include "04.funciones_mochila_personajes_jugar.h" // Funciones de la Mochila y Personajes Jugar
-#include "05.funciones_poder_magico.h"             // Funciones para los Poderes Magicos
-#include "06.funciones_mapa.h"                     // Funciones para el mapa (grafo)
-#include "07.funciones_cargar_archivo.h"           // Funciones para la carga de archivos
-#include "09.menus_main.h"                         // Todos los menus del main
+#include "05.funciones_poder_magico.h"       // Funciones para los Poderes Magicos
+#include "06.funciones_mapa.h"               // Funciones para el mapa (grafo)
+#include "07.funciones_cargar_archivo.h"     // Funciones para la carga de archivos
+#include "09.menus_main.h"                   // Todos los menus del main
 #include "10.combate.h"
 #include <utility> // Para std::pair
+#include <queue>   // Para std::priority_queue
+#include <vector>  // Para std::vector
+#include <limits>  // Para INT_MAX
 
 /*Falta:
     -Turnos de movimiento(turnos fuera de combate)
@@ -22,12 +25,12 @@
 // Dijkstra. Encuentra los caminos mas cortos desde el nodo X a todos los demas
 
 // Encuentra el nodo con la adyacencia de menor peso de entre los nodos Pendientes por Visitar
-sala *encontrarNodoMinimo(mapaGrafo &pendientes, vector<int> &distancias)
+sala *encontrarNodoMinimo(mapaGrafo &pendientes, std::vector<int> &distancias)
 {
-    int distancia_minima = INT_MAX;
+    int distancia_minima = std::numeric_limits<int>::max(); // Usa std::numeric_limits para INT_MAX
     sala *minimo = nullptr;
 
-    for (int i = 0; i < pendientes.mapa_salas.size(); i++) // Itera en los pendientes
+    for (size_t i = 0; i < pendientes.mapa_salas.size(); i++) // Itera en los pendientes
     {
         sala *actual = pendientes.mapa_salas[i]; // Actual es un nodo todavia pendiente
 
@@ -54,22 +57,22 @@ void eliminarNodoPendiente(mapaGrafo &pendientes, sala *nodoEliminar)
     }
 }
 
-vector<int> dijkstra(sala *nodoInicial, mapaGrafo &grafo)
+std::vector<int> dijkstra(sala *nodoInicial, mapaGrafo &grafo)
 {
     // 1. Validación inicial
     if (!nodoInicial || grafo.mapa_salas.empty())
     {
-        cout << "Error: Nodo inicial inválido o grafo vacío" << endl;
+        std::cout << "Error: Nodo inicial inválido o grafo vacío" << std::endl;
         return {};
     }
 
     // 2. Inicialización
     int num_nodos = grafo.mapa_salas.size();
-    vector<int> distancias(num_nodos, INT_MAX);
-    vector<bool> visitados(num_nodos, false);
+    std::vector<int> distancias(num_nodos, std::numeric_limits<int>::max()); // Usa std::numeric_limits para INT_MAX
+    std::vector<bool> visitados(num_nodos, false);
 
     // Usamos una cola de prioridad: (distancia, nodo)
-    priority_queue<pair<int, sala *>, vector<pair<int, sala *>>, greater<>> cola;
+    std::priority_queue<std::pair<int, sala *>, std::vector<std::pair<int, sala *>>, std::greater<std::pair<int, sala *>>> cola;
 
     // 3. Configuración nodo inicial
     distancias[nodoInicial->id] = 0;
@@ -78,8 +81,10 @@ vector<int> dijkstra(sala *nodoInicial, mapaGrafo &grafo)
     // 4. Procesamiento principal
     while (!cola.empty())
     {
-        // Extraer el nodo con menor distancia
-        auto [dist_actual, nodo_actual] = cola.top();
+        // **Línea modificada para compatibilidad con C++11/14:**
+        std::pair<int, sala *> top_element = cola.top();
+        int dist_actual = top_element.first;
+        sala *nodo_actual = top_element.second;
         cola.pop();
 
         // Si ya fue visitado, lo saltamos
@@ -109,13 +114,13 @@ personaje *encontrar_heroe_lento(sala *sala_actual) // Devuelve el heroe mas len
 {
     if (!sala_actual || sala_actual->lista_heroes.empty())
     {
-        cout << "Error en encontrar heroe lento. Sala vacia o no existente" << endl;
-        cout << "Error de codigo. Retornando" << endl;
+        std::cout << "Error en encontrar heroe lento. Sala vacia o no existente" << std::endl;
+        std::cout << "Error de codigo. Retornando" << std::endl;
         return nullptr;
     }
 
     personaje *heroe_lento = nullptr;
-    int velocidad_minima = INT_MAX;
+    int velocidad_minima = std::numeric_limits<int>::max(); // Usa std::numeric_limits para INT_MAX
 
     for (personaje *heroe_actual : sala_actual->lista_heroes)
     {
@@ -132,7 +137,7 @@ sala *designar_sala_spawn_heroes(const mapaGrafo &grafo) // Spawnean en sala ran
 {
     if (grafo.mapa_salas.empty())
     {
-        cout << "El mapa esta vacio" << endl;
+        std::cout << "El mapa esta vacio" << std::endl;
         return nullptr;
     }
 
@@ -141,9 +146,9 @@ sala *designar_sala_spawn_heroes(const mapaGrafo &grafo) // Spawnean en sala ran
         sala *sala_spawn_heroes = nullptr;
         int indice_random = rand() % grafo.mapa_salas.size();
         sala_spawn_heroes = encontrar_sala(grafo, indice_random);
-        cout << "Los heroes apareceran en: " << sala_spawn_heroes->nombre << endl
-             << endl;
-        // cout << "Acabando funcion designar sala" << endl;
+        std::cout << "Los heroes apareceran en: " << sala_spawn_heroes->nombre << std::endl
+                  << std::endl;
+        // std::cout << "Acabando funcion designar sala" << std::endl;
         return sala_spawn_heroes;
     }
 }
@@ -154,11 +159,11 @@ void checkear_entidades_grafo(mapaGrafo grafo)
     {
         if (!actual->lista_heroes.empty())
         {
-            cout << "\nHAY HEROES EN: " << actual->nombre << endl;
+            std::cout << "\nHAY HEROES EN: " << actual->nombre << std::endl;
         }
         else if (!actual->lista_orcos.empty())
         {
-            cout << "\nHAY ORCOS EN: " << actual->nombre << endl;
+            std::cout << "\nHAY ORCOS EN: " << actual->nombre << std::endl;
         }
     }
 }
@@ -170,20 +175,20 @@ void spawn_heroes(sala *&sala_spawn_heroes, personaje *lista_personajes) // Carg
 
     if (!sala_spawn_heroes)
     {
-        cout << "No hay sala spawn heroes. Error de codigo" << endl;
+        std::cout << "No hay sala spawn heroes. Error de codigo" << std::endl;
         return;
     }
 
     personaje *actual = lista_personajes;
     while (actual != nullptr)
     {
-        cout << "Heroe actual siendo transportado: " << actual->nombre << endl;
+        std::cout << "Heroe actual siendo transportado: " << actual->nombre << std::endl;
         sala_spawn_heroes->lista_heroes.push_back(actual);
         actual = actual->siguiente;
     }
 }
 
-sala *designar_sala_spawn_orcos(sala *sala_spawn_heroes, mapaGrafo &grafo, const vector<int> lista_pesos)
+sala *designar_sala_spawn_orcos(sala *sala_spawn_heroes, mapaGrafo &grafo, const std::vector<int> lista_pesos)
 {
     sala *sala_spawn_orcos = nullptr;
 
@@ -205,15 +210,15 @@ sala *designar_sala_spawn_orcos(sala *sala_spawn_heroes, mapaGrafo &grafo, const
             sala_spawn_orcos = encontrar_sala(grafo, indice_random);
         }
     }
-    // cout << "Spawn de Orcos: " << sala_spawn_orcos->nombre << endl;
-    cout << "Los orcos han entrado al mapa..." << endl;
+    // std::cout << "Spawn de Orcos: " << sala_spawn_orcos->nombre << std::endl;
+    std::cout << "Los orcos han entrado al mapa..." << std::endl;
     return sala_spawn_orcos;
 }
 
 void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &lista_especies_orco,
                                personaje &lista_personajes_orco)
 {
-    vector<string> nombresOrcos = {
+    std::vector<std::string> nombresOrcos = {
         "Fenrir",
         "Grishnakh",
         "Ugluk",
@@ -236,15 +241,15 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
         "Yaznaigh"};
 
     Especie *especie_nuevo_orco; // se declara para evitar problemas
-    string nombre_nuevo_orco;
+    std::string nombre_nuevo_orco;
     bool nombre_asignado = false;
 
     // Cantidad de orcos a aparecer en su spawn:
     int cantidad_orcos_spawnear = (rand() % 5) + 1;
 
     // borrar despues
-    // cout << "Generando " << cantidad_orcos_spawnear << " orcos en sala "
-    //  << sala_spawn_orcos->nombre << " (ID: " << sala_spawn_orcos->id << ")\n";
+    // std::cout << "Generando " << cantidad_orcos_spawnear << " orcos en sala "
+    //           << sala_spawn_orcos->nombre << " (ID: " << sala_spawn_orcos->id << ")\n";
 
     // Selecciona las especies que apareceran y crea los personajes Orco
     for (size_t i = 0; i < cantidad_orcos_spawnear; i++)
@@ -263,7 +268,7 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
         }
         else // Nunca deberia de ejecutarse el else
         {
-            cout << "La lista de especies esta vacia (NUNCA DEBERIA PASAR)" << endl;
+            std::cout << "La lista de especies esta vacia (NUNCA DEBERIA PASAR)" << std::endl;
             return;
         }
 
@@ -290,7 +295,7 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
         if (max_id > 0)
         {
             // Si ya hay orcos de la especie, agarra el mismo nombre + 1
-            nombre_nuevo_orco = especie_nuevo_orco->nombre_especie + " " + to_string(max_id + 1);
+            nombre_nuevo_orco = especie_nuevo_orco->nombre_especie + " " + std::to_string(max_id + 1);
         }
         else
         {
@@ -317,7 +322,7 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
             if (repetido)
             {
                 // Si todos los nombres estan ocupados, pone uno generico
-                nombre_nuevo_orco = "Orco " + to_string(max_id + 1);
+                nombre_nuevo_orco = "Orco " + std::to_string(max_id + 1);
             }
         }
 
@@ -342,10 +347,10 @@ void spawnear_personajes_orcos(sala *sala_spawn_orcos, const Lista_especie &list
         lista_personajes_orco.siguiente = nuevo_orco;
 
         // Se agrega a la sala
-        // cout << "Orco creado: " << nombre_nuevo_orco << endl;
+        // std::cout << "Orco creado: " << nombre_nuevo_orco << std::endl;
         sala_spawn_orcos->lista_orcos.push_back(nuevo_orco);
     }
-    // cout << "Total orcos en sala: " << sala_spawn_orcos->lista_orcos.size() << endl;
+    // std::cout << "Total orcos en sala: " << sala_spawn_orcos->lista_orcos.size() << std::endl;
 }
 
 bool verificar_pelea(sala *sala_siguiente, int movimiento_heroes_orcos) // Empieza la pelea si es el caso
@@ -370,7 +375,7 @@ bool verificar_pelea(sala *sala_siguiente, int movimiento_heroes_orcos) // Empie
     }
     else // Else por si acaaso
     {
-        cout << "Error en Verificar Pelea. Nunca deberia de ejecutarse esto" << endl;
+        std::cout << "Error en Verificar Pelea. Nunca deberia de ejecutarse esto" << std::endl;
     }
     return false;
 }
@@ -380,20 +385,20 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
     // 1. Validación básica
     if (!sala_heroes)
     {
-        cout << "Error: Sala de héroes inválida" << endl;
+        std::cout << "Error: Sala de héroes inválida" << std::endl;
         return;
     }
 
     // 2. Calcular distancias desde los héroes
-    vector<int> distancias = dijkstra(sala_heroes, grafo);
+    std::vector<int> distancias = dijkstra(sala_heroes, grafo);
     if (distancias.empty())
     {
-        cout << "Error: No se pudieron calcular distancias" << endl;
+        std::cout << "Error: No se pudieron calcular distancias" << std::endl;
         return;
     }
 
     // 3. Buscar sala con orcos más cercana
-    int min_distancia = INT_MAX;
+    int min_distancia = std::numeric_limits<int>::max();
     sala *sala_orcos_cercana = nullptr;
 
     for (sala *sala_actual : grafo.mapa_salas)
@@ -402,10 +407,10 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
         if (!sala_actual->lista_orcos.empty())
         {
             // Verificar ID válido
-            if (distancias[sala_actual->id] < min_distancia)
+            if (sala_actual->id >= 0 && sala_actual->id < distancias.size() && distancias[sala_actual->id] < min_distancia)
             {
-                cout << "Los orcos se mueven hacia los heroes...\n"
-                     << endl;
+                std::cout << "Los orcos se mueven hacia los heroes...\n"
+                          << std::endl;
                 min_distancia = distancias[sala_actual->id];
                 sala_orcos_cercana = sala_actual;
             }
@@ -415,12 +420,12 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
     // 4. Si no se encontraron orcos cercanos
     if (!sala_orcos_cercana)
     {
-        cout << "No se encontraron orcos cercanos para mover" << endl;
+        std::cout << "No se encontraron orcos cercanos para mover" << std::endl;
         return;
     }
 
     // 5. Buscar mejor sala adyacente para mover
-    int mejor_distancia = INT_MAX;
+    int mejor_distancia = std::numeric_limits<int>::max();
     sala *mejor_destino = nullptr;
 
     for (const arista &arista_actual : sala_orcos_cercana->lista_adyacentes)
@@ -439,12 +444,12 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
     // 6. Si no hay destino válido
     if (!mejor_destino)
     {
-        cout << "No hay destino válido para los orcos" << endl;
+        std::cout << "No hay destino válido para los orcos" << std::endl;
         return;
     }
 
     // 7. Mover los orcos (entre 1 y 5)
-    int max_a_mover = min(5, (int)sala_orcos_cercana->lista_orcos.size());
+    int max_a_mover = std::min(5, (int)sala_orcos_cercana->lista_orcos.size());
     int cantidad_mover = rand() % max_a_mover + 1;
 
     for (int i = 0; i < cantidad_mover; i++)
@@ -457,14 +462,14 @@ void movimiento_orcos(sala *sala_heroes, mapaGrafo &grafo) // Movimiento orcos
         }
     }
 
-    // cout << cantidad_mover << " orcos movidos de "
-    //      << sala_orcos_cercana->nombre << " a "
-    //      << mejor_destino->nombre << endl;
+    // std::cout << cantidad_mover << " orcos movidos de "
+    //           << sala_orcos_cercana->nombre << " a "
+    //           << mejor_destino->nombre << std::endl;
 
     // 8. Verificar combate
     if (!mejor_destino->lista_heroes.empty())
     {
-        cout << "¡Emboscada! Comienza combate..." << endl;
+        std::cout << "¡Emboscada! Comienza combate..." << std::endl;
         combateorcos(mejor_destino, tipoEspecieHeroe);
     }
 }
@@ -476,8 +481,8 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
 
     if (sala_origen->lista_heroes.empty()) // Por si acaso
     {
-        cout << "No hay heroes en la sala " << sala_origen->nombre << endl;
-        cout << "Retornando..." << endl;
+        std::cout << "No hay heroes en la sala " << sala_origen->nombre << std::endl;
+        std::cout << "Retornando..." << std::endl;
         return sala_origen;
     }
 
@@ -486,18 +491,18 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
 
     if (!heroe_lento) // Por si acaso
     {
-        cout << "No se puedo encontrar el heroe mas lento. Error en el juego" << endl;
-        cout << "Retornando..." << endl;
+        std::cout << "No se puedo encontrar el heroe mas lento. Error en el juego" << std::endl;
+        std::cout << "Retornando..." << std::endl;
         return sala_origen;
     }
 
     int energia_restante = heroe_lento->tipo->rapidez;
     bool pelea = false;
 
-    cout << "Los heroes se encuentran en: " << sala_origen->nombre << endl;
-    cout << "Pueden recorrer " << energia_restante << "km de distancia" << endl;
+    std::cout << "Los heroes se encuentran en: " << sala_origen->nombre << std::endl;
+    std::cout << "Pueden recorrer " << energia_restante << "km de distancia" << std::endl;
 
-    cout << "\n";
+    std::cout << "\n";
 
     while (energia_restante > 0) // Ejecutar mientras los heroes no se hayan movido
     {
@@ -514,27 +519,27 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         }
         if (!pueden_moverse) // Basicamente, el caso base
         {
-            cout << "Los heroes estan muy cansados como para ir a otra sala" << endl;
-            cout << "Los heroes se quedaron dormidos en el camino... " << endl;
+            std::cout << "Los heroes estan muy cansados como para ir a otra sala" << std::endl;
+            std::cout << "Los heroes se quedaron dormidos en el camino... " << std::endl;
             break;
         }
 
         // 2. Como SI hay a donde moverse, le pregunta al usuario
-        cout << "Ingrese 0 para cancelar su turno" << endl;
+        std::cout << "Ingrese 0 para cancelar su turno" << std::endl;
         mostrar_adyacencias(sala_origen);
 
         int entrada_usuario = obtener_entero("Indique a que sala se desea mover: ");
         if (entrada_usuario == 0)
         {
-            cout << "El jugador ha decidido no moverse." << endl;
-            cout << "Turno cancelado. " << endl;
+            std::cout << "El jugador ha decidido no moverse." << std::endl;
+            std::cout << "Turno cancelado. " << std::endl;
             return sala_origen;
         }
 
         sala_destino = encontrar_sala(grafo, entrada_usuario);
         if (!sala_destino) // Comprueba que la sala exista
         {
-            cout << "La sala no existe. Indique una opcion valida" << endl;
+            std::cout << "La sala no existe. Indique una opcion valida" << std::endl;
             continue;
         }
 
@@ -550,14 +555,14 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         }
         if (distancia == -1) // Si las salas no estan conectadas:
         {                    // Si el jugador indica el ID de la sala_origen, si esta conectada consigo misma se podra mover, sino no
-            cout << "La sala indicada no es adyacente" << endl;
-            cout << "Ingrese una sala valida." << endl;
+            std::cout << "La sala indicada no es adyacente" << std::endl;
+            std::cout << "Ingrese una sala valida." << std::endl;
             continue;
         }
         if (distancia > energia_restante) // Si la sala esta muy lejos:
         {
-            cout << "Los heroes estan muy cansados para ir a " << sala_destino->nombre << endl;
-            cout << "Indique una sala mas cercana." << endl;
+            std::cout << "Los heroes estan muy cansados para ir a " << sala_destino->nombre << std::endl;
+            std::cout << "Indique una sala mas cercana." << std::endl;
             continue;
         }
 
@@ -567,9 +572,9 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
             sala_destino->lista_heroes.push_back(personaje_actual);             // Agrega el personaje[0] a sala_destino
             sala_origen->lista_heroes.erase(sala_origen->lista_heroes.begin()); // Borra personaje[0] de sala_origen
         }
-        cout << "Los heroes se han movido de " << sala_origen->nombre << " hacia " << sala_destino->nombre << endl;
+        std::cout << "Los heroes se han movido de " << sala_origen->nombre << " hacia " << sala_destino->nombre << std::endl;
         energia_restante -= distancia;
-        cout << "Energia restante: " << energia_restante << endl;
+        std::cout << "Energia restante: " << energia_restante << std::endl;
 
         sala_origen = sala_destino; // Los heroes ya se movieron, se cambia el origen
 
@@ -577,8 +582,8 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         pelea = verificar_pelea(sala_origen, 1);
         if (pelea)
         {
-            cout << "Los Heroes han emboscado a los orcos." << endl;
-            cout << "!!! A pelear !!!" << endl;
+            std::cout << "Los Heroes han emboscado a los orcos." << std::endl;
+            std::cout << "!!! A pelear !!!" << std::endl;
             combateheroes(sala_origen, tipoEspecieHeroe);
             // Si hay pelea, el movimiento se detiene
             return sala_origen;
@@ -600,8 +605,8 @@ sala *movimiento_heroes(sala *sala_origen, mapaGrafo &grafo, Lista_especie lista
         {
             Especie *referenci_actual = encontrar_especie_id(lista_heroes, heroe_actual->tipo->identificador);
             int recuperacion = heroe_actual->tipo->danno_fortaleza * 0.1;
-            heroe_actual->tipo->danno_fortaleza = min(referenci_actual->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion);
-            cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
+            heroe_actual->tipo->danno_fortaleza = std::min(referenci_actual->danno_fortaleza, heroe_actual->tipo->danno_fortaleza + recuperacion);
+            std::cout << heroe_actual->nombre << " ha recuperado " << recuperacion << " puntos de fortaleza.\n";
 
             heroe_actual = heroe_actual->siguiente;
         }
