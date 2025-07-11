@@ -341,7 +341,7 @@ void cargar_adyacencias(mapaGrafo &grafo, bool &listo_adyacencias) // Cargar Ady
         string colocar = "";
 
         string ir_colocando = "";
-        while (fin != controlador +1)
+        while (fin != controlador)
         {
             getline(archivo, linea);
             if (obtener_str_limitado(linea) == "---")
