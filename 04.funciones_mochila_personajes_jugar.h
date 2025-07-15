@@ -40,6 +40,11 @@ int cantidad_personaje_heroe = 0;
 int cantidad_personajes_jugar = 0;
 int regulador_personajes_jugar = 0;
 
+bool hechizomortal_usado = false;
+bool enanospoder_usado = false;
+bool maldadfuera_usado = false;
+bool implementosupremo_usado = false;
+
 string pausa = " "; // para que se pare el programa.
 
 // Para crear personajes.
@@ -233,17 +238,6 @@ int cantidad_personajes_por_especie(personaje &lista_personajes, Especie *mostra
         actual = actual->siguiente;
     }
     return contador;
-}
-
-bool poder_ya_usado(personaje* lista_personajes, const string& poder) {
-    personaje* actual = lista_personajes;
-    while (actual != nullptr) {
-        if (actual->mimochila != nullptr && actual->mimochila->num_poder == poder) {
-            return true;
-        }
-        actual = actual->siguiente;
-    }
-    return false;
 }
 
 // funcion para modificar a los personajes.
@@ -572,6 +566,62 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
 }
 
 //----------------------------------- FUNCIONES PERSONAJES JUGAR --------------------------------------
+// Selecciona los heroes y su equipamiento de manera predeterminada para jugar mas rapido
+// NOTA: Cambia los IDs de ejemplo por los que correspondan a tu archivo cargado
+void precargar_equipo_jugar(personaje *&lista_jugar, personaje &heroes, Implemento &implementos)
+{
+    // IDs de héroes e implementos predeterminados (ajusta según tu archivo)
+    int ids_heroes[] = {1, 2, 3, 5};                                            // Ejemplo: IDs de los héroes a precargar
+    int ids_implementos[][3] = {{1, 6, 7}, {2, 6, 12}, {3, 6, 11}, {4, 12, 8}}; // Tres implementos por héroe, cambia según tus datos
+    string poderes[] = {"implemento supremo", "hechizo mortal", "enanos al poder", "Maldad Fuera"};
+
+    for (int i = 0; i < 4; ++i)
+    {
+        personaje *heroe = encontrar_personaje(heroes, ids_heroes[i]);
+        if (heroe)
+        {
+            personaje *nuevo = new personaje;
+            nuevo->nombre = heroe->nombre;
+            nuevo->tipo = new Especie;
+            *(nuevo->tipo) = *(heroe->tipo);
+            nuevo->identificador = cantidad_personajes_jugar + regulador_personajes_jugar + 1;
+            nuevo->mimochila = new mochila;
+            nuevo->mimochila->implementos = nullptr;
+            nuevo->mimochila->poderes = nullptr;
+            nuevo->mimochila->num_poder = poderes[i];
+            nuevo->siguiente = nullptr;
+
+            // Asignar implementos predeterminados
+            for (int j = 0; j < 2; ++j)
+            {
+                Implemento *imp = buscar_implemento(implementos, ids_implementos[i][j]);
+                if (imp)
+                {
+                    Implemento *nuevo_imp = new Implemento;
+                    *nuevo_imp = *imp;
+                    nuevo_imp->siguiente = nuevo->mimochila->implementos;
+                    nuevo->mimochila->implementos = nuevo_imp;
+                }
+            }
+
+            // Insertar al final de la lista_jugar
+            if (lista_jugar == nullptr)
+            {
+                lista_jugar = nuevo;
+            }
+            else
+            {
+                personaje *ultimo = lista_jugar;
+                while (ultimo->siguiente != nullptr)
+                {
+                    ultimo = ultimo->siguiente;
+                }
+                ultimo->siguiente = nuevo;
+            }
+            cantidad_personajes_jugar++;
+        }
+    }
+}
 
 void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, personaje *lista_personajes_jugar,
                     bool &hechizomortal_usado, bool &enanospoder_usado, bool &maldadfuera_usado, bool &implementosupremo_usado)
@@ -704,27 +754,92 @@ void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, per
                 printf("\033[0;37m");
 
                 opcio = obtener_entero("Elija sabiamente: ");
-                if (opcio >= 1 && opcio <= 4) {
-                    string poder_seleccionado;
-                    switch(opcio) {
-                        case 1: poder_seleccionado = "Poder1"; break;
-                        case 2: poder_seleccionado = "Poder2"; break;
-                        case 3: poder_seleccionado = "Poder3"; break;
-                        case 4: poder_seleccionado = "Poder4"; break;
+                if (opcio == 1) // Hechizo mortal
+                {
+                    if (hechizomortal_usado)
+                    {
+                        printf("\033[0;31m"); // Rojo
+                        cout << "Este poder ya esta en uso" << endl;
+                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
+                        printf("\033[0;37m"); // Gris claro
                     }
-                    
-                    if (poder_ya_usado(lista_personajes_jugar, poder_seleccionado)) {
-                        printf("\033[0;31m"); // Mensaje de error
-                        cout << "¡Este poder ya está en uso por otro personaje!\n";
-                        printf("\033[0;37m");
-                        continue;
+                    else
+                    {
+                        personaje_a_llenar->mimochila->num_poder = "hechizo mortal";
+                        if (con_poderes == 0)
+                        {
+                            con_poderes += 1;
+                            hechizomortal_usado = true;
+                            cantidad_objetos++;
+                        }
                     }
-                    
-                    personaje_a_llenar->mimochila->num_poder = poder_seleccionado;
-                    if (con_poderes == 0) {
-                        con_poderes++;
-                        cantidad_objetos++;
+                    opcio = 0;
+                    break;
+                }
+                else if (opcio == 2) // Enanos al poder
+                {
+                    if (enanospoder_usado)
+                    {
+                        printf("\033[0;31m"); // Rojo
+                        cout << "Este poder ya esta en uso" << endl;
+                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
+                        printf("\033[0;37m"); // Gris claro
                     }
+                    else
+                    {
+                        personaje_a_llenar->mimochila->num_poder = "enanos al poder";
+                        if (con_poderes == 0)
+                        {
+                            con_poderes += 1;
+                            enanospoder_usado = true;
+                            cantidad_objetos++;
+                        }
+                    }
+                    opcio = 0;
+                    break;
+                }
+                else if (opcio == 3) // Maldad Fuera
+                {
+                    if (maldadfuera_usado)
+                    {
+                        printf("\033[0;31m"); // Rojo
+                        cout << "Este poder ya esta en uso" << endl;
+                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
+                        printf("\033[0;37m"); // Gris claro
+                    }
+                    else
+                    {
+                        personaje_a_llenar->mimochila->num_poder = "Maldad Fuera";
+                        if (con_poderes == 0)
+                        {
+                            con_poderes += 1;
+                            maldadfuera_usado = true;
+                            cantidad_objetos++;
+                        }
+                    }
+                    opcio = 0;
+                    break;
+                }
+                else if (opcio == 4) // Implemento Supremo
+                {
+                    if (implementosupremo_usado)
+                    {
+                        printf("\033[0;31m"); // Rojo
+                        cout << "Este poder ya esta en uso" << endl;
+                        cout << "No te aproveches de la bondad de los 3 guerreros ancestrales" << endl;
+                        printf("\033[0;37m"); // Gris claro
+                    }
+                    else
+                    {
+                        personaje_a_llenar->mimochila->num_poder = "implemento supremo";
+                        if (con_poderes == 0)
+                        {
+                            con_poderes += 1;
+                            implementosupremo_usado = true;
+                            cantidad_objetos++;
+                        }
+                    }
+                    opcio = 0;
                     break;
                 }
                 else if (opcio == 5)

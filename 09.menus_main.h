@@ -379,8 +379,8 @@ void menu_poderes_magicos() // Case 4 del main
     } while (opcion_interna != 5);
 }
 
-void carga_archivos(bool especies_cargadas, bool personajes_cargados,
-                    bool implementos_cargados, bool salas_cargadas, bool adyacencias_cargadas) // Case 5 del main
+void carga_archivos(bool &especies_cargadas, bool &personajes_cargados,
+                    bool &implementos_cargados, bool &salas_cargadas, bool &adyacencias_cargadas) // Case 5 del main
 {
     limpiar_pantalla();
     printf("\033[1;33m"); // Amarillo negrita
@@ -570,6 +570,7 @@ void menu_pre_juego()
         cout << "           MENU DE PERSONAJES PARA JUGAR  " << endl;
         cout << "==========================================" << endl;
         printf("\033[0;37m"); // Gris claro
+        cout << "0. Cargar heroes predeterminados" << endl;
         cout << "1. Elegir personaje y sus objetos" << endl;
         cout << "2. Mostrar personajes del equipo actual" << endl;
         cout << "3. Modificar mochila" << endl;
@@ -587,25 +588,44 @@ void menu_pre_juego()
 
         switch (opcion_interna)
         {
-        case 1:
-            eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos);
-            limpiar_pantalla();
-            break;
-        case 2:
+        case 0: // Precargar Heroes
+        {
+            precargar_equipo_jugar(personajes_jugar, personajes_hero, lista_implementos);
+            cout << "EL equipo ha sido precargado exitosamente" << endl;
             mostrar_personajes_jugar(personajes_jugar);
             cout << "pulse enter para continuar." << endl;
             getline(cin, pausa5);
             limpiar_pantalla();
             break;
-        case 3:
+        }
+        case 1: // Equipar heroes
+        {
+            eleccion_personaje(personajes_jugar, personajes_hero, lista_implementos);
+            limpiar_pantalla();
+            break;
+        }
+        case 2: // Mostrar equipo actual
+        {
+            mostrar_personajes_jugar(personajes_jugar);
+            cout << "pulse enter para continuar." << endl;
+            getline(cin, pausa5);
+            limpiar_pantalla();
+            break;
+        }
+        case 3: // Modificar Mochila
+        {
             modificar_mochila(personajes_jugar, lista_implementos, lista_podere_magicos);
             limpiar_pantalla();
             break;
-        case 4:
+        }
+        case 4: // Eliminar personaje del equipo
+        {
             eliminar_personaje_jugar(personajes_jugar);
             limpiar_pantalla();
             break;
-        case 5:
+        }
+        case 5: // Jugar
+        {
             if (cantidad_personajes_jugar == 4)
             {
                 printf("\033[0;32m"); // Verde
@@ -625,12 +645,14 @@ void menu_pre_juego()
                 getline(cin, pausa5);
                 limpiar_pantalla();
             }
-
+        }
         default:
+        {
             printf("\033[0;31m"); // Rojo
             cout << "Opcion invalida. Ingrese una opcion valida." << endl;
             printf("\033[0m"); // Reset color
             break;
+        }
         }
     } while (opcion_interna != 5 && !iniciar_juego);
 }

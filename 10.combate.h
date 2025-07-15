@@ -55,18 +55,6 @@ personaje *encontrar_heroe_mas_debil(sala *sala_actual) // Encontrar heroe mas d
     return heroe_debil;
 }
 
-// CREA UN BOOL QUE SE LLAME PRIMEROORCOS Y PRIMEROHEROES, NO SE LO VAS A PASAR POR PARAMETRO,
-//  ESE CONDICIONAL VA A ESTAR DENTRO DE CADA VEZ QUE SE MUEVAN LOS ORCOS Y CADA VEZ QUE SE MUEVAN LOS HEROES
-// EJEMPLO: IF(PRIMEROORCOS == TRUE && PRIMEROHEROES == FALSE)
-// {
-// combateheroes(sala*sala_actual);
-// }
-// else if(PRIMEROORCOS==FALSE&&PRIMEROHEROES==TRUE)
-//{
-// combateorcos(sala*sala_actual;
-// }
-// else continue;
-
 // Empiezan los heroes, se ejecuta hasta que TODO el combate haya terminado
 void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
 {
@@ -97,7 +85,7 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                 }
                 personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
                 if (!orco_objetivo)
-                {
+                { 
                     cout << "Todos los orcos han sido derrotados!, los heroes han ganado, enhorabuena!!\n";
                     combate_terminado = true;
                     break;
@@ -132,17 +120,13 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
 
                     while (arma_actual != nullptr) // Muestra las armas
                     {
-
-                        // VERRRR.
-                        // verrrrrrrr.
-                        //  esta con la fortalea actual que tenga el herore, no con la estandarr de la especie
                         if (arma_actual->tipo_implemento == "Arma" && heroe_actual->tipo->danno_fortaleza >= arma_actual->fortalezanecesaria)
                         {
                             cout << contador << ". " << arma_actual->nombre_implemento
-                                 << "- Danno: " << arma_actual->valor
-                                 << ", Usos: " << arma_actual->usos << "\n";
+                                << "- Danno: " << arma_actual->valor
+                                << ", Usos: " << arma_actual->usos << "\n";
                             armas.push_back(arma_actual);
-                            contador++;
+                            contador++; 
                         }
                         arma_actual = arma_actual->siguiente;
                     }
