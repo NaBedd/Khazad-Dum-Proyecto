@@ -568,7 +568,7 @@ void eliminar_elemento_lista(Lista_especie &lista, personaje lista_personajes, i
 //----------------------------------- FUNCIONES PERSONAJES JUGAR --------------------------------------
 // Selecciona los heroes y su equipamiento de manera predeterminada para jugar mas rapido
 // NOTA: Cambia los IDs de ejemplo por los que correspondan a tu archivo cargado
-void precargar_equipo_jugar(personaje *&lista_jugar, personaje &heroes, Implemento &implementos)
+bool precargar_equipo_jugar(personaje *&lista_jugar, personaje &heroes, Implemento &implementos)
 {
     // IDs de héroes e implementos predeterminados (ajusta según tu archivo)
     int ids_heroes[] = {1, 2, 3, 5};                                            // Ejemplo: IDs de los héroes a precargar
@@ -592,7 +592,7 @@ void precargar_equipo_jugar(personaje *&lista_jugar, personaje &heroes, Implemen
             nuevo->siguiente = nullptr;
 
             // Asignar implementos predeterminados
-            for (int j = 0; j < 2; ++j)
+            for (int j = 0; j < 3; ++j)
             {
                 Implemento *imp = buscar_implemento(implementos, ids_implementos[i][j]);
                 if (imp)
@@ -621,6 +621,7 @@ void precargar_equipo_jugar(personaje *&lista_jugar, personaje &heroes, Implemen
             cantidad_personajes_jugar++;
         }
     }
+    return true;
 }
 
 void llenar_mochila(personaje *&personaje_a_llenar, Implemento &Implementos, personaje *lista_personajes_jugar,

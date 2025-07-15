@@ -43,6 +43,8 @@ bool salas_cargadas = false;
 bool adyacencias_cargadas = false;
 bool personajes_cargados = false;
 
+bool equipo_precargado = false;
+
 bool acabo_juego = false;
 // Para puerta destino
 vector<int> salas_puerta_pasadas;
@@ -590,12 +592,19 @@ void menu_pre_juego()
         {
         case 0: // Precargar Heroes
         {
-            precargar_equipo_jugar(personajes_jugar, personajes_hero, lista_implementos);
-            cout << "EL equipo ha sido precargado exitosamente" << endl;
-            mostrar_personajes_jugar(personajes_jugar);
-            cout << "pulse enter para continuar." << endl;
-            getline(cin, pausa5);
-            limpiar_pantalla();
+            if (!equipo_precargado)
+            {
+                equipo_precargado = precargar_equipo_jugar(personajes_jugar, personajes_hero, lista_implementos);
+                cout << "EL equipo ha sido precargado exitosamente" << endl;
+                mostrar_personajes_jugar(personajes_jugar);
+                cout << "pulse enter para continuar." << endl;
+                getline(cin, pausa5);
+                limpiar_pantalla();
+            }
+            else
+            {
+                cout << "El equipo ya habia sido cargado previamente" << endl;
+            }
             break;
         }
         case 1: // Equipar heroes
