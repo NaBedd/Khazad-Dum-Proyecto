@@ -1,13 +1,13 @@
 // Librerias Locales:
 #pragma once
-#include "01.funciones_genericas.h"          // Funciones generales y librerias para el programa
-#include "02.funciones_tipos_especie.h"      // Funciones para las Especies de Heroes y Orcos
-#include "03.funciones_implementos.h"        // Funciones para Implementos
+#include "01.funciones_genericas.h"                // Funciones generales y librerias para el programa
+#include "02.funciones_tipos_especie.h"            // Funciones para las Especies de Heroes y Orcos
+#include "03.funciones_implementos.h"              // Funciones para Implementos
 #include "04.funciones_mochila_personajes_jugar.h" // Funciones de la Mochila y Personajes Jugar
-#include "05.funciones_poder_magico.h"       // Funciones para los Poderes Magicos
-#include "06.funciones_mapa.h"               // Funciones para el mapa (grafo)
-#include "07.funciones_cargar_archivo.h"     // Funciones para la carga de archivos
-#include "09.menus_main.h"                   // Todos los menus del main
+#include "05.funciones_poder_magico.h"             // Funciones para los Poderes Magicos
+#include "06.funciones_mapa.h"                     // Funciones para el mapa (grafo)
+#include "07.funciones_cargar_archivo.h"           // Funciones para la carga de archivos
+#include "09.menus_main.h"                         // Todos los menus del main
 #include "10.combate.h"
 #include <utility> // Para std::pair
 #include <queue>   // Para std::priority_queue

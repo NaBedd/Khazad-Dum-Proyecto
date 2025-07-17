@@ -85,7 +85,7 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                 }
                 personaje *orco_objetivo = encontrar_orco_mas_debil(sala_actual);
                 if (!orco_objetivo)
-                { 
+                {
                     cout << "Todos los orcos han sido derrotados!, los heroes han ganado, enhorabuena!!\n";
                     combate_terminado = true;
                     break;
@@ -123,10 +123,10 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                         if (arma_actual->tipo_implemento == "Arma" && heroe_actual->tipo->danno_fortaleza >= arma_actual->fortalezanecesaria)
                         {
                             cout << contador << ". " << arma_actual->nombre_implemento
-                                << "- Danno: " << arma_actual->valor
-                                << ", Usos: " << arma_actual->usos << "\n";
+                                 << "- Danno: " << arma_actual->valor
+                                 << ", Usos: " << arma_actual->usos << "\n";
                             armas.push_back(arma_actual);
-                            contador++; 
+                            contador++;
                         }
                         arma_actual = arma_actual->siguiente;
                     }
@@ -209,7 +209,7 @@ void combateheroes(sala *sala_actual, Lista_especie especies_heroes)
                 }
                 case 3: // Poderes magicos
                 {
-                    Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
+                    // Especie *referencia = encontrar_especie_id(especies_heroes, heroe_actual->tipo->identificador);
                     cout << "\nPoderes magicos disponibles de " << heroe_actual->nombre << ":\n";
                     Poder_magico *poder = heroe_actual->mimochila->poderes;
                     Poder_magico *anterior = nullptr;
