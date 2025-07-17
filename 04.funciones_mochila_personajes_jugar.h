@@ -131,9 +131,6 @@ void crear_personaje(personaje &lista_personaje, Lista_especie &lista_tipos, int
 }
 
 // Funcion para mostrar los personajes
-#include <iostream>
-#include <stack>
-using namespace std;
 
 void mostrar_personajes(personaje &lista, int tipo)
 {
